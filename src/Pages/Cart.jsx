@@ -1,6 +1,6 @@
 import React from "react";
 
-const Cart = () => {
+const CartPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Cart Banner */}
@@ -129,4 +129,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default CartPage;
