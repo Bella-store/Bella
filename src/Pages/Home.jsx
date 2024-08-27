@@ -3,6 +3,15 @@ export default function Home() {
         <div>
             <ul className="flex flex-col space-y-4">
                 <li>
+                    <a href="/login">Login Page</a>
+                </li>
+                <li>
+                    <a href="/register">Register Page</a>
+                </li>
+                <li>
+                    <a href="/products">Products Page</a>
+                </li>
+                <li>
                     <a href="/cart">Cart Page</a>
                 </li>
                 <li>
