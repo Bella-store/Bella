@@ -4,9 +4,9 @@ import "./App.css";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
-import Login from "./Pages/Login";
-import Register from "./Pages/Register";
-import Products from "./Pages/Products";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Products from "./pages/Products";
 
 function App() {
     return (
