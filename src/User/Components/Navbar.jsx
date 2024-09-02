@@ -94,7 +94,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <CiHeart className="size-6" />
+            <Link to="/wishlist"><CiHeart className="size-6" /></Link>
           </div>
           <PiLineVerticalLight className="size-6" />
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
@@ -128,7 +128,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/contact" onClick={toggleSidebar}>
+            <Link to="/contactUs" onClick={toggleSidebar}>
               Contact Us
             </Link>
           </li>
