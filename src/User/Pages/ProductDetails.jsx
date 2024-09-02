@@ -4,7 +4,7 @@ import Details from "../Components/DetailsSection";
 import Navbar from "../Components/Navbar";
 import Link from "../Components/Links";
 import RelatedProducts from "../Components/RelatedProducts";
-import Footer from "../Components/footer";
+import Footer from "../Components/Footer";
 
 function ProductDetails() {
   return (
