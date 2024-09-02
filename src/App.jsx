@@ -1,14 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Home from "./pages/Home";
-import Login from "./Pages/Login";
-import Register from "./Pages/Register";
-import Products from "./Pages/Products";
-import ContactUs from "./Pages/ContactUs";
-import Wishlist from "./Pages/Wishlist";
+import Cart from "./User/Pages/Cart";
+import Checkout from "./User/Pages/Checkout";
+import Home from "./User/Pages/Home";
+import Login from "./User/Pages/Login";
+import Register from "./User/Pages/Register";
+import Products from "./User/Pages/Products";
+import ContactUs from "./User/Pages/ContactUs";
+import Wishlist from "./User/Pages/Wishlist";
 
 function App() {
   return (

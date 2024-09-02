@@ -1,6 +1,7 @@
-import PageBanner from "../components/PageBanner";
+
 import { Link } from "react-router-dom";
-import cartItems from "../../db.json";
+import cartItems from "../../../db.json";
+import PageBanner from "../Components/PageBanner";
 
 const Cart = () => {
   return (

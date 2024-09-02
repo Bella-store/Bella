@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 export default function PageBanner({
   title,
   bg_image = "/cart-page-header.jpg",
