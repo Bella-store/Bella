@@ -1,13 +1,41 @@
-import { StrictMode } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
-import { BrowserRouter } from "react-router-dom";
+import Login from "./User/Pages/Login"; // Import the Login component
+import Home from "./User/Pages/Home"; // Assuming you have a Home component
+import Register from "./User/Pages/Register";
+import AboutUs from "./User/Pages/AboutUs";
+import Products from "./User/Pages/Products";
+import ProductDetails from "./User/Pages/ProductDetails";
+import Shop from "./User/Pages/Shop";
+import Cart from "./User/Pages/Cart";
+import Checkout from "./User/Pages/Checkout";
+import Dashboard from "./Admin/Pages/Dashboard";
+import Page404 from "./User/Pages/Page404";
+import ContactUs from "./User/Pages/ContactUs";
+import Wishlist from "./User/Pages/Wishlist";
 
-createRoot(document.getElementById("root")).render(
-    <StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </StrictMode>
+const root = createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/AboutUs" element={<AboutUs />} />
+        <Route path="/Products" element={<Products />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/Register" element={<Register />} />
+        <Route path="/contactUs" element={<ContactUs />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        
+        <Route path="*" element={<Page404 />} />
+      </Routes>
+    </Router>
+  </React.StrictMode>
 );
