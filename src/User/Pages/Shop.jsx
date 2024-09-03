@@ -68,7 +68,7 @@ const Shop = () => {
     <div className="bg-stone-50 min-h-screen ">
       <Banner title={"Shop"} />
 
-      <div className="flex flex-col lg:flex-row px-4 md:px-16 lg:px-18 py-8">
+      <div className="flex flex-col lg:flex-row px-4 md:px-16 lg:px-18 py-8 ">
         {/* Main Content Area */}
         <div className="flex flex-col flex-grow items-center w-full">
           <div className="flex justify-between items-center mb-4 w-[86%]">
@@ -76,7 +76,7 @@ const Shop = () => {
             <SortDropdown onSortChange={handleSortChange} />
           </div>
 
-          <div className="flex flex-wrap justify-center sm:1/2 md:4/5 md:gap-8 w-[100%]">
+          <div className="flex flex-wrap justify-center sm:1/2 md:4/5 md:gap-8 w-[100%] animate-fadeIn">
             {filteredPosts.map((product) => (
               <Card
                 key={product.id}
