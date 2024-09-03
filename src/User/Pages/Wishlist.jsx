@@ -1,13 +1,16 @@
 import PageBanner from "../Components/PageBanner";
-
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 const Wishlist = () => {
   return (
-    <div className=" w-full mx-auto">
+    <div className=" w-full mx-auto mt-12">
+      <Navbar />
+
       {/* Banner Section */}
       <PageBanner title="Wish List" />
 
       {/* Wishlist Section */}
-      <div className="bg-white m-auto mt-10 max-w-4xl rounded shadow-md overflow-hidden">
+      <div className="bg-white m-auto mt-10 max-w-4xl rounded shadow-md overflow-hidden mb-5">
         {/* For small screens */}
         <div className="md:hidden flex flex-col space-y-4 p-4">
           <div className="flex items-center space-x-4 bg-white border-b last:border-0 hover:bg-gray-50 transition p-4 rounded">
@@ -88,6 +91,7 @@ const Wishlist = () => {
           </table>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
