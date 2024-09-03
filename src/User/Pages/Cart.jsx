@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
 import cartItems from "../../../db.json";
 import PageBanner from "../Components/PageBanner";
-import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
-
+import Footer from "../Components/Footer";
 const Cart = () => {
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen mt-16">
       <Navbar />
       {/* Cart Banner */}
       <PageBanner title="Cart" />
@@ -142,7 +141,7 @@ const Cart = () => {
             </Link>
           </div>
         </div>
-      </div>{" "}
+      </div>
       <Footer />
     </div>
   );

@@ -1,8 +1,11 @@
 import PageBanner from "../Components/PageBanner";
-
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 const Checkout = () => {
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen   mt-16">
+      <Navbar />
+
       {/* Checkout Banner */}
       <PageBanner title="Checkout" />
 
@@ -107,6 +110,7 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,10 +1,16 @@
 import PageBanner from "../Components/PageBanner";
-
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 const ContactUs = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen mt-16">
+      <Navbar />
+
       {/* Header Section */}
-      <PageBanner title="Contact Us" bg_image="/ciri-hm-bg.jpg" />
+      <PageBanner
+        title="Contact Us"
+        bg_image="../../../public/ciri-hm-bg.jpg"
+      />
 
       {/* Contact Form Section */}
       <div className="container max-w-7xl mx-auto px-4 py-12 mt-10 flex flex-col lg:flex-row gap-12">
@@ -67,6 +73,7 @@ const ContactUs = () => {
           ></iframe>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
