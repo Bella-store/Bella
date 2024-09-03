@@ -1,14 +1,15 @@
-
 import { Link } from "react-router-dom";
 import cartItems from "../../../db.json";
 import PageBanner from "../Components/PageBanner";
+import Footer from "../Components/Footer";
+import Navbar from "../Components/Navbar";
 
 const Cart = () => {
   return (
     <div className="min-h-screen ">
+      <Navbar />
       {/* Cart Banner */}
       <PageBanner title="Cart" />
-
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="flex flex-col mt-8 lg:flex-row lg:space-x-8">
           <div className="md:max-w-4xl w-full">
@@ -141,7 +142,8 @@ const Cart = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </div>{" "}
+      <Footer />
     </div>
   );
 };

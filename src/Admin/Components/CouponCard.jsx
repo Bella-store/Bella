@@ -26,7 +26,7 @@ const CouponCard = () => {
   return (
     <div className="px-4 sm:px-6">
       <HeaderWithSubPath title="Coupons" />
-      <div className="flex flex-wrap justify-center sm:justify-start w-full">
+      <div className="flex flex-wrap justify-center w-full">
         {couponData.map((coupon, index) => (
           <div
             key={index}

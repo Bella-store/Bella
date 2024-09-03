@@ -23,7 +23,7 @@ const Products = () => {
       {loading ? (
         <p className="text-center mt-16">Loading...</p>
       ) : (
-        <div className="mt-16 flex flex-col lg:flex-row">
+        <div className="mt-16 flex flex-col lg:flex-row animate-fadeIn">
           {/* Products Container */}
           <div className="">
             <div className="flex flex-wrap justify-center gap-16 sm:1/2 md:4/5 md:gap-8  w-full">
