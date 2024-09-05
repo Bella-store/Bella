@@ -3,14 +3,15 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { ImStatsDots } from "react-icons/im";
 import { MdCancel, MdOutlineSupportAgent } from "react-icons/md";
 import { Link } from "react-router-dom";
+// import PropTypes from "prop-types"; 
 
 const Sidebar = ({ selectedItem, setSelectedItem, closeSidebar }) => {
   const menuItems = [
-    { name: "Statistics", icon: <ImStatsDots />, to: "#" },
-    { name: "Products", icon: <HiOutlineShoppingBag />, to: "#" },
-    { name: "Users", icon: <FaUsers />, to: "#" },
-    { name: "Support", icon: <MdOutlineSupportAgent />, to: "#" },
-    { name: "Coupon", icon: <FaGift />, to: "#" },
+    { name: "Statistics", icon: <ImStatsDots />, to: "/dashboard/statistics" },
+    { name: "Products", icon: <HiOutlineShoppingBag />, to: "/dashboard/products" },
+    { name: "Users", icon: <FaUsers />, to: "/dashboard/users" },
+    { name: "Support", icon: <MdOutlineSupportAgent />, to: "/dashboard/support" },
+    { name: "Coupon", icon: <FaGift />, to: "/dashboard/coupon" },
   ];
 
   return (
@@ -53,5 +54,13 @@ const Sidebar = ({ selectedItem, setSelectedItem, closeSidebar }) => {
     </div>
   );
 };
+
+// // Prop validation
+// Sidebar.propTypes = {
+//   selectedItem: PropTypes.string.isRequired,
+//   setSelectedItem: PropTypes.func.isRequired,
+//   closeSidebar: PropTypes.func.isRequired,
+// };
+
 
 export default Sidebar;

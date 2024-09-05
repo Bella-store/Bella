@@ -37,7 +37,7 @@ root.render(
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
 
           {/* Nested routes under /profileUser */}
           <Route path="/profileUser" element={<ProfileUser />}>
