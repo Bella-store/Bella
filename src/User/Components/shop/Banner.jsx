@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import DecorationImage from "../../../assets/Images/Decoration.jpg";
 
 const Banner = ({ title }) => {
@@ -9,7 +10,7 @@ const Banner = ({ title }) => {
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
         <h1 className="text-5xl font-bold">{title}</h1>
-        <p className="mt-2 text-sm">Home / {title}</p>
+        <p className="mt-2 text-sm">{t("Home")} / {title}</p>
       </div>
     </div>
   );

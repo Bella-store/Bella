@@ -1,8 +1,9 @@
-// src/components/Card.jsx
-import { CiHeart } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function CollectionCard({ id, title, price, imageUrl }) {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`w-full md:w-[47%] lg:w-[47%] xl:w-[27%] hover:cursor-pointer group relative`}
@@ -20,7 +21,7 @@ function CollectionCard({ id, title, price, imageUrl }) {
           {title}
         </h2>
         <p className="text-mainColor mt-1 lg:text-[1.2rem]">
-          {price} <span className="text-[0.8rem]">EGP</span>
+          {price} <span className="text-[0.8rem]">{t("Currency")}</span>
         </p>
       </div>
     </div>
