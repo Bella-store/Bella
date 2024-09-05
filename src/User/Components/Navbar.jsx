@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { CiSearch } from "react-icons/ci";
+import { CiSearch, CiHeart } from "react-icons/ci";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
-import { CiHeart } from "react-icons/ci";
 
 const Navbar = () => {
   const [navBg, setNavBg] = useState(false);
@@ -81,6 +80,11 @@ const Navbar = () => {
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
             <Link to="/contactUs">Contact Us</Link>
           </li>
+          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+            <Link to="/shop" onClick={toggleSidebar}>
+              Store{" "}
+            </Link>
+          </li>
         </ul>
 
         {/* Icons */}
@@ -134,12 +138,40 @@ const Navbar = () => {
               Contact Us
             </Link>
           </li>
+          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+            <Link to="/shop" onClick={toggleSidebar}>
+              Store{" "}
+            </Link>
+          </li>
+
+          {/* Icons in Sidebar */}
           <div className="flex space-x-4 items-center mt-4">
             <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
               <CiSearch className="size-10" />
             </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
-              <HiOutlineShoppingBag className="size-8" />
+            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/cart">
+                <HiOutlineShoppingBag className="size-8" />
+              </Link>
+            </div>
+            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/wishlist">
+                <CiHeart className="size-8" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Login and Register Links */}
+          <div className="space-y-2 mt-4">
+            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/login" onClick={toggleSidebar}>
+                Login
+              </Link>
+            </div>
+            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/register" onClick={toggleSidebar}>
+                Register
+              </Link>
             </div>
           </div>
         </ul>

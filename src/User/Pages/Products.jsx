@@ -1,6 +1,6 @@
 import Navbar from "../Components/Navbar";
 import Pagination from "../Components/Pagination";
-import Card from "../Components/Card";
+import CollectionCard from "../Components/CollectionCard";
 import useProducts from "../../hooks/useProducts";
 
 const Products = () => {
@@ -28,7 +28,7 @@ const Products = () => {
           <div className="">
             <div className="flex flex-wrap justify-center gap-16 sm:1/2 md:4/5 md:gap-8  w-full">
               {currentPosts.map((product) => (
-                <Card
+                <CollectionCard
                   key={product.id}
                   id={product.id}
                   title={product.title}
