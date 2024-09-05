@@ -18,7 +18,7 @@ const ContactUs = () => {
         <div className="flex-1 space-y-6">
           <p className="text-3xl text-gray-700">
             If you have any questions or concerns about this privacy policy or
-            our practices, please contact us at <br /> info@cascaron.store
+            our practices, please contact us at <br /> info@Bella.store
           </p>
           <form className="space-y-6">
             <div>

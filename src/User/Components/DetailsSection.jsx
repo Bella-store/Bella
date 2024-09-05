@@ -18,7 +18,7 @@ function Details() {
           <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
             White Zen wood
           </p>
-          <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
+          {/* <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
             Good wood countertops
           </p>
           <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
@@ -26,7 +26,7 @@ function Details() {
           </p>
           <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
             Eco-friendly paints
-          </p>
+          </p> */}
           <p className="text-textColor text-[0.8rem] mb-5 md:mb-[3rem]">
             <span className="font-bold text-[0.8rem]">Size:</span> 65 x 46
           </p>
