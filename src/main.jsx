@@ -17,35 +17,39 @@ import ContactUs from "./User/Pages/ContactUs";
 import Wishlist from "./User/Pages/Wishlist";
 import ProfileUser from "./User/Pages/profileUser";
 import UserInfo from "./User/Components/userInfo.JSX";
+import { Provider } from "react-redux";
+import storeApp from "./Redux/Store";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/AboutUs" element={<AboutUs />} />
-        <Route path="/Products" element={<Products />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/Register" element={<Register />} />
-        <Route path="/contactUs" element={<ContactUs />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+    <Provider store={storeApp}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
+          <Route path="/Products" element={<Products />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/Register" element={<Register />} />
+          <Route path="/contactUs" element={<ContactUs />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
-        {/* Nested routes under /profileUser */}
-        <Route path="/profileUser" element={<ProfileUser />}>
-          <Route path="user-info" element={<UserInfo />} />
-          {/* <Route path="favourites" element={<Favourites />} />
+          {/* Nested routes under /profileUser */}
+          <Route path="/profileUser" element={<ProfileUser />}>
+            <Route path="user-info" element={<UserInfo />} />
+            {/* <Route path="favourites" element={<Favourites />} />
             <Route path="settings" element={<Settings />} />
             <Route path="notifications" element={<Notifications />} /> */}
-        </Route>
+          </Route>
 
-        <Route path="*" element={<Page404 />} />
-      </Routes>
-    </Router>
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </Router>
+    </Provider>
   </React.StrictMode>
 );

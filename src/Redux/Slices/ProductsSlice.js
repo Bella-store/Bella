@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../Firebase/Firebaseconfig";
+import { db } from "../../config/firebase";
 // import { getAuth } from "firebase/auth";
 
 // Async action to fetch products from Firestore
