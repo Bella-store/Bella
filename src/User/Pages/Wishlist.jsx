@@ -1,13 +1,18 @@
+import React from "react";
 import PageBanner from "../Components/PageBanner";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import { useTranslation } from "react-i18next";
+
 const Wishlist = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className=" w-full mx-auto mt-12">
+    <div className="w-full mx-auto mt-12">
       <Navbar />
 
       {/* Banner Section */}
-      <PageBanner title="Wish List" />
+      <PageBanner title={t("WishlistTitle")} />
 
       {/* Wishlist Section */}
       <div className="bg-white m-auto mt-10 max-w-4xl rounded shadow-md overflow-hidden mb-5">
@@ -17,21 +22,23 @@ const Wishlist = () => {
             <div className="w-24">
               <img
                 src="/ggg-600x720.jpg"
-                alt="Rozana nightstand"
+                alt={t("ProductName")}
                 className="w-full object-cover rounded"
               />
             </div>
             <div className="flex-grow">
-              <span className="font-medium text-gray-700 ">
-                Rozana nightstand
+              <span className="font-medium text-gray-700">
+                {t("ProductName")}
               </span>
-              <div className="text-sm text-gray-600 mt-1">Price: 7,900EGP</div>
               <div className="text-sm text-gray-600 mt-1">
-                Stock Status: In stock
+                {t("Price")}: 7,900 {t("Currency")}
+              </div>
+              <div className="text-sm text-gray-600 mt-1">
+                {t("StockStatus")}: {t("InStock")}
               </div>
               <div className="mt-2">
                 <button className="bg-black text-white py-2 px-4 rounded shadow hover:bg-gray-800">
-                  Add to cart
+                  {t("AddToCart")}
                 </button>
               </div>
             </div>
@@ -48,14 +55,14 @@ const Wishlist = () => {
               <tr>
                 <th className="w-12 py-4 text-gray-600"></th>
                 <th className="w-18 py-4 text-gray-600"></th>
-                <th className="py-4 text-gray-600  font-semibold text-left">
-                  Product
+                <th className="py-4 text-gray-600 font-semibold text-left">
+                  {t("Product")}
                 </th>
                 <th className="py-4 text-gray-600 font-semibold text-center">
-                  Price
+                  {t("Price")}
                 </th>
                 <th className="py-4 text-gray-600 font-semibold text-center">
-                  Stock Status
+                  {t("StockStatus")}
                 </th>
                 <th className="py-4 text-gray-600 font-semibold text-center"></th>
               </tr>
@@ -70,20 +77,24 @@ const Wishlist = () => {
                 <td className="py-4">
                   <img
                     src="/ggg-600x720.jpg"
-                    alt="Rozana nightstand"
+                    alt={t("ProductName")}
                     className="w-16 object-cover rounded"
                   />
                 </td>
                 <td className="py-4">
                   <span className="font-medium text-gray-700">
-                    Rozana nightstand
+                    {t("ProductName")}
                   </span>
                 </td>
-                <td className="text-center text-gray-600">7,900EGP</td>
-                <td className="text-center text-gray-600">In stock</td>
+                <td className="text-center text-gray-600">
+                  7,900 {t("Currency")}
+                </td>
+                <td className="text-center text-gray-600">
+                  {t("InStock")}
+                </td>
                 <td className="text-center">
-                  <button className="bg-black text-white py-2 px-4 rounded shadow  hover:bg-[#B48E61]">
-                    Add to cart
+                  <button className="bg-black text-white py-2 px-4 rounded shadow hover:bg-[#B48E61]">
+                    {t("AddToCart")}
                   </button>
                 </td>
               </tr>

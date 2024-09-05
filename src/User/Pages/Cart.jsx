@@ -3,12 +3,16 @@ import cartItems from "../../../db.json";
 import PageBanner from "../Components/PageBanner";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import { useTranslation } from "react-i18next";
+
 const Cart = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen mt-16">
       <Navbar />
       {/* Cart Banner */}
-      <PageBanner title="Cart" />
+      <PageBanner title={t("CartTitle")} />
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="flex flex-col mt-8 lg:flex-row lg:space-x-8">
           <div className="md:max-w-4xl w-full">
@@ -31,9 +35,11 @@ const Cart = () => {
                       <span className="font-medium text-gray-700">
                         {item.title}
                       </span>
-                      <div className="text-sm text-gray-600">Quantity: 1</div>
                       <div className="text-sm text-gray-600">
-                        Subtotal: {item.price}EGP
+                        {t("Quantity")}: 1
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {t("Subtotal")}: {item.price} {t("Currency")}
                       </div>
                     </div>
                     <button className="text-gray-600 hover:text-red-500 transition">
@@ -51,16 +57,16 @@ const Cart = () => {
                       <th className="w-12 py-4 text-gray-600"></th>
                       <th className="w-22 py-4 text-gray-600"></th>
                       <th className="py-4 text-gray-600 font-semibold text-left">
-                        Product
+                        {t("Product")}
                       </th>
                       <th className="py-4 text-gray-600 font-semibold text-center">
-                        Price
+                        {t("Price")}
                       </th>
                       <th className="py-4 text-gray-600 font-semibold text-center">
-                        Quantity
+                        {t("Quantity")}
                       </th>
                       <th className="py-4 text-gray-600 font-semibold text-center">
-                        Subtotal
+                        {t("Subtotal")}
                       </th>
                     </tr>
                   </thead>
@@ -88,7 +94,7 @@ const Cart = () => {
                           </span>
                         </td>
                         <td className="text-center text-gray-600">
-                          {item.price}EGP
+                          {item.price} {t("Currency")}
                         </td>
                         <td className="text-center">
                           <div className="inline-flex items-center space-x-2">
@@ -107,7 +113,7 @@ const Cart = () => {
                           </div>
                         </td>
                         <td className="text-center text-gray-600">
-                          {item.price}EGP
+                          {item.price} {t("Currency")}
                         </td>
                       </tr>
                     ))}
@@ -119,24 +125,26 @@ const Cart = () => {
 
           {/* Cart Totals */}
           <div className="lg:max-w-sm w-full h-fit bg-white shadow-md rounded p-4 mt-8 lg:mt-0 text-sm md:text-base">
-            <h2 className="text-lg font-semibold pb-4">Cart totals</h2>
+            <h2 className="text-lg font-semibold pb-4">
+              {t("CartTotals")}
+            </h2>
             <div className="mt-4">
               <div className="flex justify-between border-b pb-2">
-                <p className="text-gray-600">Subtotal</p>
+                <p className="text-gray-600">{t("Subtotal")}</p>
                 <p className="font-semibold">
-                  {cartItems.reduce((acc, item) => acc + item.price, 0)}EGP
+                  {cartItems.reduce((acc, item) => acc + item.price, 0)} {t("Currency")}
                 </p>
               </div>
               <div className="flex justify-between mt-2 pb-2">
-                <p className="text-gray-600">Total</p>
+                <p className="text-gray-600">{t("Total")}</p>
                 <p className="font-semibold">
-                  {cartItems.reduce((acc, item) => acc + item.price, 0)}EGP
+                  {cartItems.reduce((acc, item) => acc + item.price, 0)} {t("Currency")}
                 </p>
               </div>
             </div>
             <Link to="/checkout">
               <button className="mt-4 w-full bg-gray-800 text-white py-4 rounded hover:bg-[#B48E61] transition text-sm md:text-base">
-                Proceed to Checkout
+                {t("ProceedToCheckout")}
               </button>
             </Link>
           </div>

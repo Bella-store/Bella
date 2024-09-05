@@ -4,12 +4,14 @@ import { CiSearch, CiHeart } from "react-icons/ci";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
+import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
   const [navBg, setNavBg] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation(); // Get current path
-
+  const { t, i18n } = useTranslation();
+  
   const changeNavBg = () => {
     if (window.scrollY > 0) {
       setNavBg(true);
@@ -36,6 +38,7 @@ const Navbar = () => {
           ? "bg-white text-black h-20"
           : "bg-transparent text-white"
       }`}
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
       <div className="container mx-auto flex justify-between items-center px-[5%]">
         {/* Brand Section */}
@@ -51,7 +54,7 @@ const Navbar = () => {
           </span>
           <p className={`text-sm font-light ${navBg ? "text-mainColor" : ""}`}>
             <Link to="/" className="text-[0.7rem] font-extralight">
-              LUXURY YOU DESERVE
+              {t("LUXURY_YOU_DESERVE")}
             </Link>
           </p>
         </div>
@@ -67,28 +70,32 @@ const Navbar = () => {
         </div>
 
         {/* Full Menu Links (Hidden on Small Screens) */}
-        <ul className="hidden lg:flex space-x-8 uppercase tracking-wide mt-3">
+        <ul
+          className={`hidden lg:flex space-x-8 uppercase tracking-wide mt-3 ${
+            i18n.language === "ar" ? "space-x-reverse" : ""
+          }`}
+        >
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
-            <Link to="/">Home</Link>
+            <Link to="/">{t("Home")}</Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
-            <Link to="/AboutUs">About Us</Link>
+            <Link to="/AboutUs">{t("AboutUs")}</Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
-            <Link to="/Products">Collection</Link>
+            <Link to="/Products">{t("Collection")}</Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
-            <Link to="/contactUs">Contact Us</Link>
+            <Link to="/contactUs">{t("ContactUs")}</Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <Link to="/shop" onClick={toggleSidebar}>
-              Store{" "}
+              {t("Store")}{" "}
             </Link>
           </li>
         </ul>
 
         {/* Icons */}
-        <div className="hidden lg:flex space-x-4 items-center mt-4">
+        <div className={`hidden lg:flex items-center mt-4 ${i18n.language === "ar" ? "space-x-reverse" : ""} space-x-4`}>
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <CiSearch className="size-6" />
           </div>
@@ -105,42 +112,58 @@ const Navbar = () => {
           <PiLineVerticalLight className="size-6" />
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
             <Link to="/login" className="mr-5">
-              LOGIN
+              {t("LOGIN")}
             </Link>
           </div>
+          {i18n.language === "en" && (
+            <button
+              className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]"
+              onClick={() => i18n.changeLanguage('ar')}
+            >
+              AR
+            </button>
+          )}
+          {i18n.language === "ar" && (
+            <button
+              className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]"
+              onClick={() => i18n.changeLanguage('en')}
+            >
+              EN
+            </button>
+          )}
         </div>
       </div>
 
       {/* Sidebar (Visible on Small Screens) */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white text-black shadow-lg z-50 transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 ${i18n.language === "ar" ? "right-0" : "left-0"} h-full w-64 bg-white text-black shadow-lg z-50 transform ${
+          sidebarOpen ? "translate-x-0" : `${i18n.language === "ar" ? "translate-x-full" : "-translate-x-full"}`
         } transition-transform duration-300 lg:hidden`}
       >
         <ul className="flex flex-col space-y-8 p-8 text-black uppercase">
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <Link to="/" onClick={toggleSidebar}>
-              Home
+              {t("Home")}
             </Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <Link to="/AboutUs" onClick={toggleSidebar}>
-              About Us
+              {t("AboutUs")}
             </Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <Link to="/Products" onClick={toggleSidebar}>
-              Collection
+              {t("Collection")}
             </Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <Link to="/contactUs" onClick={toggleSidebar}>
-              Contact Us
+              {t("ContactUs")}
             </Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <Link to="/shop" onClick={toggleSidebar}>
-              Store{" "}
+              {t("Store")}{" "}
             </Link>
           </li>
 
@@ -165,12 +188,12 @@ const Navbar = () => {
           <div className="space-y-2 mt-4">
             <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
               <Link to="/login" onClick={toggleSidebar}>
-                Login
+                {t("LOGIN")}
               </Link>
             </div>
             <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
               <Link to="/register" onClick={toggleSidebar}>
-                Register
+                {t("Register")}
               </Link>
             </div>
           </div>

@@ -14,7 +14,7 @@ const RelatedProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("../public/db.json");
+        const response = await fetch("../db.json");
         const data = await response.json();
         // const products = [...data];
         let products = data.slice(0, 4);
