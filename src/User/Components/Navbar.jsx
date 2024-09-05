@@ -4,11 +4,15 @@ import { CiSearch, CiHeart } from "react-icons/ci";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
+import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+
   const [navBg, setNavBg] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation(); // Get current path
+  const dispatch = useDispatch();
 
   const changeNavBg = () => {
     if (window.scrollY > 0) {
@@ -33,7 +37,7 @@ const Navbar = () => {
     <nav
       className={`fixed w-full top-0 z-50 transition-colors duration-500 px-10 ${
         navBg || (location.pathname !== "/" && location.pathname !== "/AboutUs")
-          ? "bg-white text-black h-20"
+          ? "bg-white text-titleColor h-20"
           : "bg-transparent text-white"
       }`}
     >
@@ -60,7 +64,7 @@ const Navbar = () => {
         <div className="lg:hidden">
           <button
             onClick={toggleSidebar}
-            className={`text-3xl ${navBg ? "text-black" : "text-white"}`}
+            className={`text-3xl ${navBg ? "text-titleColor" : "text-white"}`}
           >
             {sidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
@@ -92,8 +96,13 @@ const Navbar = () => {
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <CiSearch className="size-6" />
           </div>
-          <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+          <div className="hover:text-mainColor cursor-pointer transition-all duration-200 relative">
             <Link to="/cart">
+              {totalQuantity > 0 && (
+                <span className="absolute top-[0px] right-[-5px] flex justify-center items-center text-white bg-opacity-100 bg-[#DD5746] rounded-full text-xs px-[3px] ">
+                  {totalQuantity}
+                </span>
+              )}
               <HiOutlineShoppingBag className="size-6" />
             </Link>
           </div>
