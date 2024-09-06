@@ -24,9 +24,7 @@ const cartSlice = createSlice({
       const { id, title, imageUrl, price } = action.payload;
 
       // Check if an item with the same id AND title exists
-      const existingItem = state.items.find(
-        (item) => item.id === id && item.title === title
-      );
+      const existingItem = state.items.find((item) => item.id === id);
 
       if (existingItem) {
         existingItem.quantity += 1; // Increment quantity

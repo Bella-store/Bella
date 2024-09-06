@@ -18,8 +18,6 @@ const CartPage = () => {
     }
   };
 
-  
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -141,7 +139,7 @@ const CartPage = () => {
             </div>
             <Link
               to="/checkout"
-              className="mt-4 bg-gray-800 text-white py-4 rounded hover:bg-gray-700 transition text-center block w-full"
+              className="mt-4 bg-btncolor text-white py-4 rounded hover:bg-hovermain transition text-center block w-full"
             >
               Proceed to Checkout
             </Link>

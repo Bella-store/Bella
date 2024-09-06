@@ -104,7 +104,7 @@ const Checkout = () => {
               your experience throughout this website, and for other purposes
               described in our privacy policy.
             </p>
-            <button className="mt-6 w-full bg-gray-800 hover:bg-[#B48E61] text-white py-5 rounded  transition">
+            <button className="mt-6 w-full bg-btncolor hover:bg-hovermain text-white py-5 rounded  transition">
               PLACE ORDER
             </button>
           </div>
