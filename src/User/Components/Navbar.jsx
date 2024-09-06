@@ -1,54 +1,69 @@
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { CiSearch, CiHeart } from "react-icons/ci";
-import { Link, useLocation } from "react-router-dom";
+import { CiSearch, CiHeart, CiUser } from "react-icons/ci";
+import { Link, useLocation, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
+import {useNavigate } from "react-router-dom";
+
+import { IoIosLogOut } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserData,logoutUser } from "../../Redux/Slices/AuthSlice";
+
 
 const Navbar = () => {
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+
   const [navBg, setNavBg] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation(); // Get current path
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, userDetails } = useSelector((state) => state.auth);
 
   const changeNavBg = () => {
-    if (window.scrollY > 0) {
-      setNavBg(true);
-    } else {
-      setNavBg(false);
-    }
+    setNavBg(window.scrollY > 0);
   };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const logOut = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+  };
+
   useEffect(() => {
+    if (user) {
+      dispatch(fetchUserData());
+    }
+
     window.addEventListener("scroll", changeNavBg);
     return () => {
       window.removeEventListener("scroll", changeNavBg);
     };
-  }, []);
+  }, [dispatch, user]);
 
   return (
     <nav
-      className={`fixed w-full top-0 z-50 transition-colors duration-500 px-10 ${
+      className={`fixed w-full top-0 z-50 transition-colors duration-500 px-[7%] ${
         navBg || (location.pathname !== "/" && location.pathname !== "/AboutUs")
           ? "bg-white text-black h-20"
           : "bg-transparent text-white"
       }`}
     >
-      <div className="container mx-auto flex justify-between items-center px-[5%]">
+      <div className="container mx-auto flex justify-between items-center">
         {/* Brand Section */}
         <div
           className={`text-3xl font-bold mt-4 ${
             navBg || location.pathname !== "/" ? "text-mainColor" : ""
           }`}
         >
-          <span>
-            <Link to="/" className="flex justify-center font-sans">
-              Bella
-            </Link>
-          </span>
+          <Link to="/" className="flex justify-center font-sans">
+            Bella
+          </Link>
           <p className={`text-sm font-light ${navBg ? "text-mainColor" : ""}`}>
             <Link to="/" className="text-[0.7rem] font-extralight">
               LUXURY YOU DESERVE
@@ -72,18 +87,13 @@ const Navbar = () => {
             <Link to="/">Home</Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
-            <Link to="/AboutUs">About Us</Link>
+            <Link to="/aboutus">About Us</Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
             <Link to="/Products">Collection</Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
-            <Link to="/contactUs">Contact Us</Link>
-          </li>
-          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/shop" onClick={toggleSidebar}>
-              Store{" "}
-            </Link>
+            <Link to="/contact">Contact Us</Link>
           </li>
         </ul>
 
@@ -92,22 +102,62 @@ const Navbar = () => {
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <CiSearch className="size-6" />
           </div>
-          <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/cart">
+          <div className="hover:text-mainColor cursor-pointer transition-all duration-200 relative">
+            <Link
+              to="/cart"
+              className="relative h-10 flex items-center justify-center"
+            >
               <HiOutlineShoppingBag className="size-6" />
+              {totalQuantity > 0 && (
+                <span className="absolute top-0 right-[-2px] flex justify-center items-center text-white bg-opacity-100 bg-red-900 rounded-full text-xs px-[3px] ">
+                  {totalQuantity}
+                </span>
+              )}
             </Link>
           </div>
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/wishlist">
-              <CiHeart className="size-6" />
-            </Link>
+            <CiHeart className="size-6" />
           </div>
           <PiLineVerticalLight className="size-6" />
-          <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
-            <Link to="/login" className="mr-5">
-              LOGIN
-            </Link>
-          </div>
+
+          {userDetails ? (
+            <div className="flex-none text-center">
+              <div className="dropdown dropdown-end">
+                <div tabIndex={0} role="button" className="">
+                  <div className="w-40 text-[1rem]">
+                    {userDetails?.fullName}
+                  </div>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                >
+                  <li>
+                    <NavLink className=" text-titleColor" to="/profileUser/">
+                      <CiUser size={18} />
+                      User Profile
+                    </NavLink>
+                  </li>
+                  <li>
+                    <Link
+                      onClick={logOut}
+                      className=" text-titleColor"
+                      // to="/login"
+                    >
+                      <IoIosLogOut size={18} />
+                      LogOut
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
+              <Link to="/login" className="mr-5">
+                LOGIN
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -134,44 +184,16 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/contactUs" onClick={toggleSidebar}>
+            <Link to="/contact" onClick={toggleSidebar}>
               Contact Us
             </Link>
           </li>
-          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/shop" onClick={toggleSidebar}>
-              Store{" "}
-            </Link>
-          </li>
-
-          {/* Icons in Sidebar */}
           <div className="flex space-x-4 items-center mt-4">
             <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
               <CiSearch className="size-10" />
             </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/cart">
-                <HiOutlineShoppingBag className="size-8" />
-              </Link>
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/wishlist">
-                <CiHeart className="size-8" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Login and Register Links */}
-          <div className="space-y-2 mt-4">
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/login" onClick={toggleSidebar}>
-                Login
-              </Link>
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/register" onClick={toggleSidebar}>
-                Register
-              </Link>
+            <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
+              <HiOutlineShoppingBag className="size-8" />
             </div>
           </div>
         </ul>

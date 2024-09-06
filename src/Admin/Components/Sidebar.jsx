@@ -2,7 +2,9 @@ import { FaGift, FaSignOutAlt, FaUsers } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { ImStatsDots } from "react-icons/im";
 import { MdCancel, MdOutlineSupportAgent } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logoutUser } from "../../../src/Redux/Slices/AuthSlice";
 
 const Sidebar = ({ selectedItem, setSelectedItem, closeSidebar }) => {
   const menuItems = [
@@ -12,6 +14,14 @@ const Sidebar = ({ selectedItem, setSelectedItem, closeSidebar }) => {
     { name: "Support", icon: <MdOutlineSupportAgent />, to: "#" },
     { name: "Coupon", icon: <FaGift />, to: "#" },
   ];
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logOut = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen w-64 bg-white p-4 shadow-md flex flex-col justify-between relative">
@@ -48,7 +58,9 @@ const Sidebar = ({ selectedItem, setSelectedItem, closeSidebar }) => {
       </div>
       <div className="mt-8 flex items-center font-montserrat text-gray-700 hover:text-red-600 cursor-pointer">
         <FaSignOutAlt />
-        <span className="ml-2">Log out</span>
+        <Link onClick={logOut} className=" ml-2 text-titleColor">
+          LogOut
+        </Link>
       </div>
     </div>
   );
