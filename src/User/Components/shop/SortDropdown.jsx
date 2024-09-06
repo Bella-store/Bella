@@ -1,11 +1,14 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const SortDropdown = ({ onSortChange }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('Sort by Default');
+  const [selectedOption, setSelectedOption] = useState(t('SortByDefault'));
 
-  const handleOptionClick = (option) => {
+  const handleOptionClick = (optionKey) => {
+    const option = t(optionKey);
     setSelectedOption(option);
     onSortChange(option);
     setIsOpen(false);
@@ -17,7 +20,7 @@ const SortDropdown = ({ onSortChange }) => {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="inline-flex justify-between w-full rounded-md  px-4 py-2  text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+          className="inline-flex justify-between w-full rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
         >
           {selectedOption}
           <FaChevronDown className="ml-2" />
@@ -28,34 +31,34 @@ const SortDropdown = ({ onSortChange }) => {
         <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-30">
           <div className="py-1">
             <a
-              onClick={() => handleOptionClick('Sort by Default')}
+              onClick={() => handleOptionClick('SortByDefault')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
             >
-              Sort by Default
+              {t('SortByDefault')}
             </a>
             <a
-              onClick={() => handleOptionClick('Sort by Popularity')}
+              onClick={() => handleOptionClick('SortByPopularity')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
             >
-              Sort by Popularity
+              {t('SortByPopularity')}
             </a>
             <a
-              onClick={() => handleOptionClick('Sort by Latest')}
+              onClick={() => handleOptionClick('SortByLatest')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
             >
-              Sort by Latest
+              {t('SortByLatest')}
             </a>
             <a
-              onClick={() => handleOptionClick('Sort by Price: ↑')}
+              onClick={() => handleOptionClick('SortByPriceAsc')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
             >
-              Sort by Price: ↑
+              {t('SortByPriceAsc')}
             </a>
             <a
-              onClick={() => handleOptionClick('Sort by Price: ↓')}
+              onClick={() => handleOptionClick('SortByPriceDesc')}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
             >
-              Sort by Price: ↓
+              {t('SortByPriceDesc')}
             </a>
           </div>
         </div>

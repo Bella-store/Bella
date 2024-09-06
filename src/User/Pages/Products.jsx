@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import { setProducts } from "../../Redux/Slices/ProductsSlice";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import { useTranslation } from "react-i18next";
 
 const Products = () => {
+  const { t } = useTranslation(); // Initialize the useTranslation hook
   const postsPerPage = 9;
   const dispatch = useDispatch();
   const { items: products } = useSelector((state) => state.products); // Access products from Redux
@@ -48,13 +50,13 @@ const Products = () => {
       <div className="mt-16 bg-[#f4f3ef] px-[7%]">
         <div className="bg-product flex justify-center items-center h-72">
           <h2 className="text-5xl md:text-5xl text-gray-700 p-5 font-bold">
-            Collection
+            {t("Collection")}
           </h2>
         </div>
       </div>
 
       {loading ? (
-        <p className="text-center mt-16">Loading...</p>
+        <p className="text-center mt-16">{t("Loading...")}</p>
       ) : (
         <div className="mt-16 flex flex-col lg:flex-row">
           {/* Products Container */}
@@ -74,7 +76,7 @@ const Products = () => {
 
       <Pagination
         postsPerPage={postsPerPage}
-        totalPosts={products.length} // Make sure to use `products` instead of `posts`
+        totalPosts={products.length}
         paginate={paginate}
         currentPage={currentPage}
         className="mt-16"

@@ -7,11 +7,21 @@ import Card from "../Components/Card";
 import SortDropdown from "../Components/shop/SortDropdown";
 import Banner from "../Components/shop/Banner";
 import Navbar from "../Components/Navbar";
+import { useTranslation } from "react-i18next";
+
 import { db } from "../../config/firebase"; // Ensure you import the correct Firebase configuration
 
 const Shop = () => {
   const dispatch = useDispatch();
   const { items: products } = useSelector((state) => state.products); // Fetch products from Redux
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "ar";
+
+  const [currentPosts, setCurrentPosts] = useState([]);
+  
+
+
+
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 200, max: 5000 });
@@ -70,16 +80,16 @@ const Shop = () => {
     filtered = filtered.filter((product) => product.price <= maxPrice);
 
     switch (sortOption) {
-      case "Sort by Popularity":
+      case t("SortByPopularity"):
         // Add logic
         break;
-      case "Sort by Latest":
+      case t("SortByLatest"):
         // Add logic
         break;
-      case "Sort by Price: ↑":
+      case t("SortByPriceAsc"):
         filtered = filtered.sort((a, b) => a.price - b.price);
         break;
-      case "Sort by Price: ↓":
+      case t("SortByPriceDesc"):
         filtered = filtered.sort((a, b) => b.price - a.price);
         break;
       default:
@@ -92,14 +102,15 @@ const Shop = () => {
   return (
     <div className="bg-stone-50 min-h-screen ">
       <Navbar />
-      <Banner title={"Shop"} />
+      <Banner title={t("Shop")} />
 
-      <div className="flex flex-col lg:flex-row px-4 md:px-16 lg:px-18 py-8 ">
+      <div className={`flex flex-col lg:flex-row px-4 md:px-16 lg:px-18 py-8 ${isRtl ? 'flex-row-reverse' : ''}`}>
         {/* Main Content Area */}
         <div className="flex flex-col flex-grow items-center w-full">
           <div className="flex justify-between items-center mb-4 w-[86%]">
             <p className="text-gray-600 text-sm">
-              Showing {filteredPosts.length} of {products.length} results
+
+              {t("ShowingResults", { count: filteredPosts.length })}
             </p>
             <SortDropdown onSortChange={handleSortChange} />
           </div>

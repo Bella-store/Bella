@@ -1,26 +1,13 @@
 import { useState } from "react";
-// import AdminNavbar from '../Components/AdminNavbar';
+import { Routes, Route } from "react-router-dom";
 import Sidebar from "../Components/Sidebar";
 import Statistics from "../Pages/Statistics";
 import UsersTable from "../Pages/UsersTable";
-import ProductsTable from "./ProductsTable";
+import ProductsTable from "../Pages/ProductsTable";
 
 function Dashboard() {
   const [selectedItem, setSelectedItem] = useState("Statistics");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const renderContent = () => {
-    switch (selectedItem) {
-      case "Statistics":
-        return <Statistics />;
-      case "Users":
-        return <UsersTable />;
-      case "Products":
-        return <ProductsTable />;
-      default:
-        return <Statistics />;
-    }
-  };
 
   return (
     <div className="flex bg-[#fffdfb] min-h-screen">
@@ -37,8 +24,15 @@ function Dashboard() {
       </aside>
 
       <div className="flex-1 flex flex-col lg:ml-64">
-        {/* <AdminNavbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} /> */}
-        <main className="flex-1 p-6">{renderContent()}</main>
+        <main className="flex-1 p-6">
+          <Routes>
+            <Route path="statistics" element={<Statistics />} />
+            <Route path="users" element={<UsersTable />} />
+            <Route path="products" element={<ProductsTable />} />
+            {/* Default route to handle unknown paths */}
+            <Route path="*" element={<Statistics />} />
+          </Routes>
+        </main>
       </div>
     </div>
   );

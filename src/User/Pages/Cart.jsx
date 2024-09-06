@@ -4,12 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import Navbar from "../Components/Navbar";
 import PageBanner from "../Components/PageBanner";
 import { removeFromCart, adjustQuantity } from "../../Redux/Slices/CartSlice";
+import Footer from "../Components/Footer";
+import { useTranslation } from "react-i18next";
 
 const CartPage = () => {
   const cart = useSelector((state) => state.cart.items);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const dispatch = useDispatch();
+    const { t } = useTranslation();
+
 
   // Handle increment and decrement of quantity
   const handleAdjustQuantity = (id, newQuantity) => {
@@ -18,10 +22,12 @@ const CartPage = () => {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <PageBanner title="Cart" />
+
 
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="flex flex-col mt-8 lg:flex-row lg:space-x-8">
@@ -31,22 +37,56 @@ const CartPage = () => {
               {cart.length === 0 ? (
                 <p className="text-center py-4">Your cart is empty.</p>
               ) : (
+              {/* For small screens */}
+              <div className="md:hidden flex flex-col space-y-4 p-4">
+                {cartItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center space-x-4 bg-white border-b last:border-0 hover:bg-gray-50 transition p-4 rounded"
+                  >
+                    <div className="w-16">
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="w-full object-cover rounded"
+                      />
+                    </div>
+                    <div className="flex-grow">
+                      <span className="font-medium text-gray-700">
+                        {item.title}
+                      </span>
+                      <div className="text-sm text-gray-600">
+                        {t("Quantity")}: 1
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {t("Subtotal")}: {item.price} {t("Currency")}
+                      </div>
+                    </div>
+                    <button className="text-gray-600 hover:text-red-500 transition">
+                      &#10005;
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* For medium screens and above */}
+              <div className="hidden md:block">
                 <table className="min-w-full bg-white border-collapse text-sm md:text-base">
                   <thead className="bg-gray-100">
                     <tr>
                       <th className="w-12 py-4 text-gray-600"></th>
                       <th className="w-22 py-4 text-gray-600"></th>
                       <th className="py-4 text-gray-600 font-semibold text-left">
-                        Product
+                        {t("Product")}
                       </th>
                       <th className="py-4 text-gray-600 font-semibold text-center">
-                        Price
+                        {t("Price")}
                       </th>
                       <th className="py-4 text-gray-600 font-semibold text-center">
-                        Quantity
+                        {t("Quantity")}
                       </th>
                       <th className="py-4 text-gray-600 font-semibold text-center">
-                        Subtotal
+                        {t("Subtotal")}
                       </th>
                     </tr>
                   </thead>
@@ -77,7 +117,8 @@ const CartPage = () => {
                           </span>
                         </td>
                         <td className="text-center text-gray-600">
-                          {item.price} EGP
+
+                          {item.price} {t("Currency")}
                         </td>
                         <td className="text-center">
                           <div className="inline-flex items-center space-x-2">
@@ -114,7 +155,8 @@ const CartPage = () => {
                           </div>
                         </td>
                         <td className="text-center text-gray-600">
-                          {item.price * item.quantity} EGP
+
+                          {item.price} {t("Currency")}
                         </td>
                       </tr>
                     ))}
@@ -125,23 +167,29 @@ const CartPage = () => {
           </div>
 
           {/* Cart Totals */}
-          <div className="lg:max-w-sm w-full bg-white shadow-md rounded p-4 mt-8 lg:mt-0 text-sm md:text-base">
-            <h2 className="text-lg font-semibold pb-4">Cart totals</h2>
+
+          <div className="lg:max-w-sm w-full h-fit bg-white shadow-md rounded p-4 mt-8 lg:mt-0 text-sm md:text-base">
+            <h2 className="text-lg font-semibold pb-4">
+              {t("CartTotals")}
+            </h2>
             <div className="mt-4">
               <div className="flex justify-between border-b pb-2">
-                <p className="text-gray-600">Total Items</p>
-                <p className="font-semibold">{totalQuantity}</p>
+                <p className="text-gray-600">{t("Subtotal")}</p>
+                <p className="font-semibold">
+                  {cartItems.reduce((acc, item) => acc + item.price, 0)} {t("Currency")}
+                </p>
               </div>
-              <div className="flex justify-between border-b pb-2 mt-2">
-                <p className="text-gray-600">Total Price</p>
-                <p className="font-semibold">{totalPrice} EGP</p>
+              <div className="flex justify-between mt-2 pb-2">
+                <p className="text-gray-600">{t("Total")}</p>
+                <p className="font-semibold">
+                  {cartItems.reduce((acc, item) => acc + item.price, 0)} {t("Currency")}
+                </p>
               </div>
             </div>
-            <Link
-              to="/checkout"
-              className="mt-4 bg-btncolor text-white py-4 rounded hover:bg-hovermain transition text-center block w-full"
-            >
-              Proceed to Checkout
+            <Link to="/checkout">
+              <button className="mt-4 w-full bg-gray-800 text-white py-4 rounded hover:bg-[#B48E61] transition text-sm md:text-base">
+                {t("ProceedToCheckout")}
+              </button>
             </Link>
           </div>
         </div>

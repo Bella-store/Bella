@@ -1,10 +1,13 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -18,7 +21,7 @@ const Register = () => {
         <div className="w-full max-w-md px-8 py-10 bg-white rounded-lg shadow-lg">
           <div className="flex justify-center items-center gap-3 mb-6">
             <h1 className="text-3xl font-semibold text-gray-700">
-              Create Account
+              {t("CreateAccount")}
             </h1>
           </div>
 
@@ -28,21 +31,21 @@ const Register = () => {
                 htmlFor="fullName"
                 className="block text-sm font-medium text-gray-700"
               >
-                Full Name
+                {t("FullName")}
               </label>
               <input
                 id="fullName"
                 name="fullName"
                 type="text"
                 {...register("fullName", {
-                  required: "Full Name is required",
+                  required: t("FullNameRequired"),
                   minLength: {
                     value: 6,
-                    message: "Password must be at least 6 characters long",
+                    message: t("FullNameMinLength"),
                   },
                 })}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-hovermain focus:ring-1 focus:ring-hovermain focus-visible:outline-none transition-colors"
-                aria-label="Full Name"
+                aria-label={t("FullName")}
                 aria-required="true"
               />
               {errors.fullName && (
@@ -57,21 +60,21 @@ const Register = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email Address
+                {t("EmailAddress")}
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 {...register("email", {
-                  required: "Email is required",
+                  required: t("EmailRequired"),
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: "Enter a valid email address",
+                    message: t("InvalidEmail"),
                   },
                 })}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-hovermain focus:ring-1 focus:ring-hovermain focus-visible:outline-none transition-colors"
-                aria-label="Email Address"
+                aria-label={t("EmailAddress")}
                 aria-required="true"
               />
               {errors.email && (
@@ -86,21 +89,21 @@ const Register = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                {t("Password")}
               </label>
               <input
                 id="password"
                 name="password"
                 type="password"
                 {...register("password", {
-                  required: "Password is required",
+                  required: t("PasswordRequired"),
                   minLength: {
                     value: 6,
-                    message: "Password must be at least 6 characters long",
+                    message: t("PasswordMinLength"),
                   },
                 })}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-hovermain focus:ring-1 focus:ring-hovermain focus-visible:outline-none transition-colors"
-                aria-label="Password"
+                aria-label={t("Password")}
                 aria-required="true"
               />
               {errors.password && (
@@ -115,19 +118,19 @@ const Register = () => {
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-gray-700"
               >
-                Confirm Password
+                {t("ConfirmPassword")}
               </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
                 {...register("confirmPassword", {
-                  required: "Please confirm your password",
+                  required: t("ConfirmPasswordRequired"),
                   validate: (value) =>
-                    value === watch("password") || "Passwords do not match",
+                    value === watch("password") || t("PasswordsNotMatch"),
                 })}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-hovermain focus:ring-1 focus:ring-hovermain focus-visible:outline-none transition-colors"
-                aria-label="Confirm Password"
+                aria-label={t("ConfirmPassword")}
                 aria-required="true"
               />
               {errors.confirmPassword && (
@@ -142,19 +145,19 @@ const Register = () => {
                 type="submit"
                 className="w-full py-2 px-4 bg-btncolor text-white font-semibold rounded-md shadow-md hover:bg-hovermain-light transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hovermain"
               >
-                Sign Up
+                {t("SignUp")}
               </button>
             </div>
           </form>
 
           <div className="text-center mt-6">
             <p className="text-sm text-gray-500">
-              Already have an account?{" "}
+              {t("AlreadyHaveAccount")}{" "}
               <Link
                 to="/login"
                 className="ml-1 text-hovermain hover:text-hovermain font-semibold transition-colors"
               >
-                Log in
+                {t("Login")}
               </Link>
             </p>
           </div>

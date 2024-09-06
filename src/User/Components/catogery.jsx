@@ -1,8 +1,9 @@
-import  { useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Category() {
+  const { t } = useTranslation();
   const [category, setCategory] = useState([]);
 
   const fetchCategory = async () => {
@@ -39,7 +40,7 @@ function Category() {
               {/* Add a gradient to ensure text visibility */}
               <div className="absolute inset-0 hover:bg-gradient-to-t from-black to-transparent"></div>
               <h3 className="text-white text-center lg:text-left text-[1.5rem] font-light leading-4 font-montserrat absolute bottom-0 px-5 py-7 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {c.name}
+                {t(c.name)}
               </h3>
             </div>
           </Link>

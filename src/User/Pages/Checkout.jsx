@@ -1,27 +1,32 @@
+import React from "react";
 import PageBanner from "../Components/PageBanner";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import { useTranslation } from "react-i18next";
+
 const Checkout = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className="min-h-screen   mt-16">
+    <div className="min-h-screen mt-16">
       <Navbar />
 
       {/* Checkout Banner */}
-      <PageBanner title="Checkout" />
+      <PageBanner title={t("CheckoutTitle")} />
 
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="flex flex-col mt-8 lg:flex-row lg:space-x-8">
           {/* Billing Details */}
           <div className="lg:max-w-4xl w-full">
-            <div className=" rounded p-6">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6 ">
-                Billing details
+            <div className="rounded p-6">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                {t("BillingDetails")}
               </h2>
               <form className="space-y-6 border-t-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-900">
-                      First name <span className="text-red-500">*</span>
+                      {t("FirstName")} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -30,7 +35,7 @@ const Checkout = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-900">
-                      Last name <span className="text-red-500">*</span>
+                      {t("LastName")} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -40,7 +45,7 @@ const Checkout = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-900">
-                    Phone <span className="text-red-500">*</span>
+                    {t("Phone")} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -49,7 +54,7 @@ const Checkout = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-900">
-                    Email address <span className="text-red-500">*</span>
+                    {t("EmailAddress")} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -63,49 +68,48 @@ const Checkout = () => {
           {/* Order Summary */}
           <div className="lg:max-w-md w-full bg-white shadow-md rounded p-6 mt-8 lg:mt-0 text-sm md:text-base h-fit">
             <h2 className="text-2xl font-semibold pb-6 border-b-2">
-              Your order
+              {t("YourOrder")}
             </h2>
             <ul className="mb-4 mt-6">
               <li className="flex justify-between mb-2">
-                <span className="text-gray-700 font-medium">Product</span>
-                <span className="text-gray-700 font-medium">Subtotal</span>
+                <span className="text-gray-700 font-medium">{t("Product")}</span>
+                <span className="text-gray-700 font-medium">{t("Subtotal")}</span>
               </li>
               <li className="flex justify-between mb-2">
                 <span className="text-gray-700">Becca bed × 1</span>
-                <span className="text-gray-900 font-medium">21,000EGP</span>
+                <span className="text-gray-900 font-medium">21,000 {t("Currency")}</span>
               </li>
             </ul>
             <div className="border-t border-gray-300 pt-4">
               <div className="flex justify-between text-gray-700">
-                <span className="font-semibold">Subtotal</span>
-                <span>21,000EGP</span>
+                <span className="font-semibold">{t("Subtotal")}</span>
+                <span>21,000 {t("Currency")}</span>
               </div>
               <div className="flex justify-between text-gray-900 font-semibold mt-2">
-                <span>Total</span>
-                <span>21,000EGP</span>
+                <span>{t("Total")}</span>
+                <span>21,000 {t("Currency")}</span>
               </div>
             </div>
             <div className="mt-6">
               <label className="inline-flex items-center">
                 <input type="radio" className="form-radio text-black" />
-                <span className="ml-2 text-gray-700">Cash on pickup</span>
+                <span className="ml-2 text-gray-700">{t("CashOnPickup")}</span>
               </label>
               <br />
               <label className="inline-flex items-center mt-3">
                 <input type="radio" className="form-radio text-black" />
-                <span className="ml-2 text-gray-700">Pay with stripe</span>
+                <span className="ml-2 text-gray-700">{t("PayWithStripe")}</span>
               </label>
               <p className="text-sm text-gray-500 mt-2">
-                {/* Pay with cash upon delivery. */}
+                {t("CashOnDeliveryDescription")}
               </p>
             </div>
             <p className="text-xs text-gray-500 mt-4">
-              Your personal data will be used to process your order, support
-              your experience throughout this website, and for other purposes
-              described in our privacy policy.
+              {t("PrivacyPolicyNotice")}
             </p>
-            <button className="mt-6 w-full bg-btncolor hover:bg-hovermain text-white py-5 rounded  transition">
-              PLACE ORDER
+
+            <button className="mt-6 w-full bg-btncolor hover:bg-hovermain text-white py-5 rounded transition">
+              {t("PlaceOrder")}
             </button>
           </div>
         </div>
