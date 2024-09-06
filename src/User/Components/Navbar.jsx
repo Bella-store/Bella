@@ -15,6 +15,7 @@ const Navbar = () => {
 
     const [navBg, setNavBg] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -118,11 +119,6 @@ const Navbar = () => {
                                 </span>
                             )}
                             <HiOutlineShoppingBag className="size-6" />
-                            {totalQuantity > 0 && (
-                                <span className="absolute top-0 right-[-2px] flex justify-center items-center text-white bg-opacity-100 bg-red-900 rounded-full text-xs px-[3px] ">
-                                    {totalQuantity}
-                                </span>
-                            )}
                         </Link>
                     </div>
                     <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
