@@ -49,10 +49,10 @@ const Checkout = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-900">
-                    Email address <span className="text-red-500">*</span>
+                    userEmail address <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="email"
+                    type="userEmail"
                     className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 bg-white focus:ring-black focus:border-black"
                   />
                 </div>

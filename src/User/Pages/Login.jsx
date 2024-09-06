@@ -5,7 +5,7 @@ import { loginUser } from "../../Redux/Slices/AuthSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { error, role } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const {
@@ -16,10 +16,12 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const result = await dispatch(loginUser({
-        email: data.email,
-        password: data.password,
-      })).unwrap();
+      const result = await dispatch(
+        loginUser({
+          userEmail: data.userEmail,
+          password: data.password,
+        })
+      ).unwrap();
 
       if (result.role === "admin") {
         navigate("/dashboard");
@@ -27,11 +29,11 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      if (error.message.includes("auth/invalid-credential")) {
-        alert("The credentials provided are invalid. Please check your input and try again....");
-      } else {
-        alert("An unexpected error occurred. Please try again later...");
-      }
+      const errorMsg =
+        error.message.includes("auth/invalid-credential")
+          ? "The credentials provided are invalid. Please check your input and try again."
+          : "An unexpected error occurred. Please try again later...";
+      alert(errorMsg);
       console.error("Login error: ", error);
     }
   };
@@ -46,31 +48,31 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label
-              htmlFor="email"
+              htmlFor="userEmail"
               className="block text-sm font-medium text-gray-700"
             >
               Email Address
             </label>
             <input
-              id="email"
-              name="email"
+              id="userEmail"
+              name="userEmail"
               type="email"
-              {...register("email", {
-                required: "Email is required",
+              {...register("userEmail", {
+                required: "Email Address is required",
                 pattern: {
-                  value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
+                  value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,}$/,
                   message: "Invalid email address",
                 },
               })}
               className={`mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-mainColor focus:ring-1 focus:ring-mainColor transition-colors ${
-                errors.email ? "border-red-500" : ""
+                errors.userEmail ? "border-red-500" : ""
               }`}
               aria-label="Email Address"
               aria-required="true"
             />
-            {errors.email && (
+            {errors.userEmail && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
+                {errors.userEmail.message}
               </p>
             )}
           </div>
@@ -122,7 +124,7 @@ const Login = () => {
           <p className="text-sm text-gray-500">
             Don’t have an account?
             <Link
-              to="/Register"
+              to="/register"
               className="ml-1 text-mainColor hover:text-mainColor font-montserrat transition-colors"
             >
               Sign up

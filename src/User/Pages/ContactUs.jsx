@@ -37,8 +37,8 @@ const ContactUs = () => {
             </div>
             <div>
               <input
-                type="email"
-                placeholder="Email Address"
+                type="userEmail"
+                placeholder="userEmail Address"
                 className="mt-1 block w-full px-3 py-2 border-b border-gray-300 focus:outline-none sm:text-sm bg-transparent"
               />
             </div>

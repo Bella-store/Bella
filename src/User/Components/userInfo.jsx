@@ -64,19 +64,19 @@ function UserInfo() {
 
           <div className="flex flex-col gap-4 w-full">
             <input
-              type="email"
-              placeholder="Email Address"
-              {...register("email", {
-                required: "Email is required",
+              type="userEmail"
+              placeholder="userEmail Address"
+              {...register("userEmail", {
+                required: "userEmail is required",
                 pattern: {
                   value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
-                  message: "Email is not valid",
+                  message: "userEmail is not valid",
                 },
               })}
               className="input input-bordered w-full max-w-4xl focus:bg-white"
             />
-            {errors.email && (
-              <p className="text-red-500">{errors.email.message}</p>
+            {errors.userEmail && (
+              <p className="text-red-500">{errors.userEmail.message}</p>
             )}
             <input
               type="text"

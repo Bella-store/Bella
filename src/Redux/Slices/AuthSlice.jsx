@@ -1,30 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
-import { useNavigate } from "react-router-dom";
-
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut 
 } from "firebase/auth";
 
 // Register user
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
-  async ({ email, password, fullName, role }, { rejectWithValue }) => {
+  async (
+    { userEmail, password, userName, role },
+    { rejectWithValue }
+  ) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
+        userEmail,
         password
       );
       const user = userCredential.user;
 
       const userDetails = {
-        fullName,
-        email,
-        role: role || "user", // Allow dynamic role assignment
+        userName,
+        userEmail,
+        cartProducts: [], // Initialize empty arrays if needed
+        favoriteProducts: [],
+        role: role || "user",
         createdAt: new Date().toISOString(),
       };
 
@@ -40,16 +43,15 @@ export const registerUser = createAsyncThunk(
 // Login user
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ userEmail, password }, { rejectWithValue }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        email,
+        userEmail,
         password
       );
       const user = userCredential.user;
 
-      // Fetch user details from Firestore
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
@@ -69,8 +71,7 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
   await signOut(auth);
   console.log("User signed out");
-  // const nav = useNavigate();
-  // nav("/login");
+  // Handle navigation in a component after logout if needed
 });
 
 // Fetch all users

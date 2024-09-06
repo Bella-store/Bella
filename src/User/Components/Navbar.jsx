@@ -4,12 +4,11 @@ import { CiSearch, CiHeart, CiUser } from "react-icons/ci";
 import { Link, useLocation, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { IoIosLogOut } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserData,logoutUser } from "../../Redux/Slices/AuthSlice";
-
+import { fetchUserData, logoutUser } from "../../Redux/Slices/AuthSlice";
 
 const Navbar = () => {
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
@@ -125,7 +124,7 @@ const Navbar = () => {
               <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="">
                   <div className="w-40 text-[1rem]">
-                    {userDetails?.fullName}
+                    {userDetails?.userName}
                   </div>
                 </div>
                 <ul
