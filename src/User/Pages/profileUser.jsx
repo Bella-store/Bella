@@ -13,7 +13,7 @@ function ProfileUser() {
         </h2>
         <div className="flex flex-col gap-4 mt-6">
           <NavLink
-            to="/profileUser/user-info"
+            to="/profileUser/userInfo"
             className={({ isActive }) =>
               `ml-1 text-titleColor font-montserrat transition-colors flex gap-2 items-center w-full ${
                 isActive
