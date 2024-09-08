@@ -1,11 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 // Register user
 export const registerUser = createAsyncThunk(
@@ -124,6 +132,55 @@ export const updateUser = createAsyncThunk(
     }
   }
 );
+// Delete user
+export const deleteUser = createAsyncThunk(
+  "auth/deleteUser",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      await deleteDoc(userDocRef);
+      return userId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Update user details
+export const updateUserDetails = createAsyncThunk(
+  "auth/updateUserDetails",
+  async ({ userId, userData }, { rejectWithValue }) => {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      await setDoc(userDocRef, userData, { merge: true });
+      return { userId, userData };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+// Update user profile image
+export const updateUserProfileImage = createAsyncThunk(
+  "auth/updateUserProfileImage",
+  async ({ userId, imageFile }, { rejectWithValue }) => {
+    try {
+      const storage = getStorage();
+      const storageRef = ref(storage, `profileImages/${userId}`);
+
+      // Upload the image file to Firebase Storage
+      await uploadBytes(storageRef, imageFile);
+      const imageUrl = await getDownloadURL(storageRef);
+
+      // Update Firestore with the new image URL
+      const userDocRef = doc(db, "users", userId);
+      await setDoc(userDocRef, { profileImageUrl: imageUrl }, { merge: true });
+
+      return { userId, imageUrl };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -210,6 +267,44 @@ const authSlice = createSlice({
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.users = state.users.filter((user) => user.id !== action.payload);
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      // Update user details
+      .addCase(updateUserDetails.fulfilled, (state, action) => {
+        const index = state.users.findIndex(
+          (user) => user.id === action.payload.userId
+        );
+        if (index !== -1) {
+          state.users[index] = {
+            ...state.users[index],
+            ...action.payload.userData,
+          };
+        }
+      })
+      .addCase(updateUserDetails.rejected, (state, action) => {
+        state.error = action.payload;
+      });
+    builder
+      .addCase(updateUserProfileImage.fulfilled, (state, action) => {
+        const index = state.users.findIndex(
+          (user) => user.id === action.payload.userId
+        );
+        if (index !== -1) {
+          state.users[index] = {
+            ...state.users[index],
+            profileImageUrl: action.payload.imageUrl,
+          };
+        }
+        state.userDetails.profileImageUrl = action.payload.imageUrl;
+      })
+      .addCase(updateUserProfileImage.rejected, (state, action) => {
         state.error = action.payload;
       });
   },

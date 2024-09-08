@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react"; // Added useState
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { CiUser, CiHeart, CiSettings } from "react-icons/ci";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { FaSignOutAlt } from "react-icons/fa";
@@ -14,7 +14,6 @@ function ProfileUser() {
     (state) => state.auth
   );
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     if (!user) {
@@ -22,12 +21,8 @@ function ProfileUser() {
       navigate("/login");
     } else {
       dispatch(fetchUserData(user.uid));
-      // Navigate to the default route if not already on a route
-      if (location.pathname === "/profileUser") {
-        navigate("/profileUser/userInfo");
-      }
     }
-  }, [dispatch, user, navigate, location.pathname]);
+  }, [dispatch, user, navigate]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -45,7 +40,7 @@ function ProfileUser() {
             <h2 className="text-titleColor text-[1.2rem] font-semibold text-center">
               User Profile
             </h2>
-            <div className="flex flex-col gap-4 mt-6">
+            <div className="flex flex-col gap-4 mt-6 ">
               <NavLink
                 to="/profileUser/userInfo"
                 className={({ isActive }) =>
@@ -55,7 +50,7 @@ function ProfileUser() {
                       : "hover:bg-hovermain hover:text-white"
                   } p-2 rounded-md`
                 }
-                onClick={() => setActiveLink("userInfo")}
+                onClick={() => setActiveLink("userInfo")} // Correctly set the state
               >
                 <CiUser size={20} />
                 User Info
