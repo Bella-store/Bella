@@ -1,46 +1,28 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "../../Redux/Slices/ProductsSlice";
+import { fetchProducts } from "../../Redux/Slices/ProductsSlice"; // Update this path if necessary
 import ShopSidebar from "../Components/shop/ShopSidebar";
 import Card from "../Components/Card";
 import SortDropdown from "../Components/shop/SortDropdown";
 import Banner from "../Components/shop/Banner";
 import Navbar from "../Components/Navbar";
-import { db } from "../../config/firebase"; // Ensure you import the correct Firebase configuration
 
 const Shop = () => {
   const dispatch = useDispatch();
-  const { items: products } = useSelector((state) => state.products); // Fetch products from Redux
+  const { items: products, loading } = useSelector((state) => state.products);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 200, max: 5000 });
   const [maxPrice, setMaxPrice] = useState(priceRange.max);
   const [sortOption, setSortOption] = useState("Sort by Default");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const fetchedProducts = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        dispatch(setProducts(fetchedProducts)); // Dispatch products to Redux
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   // Sync the filtered posts with the products in Redux
   useEffect(() => {
-    setFilteredPosts(products); // Initialize filteredPosts with all fetched products
+    setFilteredPosts(products);
   }, [products]);
 
   const handlePriceChange = (price) => {
@@ -104,17 +86,21 @@ const Shop = () => {
             <SortDropdown onSortChange={handleSortChange} />
           </div>
 
-          <div className="flex flex-wrap justify-center sm:1/2 md:4/5 md:gap-8 w-[100%] animate-fadeIn">
-            {filteredPosts.map((product) => (
-              <Card
-                key={product.id}
-                id={product.id}
-                title={product.title}
-                price={product.price}
-                imageUrl={product.imageUrl}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="flex flex-wrap justify-center sm:1/2 md:4/5 md:gap-8 w-[100%] animate-fadeIn">
+              {filteredPosts.map((product) => (
+                <Card
+                  key={product.id}
+                  id={product.id}
+                  title={product.title}
+                  price={product.price}
+                  imageUrl={product.imageUrl}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Sidebar */}

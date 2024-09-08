@@ -1,37 +1,18 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../Components/Navbar";
 import Pagination from "../Components/Pagination";
 import CollectionCard from "../Components/CollectionCard";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { setProducts } from "../../Redux/Slices/ProductsSlice";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../config/firebase";
+import { fetchProducts } from "../../Redux/Slices/ProductsSlice"; // Update this path if necessary
 
 const Products = () => {
   const postsPerPage = 9;
   const dispatch = useDispatch();
-  const { items: products } = useSelector((state) => state.products); // Access products from Redux
-  const [loading, setLoading] = useState(true); // Local loading state
+  const { items: products, loading } = useSelector((state) => state.products);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch products from Firestore and dispatch to Redux
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const fetchedProducts = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        dispatch(setProducts(fetchedProducts)); // Dispatch products to Redux
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   // Pagination logic
@@ -74,7 +55,7 @@ const Products = () => {
 
       <Pagination
         postsPerPage={postsPerPage}
-        totalPosts={products.length} // Make sure to use `products` instead of `posts`
+        totalPosts={products.length}
         paginate={paginate}
         currentPage={currentPage}
         className="mt-16"

@@ -1,39 +1,22 @@
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../Components/Card";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../config/firebase";
-import { useDispatch } from "react-redux";
-
+import { fetchProducts } from "../../Redux/Slices/ProductsSlice"; // Update this path if necessary
 
 const RelatedProducts = () => {
-  const [relatedProducts, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   const dispatch = useDispatch();
+  const { items: products, loading } = useSelector((state) => state.products);
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const fetchedProducts = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        // Use slice to limit to 4 products
-        const limitedProducts = fetchedProducts.slice(0, 4);
-
-        // Dispatch the 4 products to Redux
-        dispatch(setProducts(limitedProducts));
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    dispatch(fetchProducts());
   }, [dispatch]);
+
+  // Use slice to limit to 4 products
+  const relatedProducts = products.slice(0, 4);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col md:flex-col lg:flex-row gap-6 ">
