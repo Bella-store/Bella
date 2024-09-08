@@ -1,23 +1,47 @@
 import { useState, useEffect } from "react";
-import db from "../../../public/db.json";
+import { collection, getDocs } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { setProducts } from "../../Redux/Slices/ProductsSlice";
 import ShopSidebar from "../Components/shop/ShopSidebar";
 import Card from "../Components/Card";
 import SortDropdown from "../Components/shop/SortDropdown";
 import Banner from "../Components/shop/Banner";
 import Navbar from "../Components/Navbar";
+import { db } from "../../config/firebase"; // Ensure you import the correct Firebase configuration
 
 const Shop = () => {
-  const [currentPosts, setCurrentPosts] = useState([]);
+  const dispatch = useDispatch();
+  const { items: products } = useSelector((state) => state.products); // Fetch products from Redux
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 200, max: 5000 });
   const [maxPrice, setMaxPrice] = useState(priceRange.max);
   const [sortOption, setSortOption] = useState("Sort by Default");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setCurrentPosts(db);
-    setFilteredPosts(db);
-  }, []);
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const fetchedProducts = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        dispatch(setProducts(fetchedProducts)); // Dispatch products to Redux
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [dispatch]);
+
+  // Sync the filtered posts with the products in Redux
+  useEffect(() => {
+    setFilteredPosts(products); // Initialize filteredPosts with all fetched products
+  }, [products]);
 
   const handlePriceChange = (price) => {
     setMaxPrice(price);
@@ -35,7 +59,7 @@ const Shop = () => {
   };
 
   const filterProducts = (searchTerm, maxPrice, sortOption) => {
-    let filtered = currentPosts;
+    let filtered = products;
 
     if (searchTerm) {
       filtered = filtered.filter((product) =>
@@ -74,7 +98,9 @@ const Shop = () => {
         {/* Main Content Area */}
         <div className="flex flex-col flex-grow items-center w-full">
           <div className="flex justify-between items-center mb-4 w-[86%]">
-            <p className="text-gray-600 text-sm">Showing 1–12 of 25 results</p>
+            <p className="text-gray-600 text-sm">
+              Showing {filteredPosts.length} of {products.length} results
+            </p>
             <SortDropdown onSortChange={handleSortChange} />
           </div>
 
@@ -82,6 +108,7 @@ const Shop = () => {
             {filteredPosts.map((product) => (
               <Card
                 key={product.id}
+                id={product.id}
                 title={product.title}
                 price={product.price}
                 imageUrl={product.imageUrl}
