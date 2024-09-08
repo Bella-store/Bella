@@ -61,7 +61,6 @@ function App() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="*"
         element={
@@ -70,8 +69,14 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/Register" element={<Register />} />
+              <Route
+                path="/login"
+                element={!currentUser ? <Login /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/Register"
+                element={!currentUser ? <Register /> : <Navigate to="/" />}
+              />
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/Products" element={<Products />} />
               <Route path="/shop" element={<Shop />} />
@@ -80,8 +85,13 @@ function App() {
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/profileUser/*" element={<ProfileUser />}>
+              {/* <Route path="/profileUser/*" element={<ProfileUser />}>
                 <Route path="userInfo" element={<UserInfo />} />
+              </Route> */}
+              <Route
+                path="/profileUser/*"
+                element={currentUser ? <ProfileUser /> : <Navigate to="/" />}>
+                        <Route path="userInfo" element={<UserInfo />} />
               </Route>
               <Route path="*" element={<Page404 />} />
             </Routes>

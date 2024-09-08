@@ -128,7 +128,7 @@ const authSlice = createSlice({
       // Register user
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        // state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -144,7 +144,7 @@ const authSlice = createSlice({
       // Login user
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        // state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -167,7 +167,7 @@ const authSlice = createSlice({
       // Fetch user data
       .addCase(fetchUserData.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        // state.error = null;
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.loading = false;
@@ -176,7 +176,7 @@ const authSlice = createSlice({
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        // state.error = action.payload;
       })
 
       // Fetch all users
@@ -184,7 +184,7 @@ const authSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
-        state.error = action.payload;
+        // state.error = action.payload;
       });
   },
 });

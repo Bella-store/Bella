@@ -29,8 +29,8 @@ const Navbar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const logOut = () => {
-    dispatch(logoutUser());
+  const logOut = async () => {
+    await dispatch(logoutUser());
     navigate("/login");
   };
 

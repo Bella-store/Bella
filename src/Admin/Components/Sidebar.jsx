@@ -18,8 +18,8 @@ const Sidebar = ({ selectedItem, setSelectedItem, closeSidebar }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const logOut = () => {
-    dispatch(logoutUser());
+  const logOut = async () => {
+    await dispatch(logoutUser());
     navigate("/login");
   };
 
