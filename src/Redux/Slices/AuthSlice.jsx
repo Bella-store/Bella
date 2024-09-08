@@ -1,19 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 // Register user
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
-  async (
-    { userEmail, password, userName, role },
-    { rejectWithValue }
-  ) => {
+  async ({ userEmail, password, userName, role }, { rejectWithValue }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -111,6 +108,22 @@ export const fetchUserData = createAsyncThunk(
     }
   }
 );
+// Update user details
+export const updateUser = createAsyncThunk(
+  "auth/updateUser",
+  async (userData, { rejectWithValue, getState }) => {
+    try {
+      const { user } = getState().auth;
+      if (!user) throw new Error("User not authenticated");
+
+      await setDoc(doc(db, "users", user.uid), userData, { merge: true });
+
+      return userData;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -184,6 +197,19 @@ const authSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      // Update user
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userDetails = { ...state.userDetails, ...action.payload };
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
   },

@@ -16,6 +16,7 @@ import ContactUs from "./User/Pages/ContactUs";
 import Wishlist from "./User/Pages/Wishlist";
 import ProfileUser from "./User/Pages/profileUser";
 import UserInfo from "./User/Components/userInfo.JSX";
+import Settings from "./User/Components/Settings";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../src/config/firebase";
 // import { doc, getDoc } from "firebase/firestore";
@@ -82,6 +83,7 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/profileUser/*" element={<ProfileUser />}>
                 <Route path="userInfo" element={<UserInfo />} />
+                <Route path="settings" element={<Settings />} />
               </Route>
               <Route path="*" element={<Page404 />} />
             </Routes>
