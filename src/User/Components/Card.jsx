@@ -4,6 +4,7 @@ import { addToCart } from "../../Redux/Slices/CartSlice";
 import { toggleFavourite } from "../../Redux/Slices/FavouriteSlice"; // Action to toggle favourite
 import { Link } from "react-router-dom";
 
+// eslint-disable-next-line react/prop-types
 function Card({ id, title, imageUrl, price, uid }) {
   const dispatch = useDispatch();
   const isFavourite = useSelector((state) =>

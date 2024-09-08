@@ -1,24 +1,34 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
+import ProductDetails from "../../assets/Images/details.jpg";
 import { NavLink } from "react-router-dom";
 
-function Details({ product }) {
+function Details() {
   return (
     <>
       <div className="grid grid-cols-2 gap-10 px-[7%] py-5 md:py-[3%] md:px-[7%]">
         <div className="bg-slate-400 col-span-2 sm:col-span-1">
-          <img src={product.imageUrl} alt={product.title} className="" />
+          <img src={ProductDetails} alt="aboutUs" className="" />
         </div>
         <div className="col-span-2 sm:col-span-1 px-3 sticky top-5 left-[50%]">
           <h2 className="text-titleColor text-[1.2rem] md:text-[1.5rem] font-light mb-2 md:mb-5 ">
-            {product.title}
+            Rozana nightstand
           </h2>
-          <p className="text-mainColor mb-2 md:mb-5">{product.price} EGP</p>
+          <p className="text-mainColor mb-2 md:mb-5">7,900EGP</p>
           <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
-            {product.material}
+            White Zen wood
           </p>
+          {/* <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
+            Good wood countertops
+          </p>
+          <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
+            Natural veneer
+          </p>
+          <p className="text-textColor text-[0.8rem] mb-2 md:mb-5">
+            Eco-friendly paints
+          </p> */}
           <p className="text-textColor text-[0.8rem] mb-5 md:mb-[3rem]">
-            <span className="font-bold text-[0.8rem]">Size:</span>{" "}
-            {product.size}
+            <span className="font-bold text-[0.8rem]">Size:</span> 65 x 46
           </p>
           <div className="flex gap-2 mb-5 md:mb-[5rem]">
             <button className="text-[14px] md:text-[14px] p-[0.3rem] border border-textColor">
@@ -32,7 +42,7 @@ function Details({ product }) {
             <p className="text-titleColor text-[0.8rem]">
               {`Category:`}
               <NavLink to="/Products" className="text-textColor">
-                {product.category}
+                New Arrival
               </NavLink>
             </p>
           </div>
