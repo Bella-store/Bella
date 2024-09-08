@@ -85,9 +85,6 @@ function App() {
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
-              {/* <Route path="/profileUser/*" element={<ProfileUser />}>
-                <Route path="userInfo" element={<UserInfo />} />
-              </Route> */}
               <Route
                 path="/profileUser/*"
                 element={currentUser ? <ProfileUser /> : <Navigate to="/" />}>
