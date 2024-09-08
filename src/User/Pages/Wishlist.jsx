@@ -3,11 +3,14 @@ import { toggleFavourite } from "../../Redux/Slices/FavouriteSlice";
 import PageBanner from "../Components/PageBanner";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import { addToCart } from "../../Redux/Slices/CartSlice";
 
 const Wishlist = () => {
   const favourites = useSelector((state) => state.favourites.items);
   const dispatch = useDispatch();
-
+  const handleAddtoCart = (item) => {
+    dispatch(addToCart(item));
+  };
   return (
     <div className="w-full mx-auto mt-12">
       <Navbar />
@@ -110,7 +113,10 @@ const Wishlist = () => {
                       </td>
                       <td className="text-center text-gray-600">In stock</td>
                       <td className="text-center">
-                        <button className="bg-black text-white py-2 px-4 rounded shadow  hover:bg-[#B48E61]">
+                        <button
+                          onClick={() => handleAddtoCart(item)}
+                          className="bg-black text-white py-2 px-4 rounded shadow  hover:bg-[#B48E61]"
+                        >
                           Add to cart
                         </button>
                       </td>

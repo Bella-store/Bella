@@ -1,10 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Function to save cart state to localStorage
 const saveCartToLocalStorage = (state) => {
   localStorage.setItem("cart", JSON.stringify(state));
 };
 
-const initialState = JSON.parse(localStorage.getItem("cart")) || {
+// Function to load the cart state from localStorage
+const loadCartFromLocalStorage = () => {
+  try {
+    const serializedCart = localStorage.getItem("cart");
+    return serializedCart ? JSON.parse(serializedCart) : undefined;
+  } catch (e) {
+    console.warn("Failed to load cart from localStorage", e);
+    return undefined;
+  }
+};
+
+// Initial state loaded from localStorage or default state
+const initialState = loadCartFromLocalStorage() || {
   items: [],
   totalQuantity: 0,
   totalPrice: 0,
@@ -37,11 +50,13 @@ const cartSlice = createSlice({
       // Recalculate totals after adding item
       state.totalQuantity = calculateTotalQuantity(state.items);
       state.totalPrice = calculateTotalPrice(state.items);
+
+      // Save updated state to localStorage
+      saveCartToLocalStorage(state);
     },
 
     adjustQuantity: (state, action) => {
       const { id, quantity } = action.payload;
-      // Find item based on both id and uid
       const item = state.items.find((item) => item.id === id);
 
       if (item && quantity > 0) {
@@ -50,6 +65,9 @@ const cartSlice = createSlice({
         // Recalculate totals after adjusting quantity
         state.totalQuantity = calculateTotalQuantity(state.items);
         state.totalPrice = calculateTotalPrice(state.items);
+
+        // Save updated state to localStorage
+        saveCartToLocalStorage(state);
       }
     },
 
@@ -63,6 +81,9 @@ const cartSlice = createSlice({
         // Recalculate totals after removing item
         state.totalQuantity = calculateTotalQuantity(state.items);
         state.totalPrice = calculateTotalPrice(state.items);
+
+        // Save updated state to localStorage
+        saveCartToLocalStorage(state);
       }
     },
 
@@ -70,6 +91,9 @@ const cartSlice = createSlice({
       state.items = [];
       state.totalQuantity = 0;
       state.totalPrice = 0;
+
+      // Save updated state to localStorage
+      saveCartToLocalStorage(state);
     },
   },
 });
