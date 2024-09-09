@@ -16,9 +16,8 @@ import ContactUs from "./User/Pages/ContactUs";
 import Wishlist from "./User/Pages/Wishlist";
 import ProfileUser from "./User/Pages/profileUser";
 import UserInfo from "./User/Components/userInfo.JSX";
-import Settings from "./User/Components/Settings";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../src/config/firebase";
+import { auth } from "../src/config/firebase";
 import ProtectedRoute from "../src/ProtectedRoute/ProtectedRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../src/Redux/Slices/AuthSlice";
@@ -56,7 +55,7 @@ function App() {
         <>
             <Routes>
                 <Route
-                    path="/dashboard"
+                    path="/dashboard/*"
                     element={
                         <ProtectedRoute
                             isAllowed={role === "admin"}
