@@ -18,7 +18,7 @@ export const fetchProducts = createAsyncThunk(
 // Add a product
 export const addProducts = createAsyncThunk(
   "products/addProducts",
-  async ({ title, price, imageUrl, category, description, quantity }) => {
+  async ({title, price, imageUrl, category, description, quantity }) => {
     try {
       const newProduct = await addDoc(collection(db, "products"), {
         title,

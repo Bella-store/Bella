@@ -33,31 +33,6 @@ const Navbar = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
-  const logOut = async () => {
-    await dispatch(logoutUser());
-    navigate("/login");
-  };
-
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchUserData());
-    }
-
-    window.addEventListener("scroll", changeNavBg);
-    return () => {
-      window.removeEventListener("scroll", changeNavBg);
-    const changeNavBg = () => {
-        if (window.scrollY > 0) {
-            setNavBg(true);
-        } else {
-            setNavBg(false);
-        }
-    };
-
-    const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
-    };
-
     const logOut = () => {
         dispatch(logoutUser());
         navigate("/login");
