@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
-// import { getAuth } from "firebase/auth";
 
 // Async action to fetch products from Firestore
 export const fetchProducts = createAsyncThunk(
@@ -15,27 +14,37 @@ export const fetchProducts = createAsyncThunk(
     return products;
   }
 );
+
 const productsSlice = createSlice({
   name: "products",
   initialState: {
     items: [],
     loading: false,
     error: null,
+    filteredItems: [], // Add filtered items
+    selectedCategories: [], // Add category filters
   },
   reducers: {
     setProducts(state, action) {
       state.items = action.payload;
+      state.filteredItems = action.payload; // Initialize filtered items
+    },
+    setSelectedCategories(state, action) {
+      state.selectedCategories = action.payload;
+      state.filteredItems = state.items.filter((product) =>
+        action.payload.includes(product.category)
+      );
     },
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchProducts
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.items = action.payload;
+        state.filteredItems = action.payload; // Initialize filtered items
         state.loading = false;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -45,6 +54,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { setProducts } = productsSlice.actions;
+export const { setProducts, setSelectedCategories } = productsSlice.actions;
 
 export default productsSlice.reducer;

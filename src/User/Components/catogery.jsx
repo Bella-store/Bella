@@ -1,5 +1,4 @@
-import  { useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Category() {
@@ -25,7 +24,7 @@ function Category() {
       {category.length > 0 &&
         category.map((c) => (
           <Link
-            to="/Products"
+            to={`/shop`}
             key={c.id}
             className="relative w-full md:w-[48%] lg:w-[30%] px-[7%] cursor-pointer bg-center bg-cover min-h-[25rem] max-h-[30rem] 
             lg:min-h-[25rem] lg:max-h-[70rem] xl:min-h-[35rem] xl:max-h-[60rem] group overflow-hidden"
