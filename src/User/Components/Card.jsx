@@ -1,26 +1,36 @@
 import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../Redux/Slices/CartSlice";
-import { toggleFavourite } from "../../Redux/Slices/FavouriteSlice"; // Action to toggle favourite
+import { toggleFavourite } from "../../Redux/Slices/FavouriteSlice";
 import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 function Card({ id, title, imageUrl, price, uid }) {
   const dispatch = useDispatch();
-  const isFavourite = useSelector((state) =>
-    state.favourites.items.some((item) => item.id === id)
-  ); // Check if the current product is favourited
+  const navigate = useNavigate();
+
+  // Get the current favorite state (now an array of product IDs)
+  const favouriteIds = useSelector((state) => state.favourites.items);
+  const isFavourite = favouriteIds.includes(id);
+
+  // Get user details from state
+  const { userDetails } = useSelector((state) => state.auth);
 
   const handleAddToCart = () => {
-    const product = { id, title, imageUrl, price, uid };
+    const product = { id, title, imageUrl, price };
     dispatch(addToCart(product));
-    console.log("Product ID:", id);
+    console.log("Product ID added to cart:", id);
   };
 
   const handleToggleFavourite = () => {
-    const product = { id, title, imageUrl, price };
-    dispatch(toggleFavourite(product));
-    console.log("Product ID:", id);
+    if (!userDetails) {
+      navigate("/login");
+    } else {
+      dispatch(toggleFavourite(id));
+      console.log("Toggled favorite for product ID:", id);
+    }
   };
 
   return (
@@ -43,8 +53,11 @@ function Card({ id, title, imageUrl, price, uid }) {
           className="col-span-1 cursor-pointer border-gray-500 border transition-all duration-200 hover:text-white hover:border-mainColor hover:bg-mainColor flex justify-center items-center"
           onClick={handleToggleFavourite}
         >
-          <CiHeart size={24} color={isFavourite ? "white" : "black"} />{" "}
-          {/* Change color based on favourite status */}
+          {isFavourite ? (
+            <FaHeart size={19} color="white" />
+          ) : (
+            <CiHeart size={24} color="black" />
+          )}
         </div>
       </div>
 
