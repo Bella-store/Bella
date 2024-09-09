@@ -97,7 +97,7 @@ const Wishlist = () => {
                       >
                         <td className="text-center py-4">
                           <button
-                            onClick={() => dispatch(toggleFavourite(item))}
+                            onClick={() => dispatch(toggleFavourite(item.id))}
                             className="text-gray-600 hover:text-red-500 transition"
                           >
                             &#10005;
