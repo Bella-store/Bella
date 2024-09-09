@@ -19,116 +19,128 @@ import UserInfo from "./User/Components/userInfo.JSX";
 import Settings from "./User/Components/Settings";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../src/config/firebase";
-// import { doc, getDoc } from "firebase/firestore";
 import ProtectedRoute from "../src/ProtectedRoute/ProtectedRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../src/Redux/Slices/AuthSlice";
+import { ToastContainer } from "react-toastify";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  const { role } = useSelector((state) => state.auth);
+    const { role } = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setCurrentUser(user);
-        await dispatch(fetchUserData(user.uid));
-      } else {
-        setCurrentUser(null);
-        fetchUserData(null);
-      }
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                setCurrentUser(user);
+                await dispatch(fetchUserData(user.uid));
+            } else {
+                setCurrentUser(null);
+                fetchUserData(null);
+            }
 
-      setLoading(false);
-    });
+            setLoading(false);
+        });
 
-    return () => unsubscribe();
-  }, [dispatch]);
+        return () => unsubscribe();
+    }, [dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
-  return (
-    <Routes>
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute isAllowed={role === "admin"} redirectPath="/">
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="*"
-        element={
-          role === "admin" ? (
-            <Navigate to="/dashboard" />
-          ) : (
+    return (
+        <>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/Register" element={<Register />} />
-              <Route path="/AboutUs" element={<AboutUs />} />
-              <Route path="/Products" element={<Products />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/products/:id" element={<ProductDetails />} />
-              <Route path="/contactUs" element={<ContactUs />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/profileUser/*" element={<ProfileUser />}>
-                <Route path="userInfo" element={<UserInfo />} />
-                <Route path="settings" element={<Settings />} />
-              </Route>
-              <Route path="*" element={<Page404 />} />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute
+                            isAllowed={role === "admin"}
+                            redirectPath="/"
+                        >
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="*"
+                    element={
+                        role === "admin" ? (
+                            <Navigate to="/dashboard" />
+                        ) : (
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route
+                                    path="/login"
+                                    element={
+                                        !currentUser ? (
+                                            <Login />
+                                        ) : (
+                                            <Navigate to="/" />
+                                        )
+                                    }
+                                />
+                                <Route
+                                    path="/Register"
+                                    element={
+                                        !currentUser ? (
+                                            <Register />
+                                        ) : (
+                                            <Navigate to="/" />
+                                        )
+                                    }
+                                />
+                                <Route path="/AboutUs" element={<AboutUs />} />
+                                <Route
+                                    path="/Products"
+                                    element={<Products />}
+                                />
+                                <Route path="/shop" element={<Shop />} />
+                                <Route
+                                    path="/products/:id"
+                                    element={<ProductDetails />}
+                                />
+                                <Route
+                                    path="/contactUs"
+                                    element={<ContactUs />}
+                                />
+                                <Route
+                                    path="/wishlist"
+                                    element={<Wishlist />}
+                                />
+                                <Route path="/cart" element={<Cart />} />
+                                <Route
+                                    path="/checkout"
+                                    element={<Checkout />}
+                                />
+                                <Route
+                                    path="/profileUser/*"
+                                    element={
+                                        currentUser ? (
+                                            <ProfileUser />
+                                        ) : (
+                                            <Navigate to="/" />
+                                        )
+                                    }
+                                >
+                                    <Route
+                                        path="userInfo"
+                                        element={<UserInfo />}
+                                    />
+                                </Route>
+                                <Route path="*" element={<Page404 />} />
+                            </Routes>
+                        )
+                    }
+                />
             </Routes>
-          )
-        }
-      />
-    </Routes>
-  );
+            <ToastContainer />
+        </>
+    );
 }
 
 export default App;
-
-// const [role, setRole] = useState(null);
-
-// useEffect(() => {
-//   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-//     if (user) {
-//       setCurrentUser(user);
-//       await dispatch(fetchUserData(user.uid));
-//       console.log(user.uid + "fffffffffffffffffffdfgh");
-//     } else {
-//       setCurrentUser(null);
-//       setRole(null);
-//     }
-//     setLoading(false);
-//   });
-
-//   return () => unsubscribe();
-// }, []);
-
-// const fetchUserRole = async (uid) => {
-//   try {
-//     const userDoc = await getDoc(doc(db, "users", uid));
-
-//     if (userDoc.exists()) {
-//       const userData = userDoc.data();
-//       console.log(userData + "testttttttttttttttttttttttttttttttttttttttttt");
-
-//       setRole(userData.role);
-//     } else {
-//       console.log("No such user document!");
-//       setRole(null);
-//     }
-//   } catch (error) {
-//     console.error("Error fetching user role: ", error);
-//     setRole(null);
-//   }
-// };
