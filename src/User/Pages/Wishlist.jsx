@@ -20,7 +20,7 @@ const Wishlist = () => {
   return (
     <div className="flex flex-col min-h-screen ">
       <Navbar />
-      <div className="flex-grow mt-12">
+      <div className="flex-grow mt-16 mb-3">
         <PageBanner title="Wish List" />
 
         <div className="bg-white m-auto mt-10 max-w-4xl rounded shadow-md overflow-hidden mb-5">
