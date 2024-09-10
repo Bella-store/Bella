@@ -21,11 +21,12 @@ import { auth } from "../src/config/firebase";
 import ProtectedRoute from "../src/ProtectedRoute/ProtectedRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../src/Redux/Slices/AuthSlice";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Statistics from "./ReAdmin/Components/Statistics";
 import Users from "./ReAdmin/Components/Users";
 import ProductsDash from "./ReAdmin/Components/ProductsDash";
+import Settings from "./User/Components/Settings";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -99,6 +100,7 @@ function App() {
                   element={currentUser ? <ProfileUser /> : <Navigate to="/" />}
                 >
                   <Route path="userInfo" element={<UserInfo />} />
+                  <Route path="settings" element={<Settings />} />
                 </Route>
                 <Route path="*" element={<Page404 />} />
               </Routes>

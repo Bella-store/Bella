@@ -1,35 +1,38 @@
-import { useEffect, useState } from "react"; // Added useState
+import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { CiUser, CiHeart, CiSettings } from "react-icons/ci";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../../Redux/Slices/AuthSlice";
+import { onAuthStateChanged } from "firebase/auth"; // Import this to listen to auth state
+import { auth } from "../../config/firebase"; // Import Firebase auth
+import { loginUser } from "../../Redux/Slices/AuthSlice"; // Dispatch action to set user in redux
 
 function ProfileUser() {
   const [activeLink, setActiveLink] = useState("userInfo");
-
   const dispatch = useDispatch();
-  const { user, userDetails, loading, error } = useSelector(
+  const { user, userId, userDetails, loading } = useSelector(
     (state) => state.auth
   );
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      console.error("User not authenticated");
-      navigate("/login");
-    } else {
-      dispatch(fetchUserData(user.uid));
-    }
-  }, [dispatch, user, navigate]);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        // If there's an authenticated user, fetch their data
+        dispatch(fetchUserData(currentUser.uid));
+      } else {
+        console.error("User not authenticated");
+        navigate("/login");
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup the listener on component unmount
+  }, [dispatch, navigate]);
 
   if (loading) {
     return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -72,7 +75,7 @@ function ProfileUser() {
               </NavLink>
 
               <NavLink
-                to="/profileUser/settings"
+                to="/profileUser/Settings"
                 className={({ isActive }) =>
                   `ml-1 text-titleColor font-montserrat transition-colors flex gap-2 ${
                     isActive
