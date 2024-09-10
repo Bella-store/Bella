@@ -10,7 +10,7 @@ import ProductDetails from "./User/Pages/ProductDetails";
 import Shop from "./User/Pages/Shop";
 import Cart from "./User/Pages/Cart";
 import Checkout from "./User/Pages/Checkout";
-import Dashboard from "./Admin/Pages/Dashboard";
+import Dashboard from "./ReAdmin/Pages/Dashboard";
 import Page404 from "./User/Pages/Page404";
 import ContactUs from "./User/Pages/ContactUs";
 import Wishlist from "./User/Pages/Wishlist";
@@ -22,6 +22,12 @@ import ProtectedRoute from "../src/ProtectedRoute/ProtectedRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../src/Redux/Slices/AuthSlice";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Statistics from "./ReAdmin/Components/Statistics";
+import Users from "./ReAdmin/Components/Users";
+import ProductsDash from "./ReAdmin/Components/ProductsDash";
+import Settings from "./User/Components/Settings";
+import ProfileFavourite from "./User/Components/ProfileFavourite";
 import Success from "./User/Components/Success";
 
 function App() {
@@ -62,7 +68,11 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="users" element={<Users />} />
+          <Route path="productsdash" element={<ProductsDash />} />
+        </Route>
         <Route
           path="*"
           element={
@@ -92,6 +102,8 @@ function App() {
                   element={currentUser ? <ProfileUser /> : <Navigate to="/" />}
                 >
                   <Route path="userInfo" element={<UserInfo />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="userfav" element={<ProfileFavourite />} />
                 </Route>
                 <Route path="*" element={<Page404 />} />
                 <Route path="/success" element={<Success />} />

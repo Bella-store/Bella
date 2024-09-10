@@ -26,7 +26,7 @@ const productColumns = [
 const ProductsTable = () => {
   return (
     <div>
-      <HeaderWithSubPath title="Products" />
+      {/* <HeaderWithSubPath title="Products" /> */}
       <DataTable  columns={productColumns} data={productsData} />
     </div>
   );

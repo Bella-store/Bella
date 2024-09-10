@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { GoFileMedia } from "react-icons/go";
@@ -14,6 +15,7 @@ const DataTable = () => {
   const [imageFile, setImageFile] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(" ");
 
   const [newProduct, setNewProduct] = useState({
     title: "",
@@ -32,7 +34,11 @@ const DataTable = () => {
     setModal(false);
     resetForm();
   };
-
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+    console.log(searchTerm);
+    
+  };
   const openDeleteModal = (product) => {
     setProductToDelete(product);
     setDeleteModal(true);
@@ -74,7 +80,7 @@ const DataTable = () => {
     try {
       const downloadURL = await uploadImage();
 
-      await  dispatch(
+      await dispatch(
         addProducts({
           ...newProduct,
           imageUrl: downloadURL,
@@ -128,11 +134,17 @@ const DataTable = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-7">
         <h1 className="text-2xl font-bold text-titleColor">Products</h1>
+        <input
+          type="text"
+          className="w-[50%] input input-bordered focus:border-0 h-[2.5rem] "
+          placeholder="Search"
+          onClick={handleSearch}
+        />
         <button
           onClick={openModal}
-          className="bg-mainColor text-white p-2 px-7 rounded"
+          className="bg-mainColor text-white px-7 rounded"
         >
           Add Product
         </button>
@@ -154,172 +166,194 @@ const DataTable = () => {
               </tr>
             </thead>
             <tbody>
-              {items.map((item, index) => (
-                <tr key={item.id} className="text-center">
-                  <td>{index + 1}</td>
-                  <td>
-                    <img
-                      src={item.imageUrl}
-                      alt="Product"
-                      className="h-12 w-12 m-auto object-cover"
-                    />
-                  </td>
-                  <td>{item.title}</td>
-                  <td>{item.category}</td>
-                  <td>{item.quantity}</td>
-                  <td>${item.price}</td>
-                  <td>{item.description}</td>
-                  <td className="flex gap-2">
-                    <button
-                      className="btn btn-ghost btn-xs"
-                      onClick={() => openDeleteModal(item)}
-                    >
-                      Delete
-                    </button>
-                    <button className="btn btn-ghost btn-xs">Edit</button>
-                  </td>
-                </tr>
-              ))}
+{items.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm)
+  )
+  .map((item, index) => (
+    <tr key={item.id} className="text-center">
+      <td>{index + 1}</td>
+      <td>
+        <img
+          src={item.imageUrl}
+          alt="Product"
+          className="h-12 w-12 m-auto object-cover"
+        />
+      </td>
+      <td>{item.title}</td>
+      <td>{item.category}</td>
+      <td>{item.quantity}</td>
+      <td>${item.price}</td>
+      <td>{item.description}</td>
+      <td className="flex gap-2">
+        <button
+          className="btn btn-ghost btn-xs"
+          onClick={() => openDeleteModal(item)}
+        >
+          Delete
+        </button>
+        <button className="btn btn-ghost btn-xs">Edit</button>
+      </td>
+    </tr>
+  ))}
+
             </tbody>
           </table>
         </div>
       </div>
 
       {/* Add Product Modal */}
-{/* Add Product Modal */}
-{isModal && (
-  <div className="fixed w-full z-[99999] inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="modal-box bg-white p-5 rounded-lg sm:w-[50rem]">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">Add Product</h2>
-        <button
-          className="btn btn-circle btn-ghost hover:bg-mainColor hover:text-white"
-          onClick={closeModal}
-        >
-          <IoCloseOutline size={18} />
-        </button>
-      </div>
+      {/* Add Product Modal */}
+      {isModal && (
+        <div className="fixed w-full z-[99999] inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="modal-box bg-white p-5 rounded-lg sm:w-[50rem]">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">Add Product</h2>
+              <button
+                className="btn btn-circle btn-ghost hover:bg-mainColor hover:text-white"
+                onClick={closeModal}
+              >
+                <IoCloseOutline size={18} />
+              </button>
+            </div>
 
-      <form onSubmit={handleAddProduct} className="space-y-3">
-        {/* Label for Product Name */}
-        <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
-          Product Name
-        </label>
-        <input
-          id="productName"
-          type="text"
-          name="title"
-          value={newProduct.title}
-          onChange={handleInputChange}
-          className="input input-bordered w-full"
-          required
-        />
+            <form onSubmit={handleAddProduct} className="space-y-3">
+              {/* Label for Product Name */}
+              <label
+                htmlFor="productName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Product Name
+              </label>
+              <input
+                id="productName"
+                type="text"
+                name="title"
+                value={newProduct.title}
+                onChange={handleInputChange}
+                className="input input-bordered w-full"
+                required
+              />
 
-        {/* Label for Price */}
-        <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-          Price
-        </label>
-        <input
-          id="price"
-          type="number"
-          name="price"
-          value={newProduct.price}
-          onChange={handleInputChange}
-          min={1}
-          className="input input-bordered w-full"
-          required
-        />
+              {/* Label for Price */}
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Price
+              </label>
+              <input
+                id="price"
+                type="number"
+                name="price"
+                value={newProduct.price}
+                onChange={handleInputChange}
+                min={1}
+                className="input input-bordered w-full"
+                required
+              />
 
-        {/* Label for Quantity */}
-        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
-          Quantity
-        </label>
-        <input
-          id="quantity"
-          type="number"
-          name="quantity"
-          value={newProduct.quantity}
-          onChange={handleInputChange}
-          min={1}
-          className="input input-bordered w-full"
-          required
-        />
+              {/* Label for Quantity */}
+              <label
+                htmlFor="quantity"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Quantity
+              </label>
+              <input
+                id="quantity"
+                type="number"
+                name="quantity"
+                value={newProduct.quantity}
+                onChange={handleInputChange}
+                min={1}
+                className="input input-bordered w-full"
+                required
+              />
 
-        {/* Label for Description */}
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-          Product Description
-        </label>
-        <textarea
-          id="description"
-          name="description"
-          value={newProduct.description}
-          onChange={handleInputChange}
-          placeholder="Product description..."
-          className="textarea textarea-bordered w-full"
-          rows="2"
-          required
-        />
+              {/* Label for Description */}
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Product Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={newProduct.description}
+                onChange={handleInputChange}
+                placeholder="Product description..."
+                className="textarea textarea-bordered w-full"
+                rows="2"
+                required
+              />
 
-        {/* Label for Category */}
-        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-          Category
-        </label>
-        <select
-          id="category"
-          name="category"
-          value={newProduct.category}
-          onChange={handleInputChange}
-          className="select select-info w-full"
-          required
-        >
-          <option value="" disabled>
-            Category
-          </option>
-          <option value="Bedroom">Bedroom</option>
-          <option value="Decoration">Decoration</option>
-          <option value="Living Room">Living Room</option>
-        </select>
+              {/* Label for Category */}
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Category
+              </label>
+              <select
+                id="category"
+                name="category"
+                value={newProduct.category}
+                onChange={handleInputChange}
+                className="select select-info w-full"
+                required
+              >
+                <option value="" disabled>
+                  Category
+                </option>
+                <option value="Bedroom">Bedroom</option>
+                <option value="Decoration">Decoration</option>
+                <option value="Living Room">Living Room</option>
+              </select>
 
-        {/* Label for Image Upload */}
-        <div className="flex items-center gap-3">
-          <label htmlFor="imgFile" className="cursor-pointer block text-sm font-medium text-gray-700">
-            Add Image
-          </label>
-          <GoFileMedia />
-          <input
-            id="imgFile"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
+              {/* Label for Image Upload */}
+              <div className="flex items-center gap-3">
+                <label
+                  htmlFor="imgFile"
+                  className="cursor-pointer block text-sm font-medium text-gray-700"
+                >
+                  Add Image
+                </label>
+                <GoFileMedia />
+                <input
+                  id="imgFile"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </div>
 
-        {/* Preview Image */}
-        {preview && (
-          <div className="max-w-full">
-            <img
-              src={preview}
-              alt="Preview"
-              className="object-cover h-[20rem]"
-            />
+              {/* Preview Image */}
+              {preview && (
+                <div className="max-w-full">
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="object-cover h-[20rem]"
+                  />
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <div className="flex justify-end mt-4">
+                <button
+                  disabled={isDisabled}
+                  className="bg-mainColor text-white p-2 px-7 rounded mt-10"
+                  type="submit"
+                >
+                  Add
+                </button>
+              </div>
+            </form>
           </div>
-        )}
-
-        {/* Submit Button */}
-        <div className="flex justify-end mt-4">
-          <button
-            disabled={isDisabled}
-            className="bg-mainColor text-white p-2 px-7 rounded mt-10"
-            type="submit"
-          >
-            Add
-          </button>
         </div>
-      </form>
-    </div>
-  </div>
-)}
+      )}
 
       {/* Delete Product Modal */}
       {isDeleteModal && (
