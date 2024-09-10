@@ -16,8 +16,8 @@ const AddProductModal = ({ closeModal }) => {
     category: "",
     description: "",
     imageUrl: "",
-    price: 0,
-    quantity: 0,
+    price: 1,
+    quantity: 1,
   });
 
   const dispatch = useDispatch();
