@@ -31,90 +31,135 @@ import ProfileFavourite from "./User/Components/ProfileFavourite";
 import Success from "./User/Components/Success";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  const { role } = useSelector((state) => state.auth);
+    const { role } = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setCurrentUser(user);
-        await dispatch(fetchUserData(user.uid));
-      } else {
-        setCurrentUser(null);
-        fetchUserData(null);
-      }
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                setCurrentUser(user);
+                await dispatch(fetchUserData(user.uid));
+            } else {
+                setCurrentUser(null);
+                fetchUserData(null);
+            }
 
-      setLoading(false);
-    });
+            setLoading(false);
+        });
 
-    return () => unsubscribe();
-  }, [dispatch]);
+        return () => unsubscribe();
+    }, [dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
-  return (
-    <>
-      <Routes>
-        <Route
-          path="/dashboard/*"
-          element={
-            <ProtectedRoute isAllowed={role === "admin"} redirectPath="/">
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="statistics" element={<Statistics />} />
-          <Route path="users" element={<Users />} />
-          <Route path="productsdash" element={<ProductsDash />} />
-        </Route>
-        <Route
-          path="*"
-          element={
-            role === "admin" ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <Routes>
-                <Route path="/" element={<Home />} />
+    return (
+        <>
+            <Routes>
                 <Route
-                  path="/login"
-                  element={!currentUser ? <Login /> : <Navigate to="/" />}
-                />
-                <Route
-                  path="/Register"
-                  element={!currentUser ? <Register /> : <Navigate to="/" />}
-                />
-                <Route path="/AboutUs" element={<AboutUs />} />
-                <Route path="/Products" element={<Products />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/products/:id" element={<ProductDetails />} />
-                <Route path="/contactUs" element={<ContactUs />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route
-                  path="/profileUser/*"
-                  element={currentUser ? <ProfileUser /> : <Navigate to="/" />}
+                    path="/dashboard/*"
+                    element={
+                        <ProtectedRoute
+                            isAllowed={role === "admin"}
+                            redirectPath="/"
+                        >
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
                 >
-                  <Route path="userInfo" element={<UserInfo />} />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="userfav" element={<ProfileFavourite />} />
+                    <Route path="statistics" element={<Statistics />} />
+                    <Route path="users" element={<Users />} />
+                    <Route path="productsdash" element={<ProductsDash />} />
                 </Route>
-                <Route path="*" element={<Page404 />} />
-                <Route path="/success" element={<Success />} />
-              </Routes>
-            )
-          }
-        />
-      </Routes>
-      <ToastContainer />
-    </>
-  );
+                <Route
+                    path="*"
+                    element={
+                        role === "admin" ? (
+                            <Navigate to="/dashboard/statistics" />
+                        ) : (
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route
+                                    path="/login"
+                                    element={
+                                        !currentUser ? (
+                                            <Login />
+                                        ) : (
+                                            <Navigate to="/" />
+                                        )
+                                    }
+                                />
+                                <Route
+                                    path="/Register"
+                                    element={
+                                        !currentUser ? (
+                                            <Register />
+                                        ) : (
+                                            <Navigate to="/" />
+                                        )
+                                    }
+                                />
+                                <Route path="/AboutUs" element={<AboutUs />} />
+                                <Route
+                                    path="/Products"
+                                    element={<Products />}
+                                />
+                                <Route path="/shop" element={<Shop />} />
+                                <Route
+                                    path="/products/:id"
+                                    element={<ProductDetails />}
+                                />
+                                <Route
+                                    path="/contactUs"
+                                    element={<ContactUs />}
+                                />
+                                <Route
+                                    path="/wishlist"
+                                    element={<Wishlist />}
+                                />
+                                <Route path="/cart" element={<Cart />} />
+                                <Route
+                                    path="/checkout"
+                                    element={<Checkout />}
+                                />
+                                <Route
+                                    path="/profileUser/*"
+                                    element={
+                                        currentUser ? (
+                                            <ProfileUser />
+                                        ) : (
+                                            <Navigate to="/" />
+                                        )
+                                    }
+                                >
+                                    <Route
+                                        path="userInfo"
+                                        element={<UserInfo />}
+                                    />
+                                    <Route
+                                        path="settings"
+                                        element={<Settings />}
+                                    />
+                                    <Route
+                                        path="userfav"
+                                        element={<ProfileFavourite />}
+                                    />
+                                </Route>
+                                <Route path="*" element={<Page404 />} />
+                                <Route path="/success" element={<Success />} />
+                            </Routes>
+                        )
+                    }
+                />
+            </Routes>
+            <ToastContainer />
+        </>
+    );
 }
 
 export default App;
