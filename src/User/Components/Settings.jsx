@@ -75,7 +75,7 @@ function Settings() {
             name="userName"
             value={formData.userName}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:border-transparent text-gray-700"
+            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
           />
         </div>
         <div>
@@ -87,7 +87,7 @@ function Settings() {
             name="userEmail"
             value={formData.userEmail}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:border-transparent text-gray-700"
+            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
           />
         </div>
         <div>
@@ -99,7 +99,7 @@ function Settings() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:border-transparent text-gray-700"
+            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
           />
         </div>
         <div>
@@ -111,7 +111,7 @@ function Settings() {
             name="address"
             value={formData.address}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:border-transparent text-gray-700"
+            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
           />
         </div>
         <div>
@@ -123,7 +123,7 @@ function Settings() {
             name="city"
             value={formData.city}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:border-transparent text-gray-700"
+            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
           />
         </div>
         <button
