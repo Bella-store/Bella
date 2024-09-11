@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, deleteUser } from "../../Redux/Slices/AuthSlice";
 import Pagination from "../../User/Components/Pagination";
 import { IoCloseOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -64,17 +66,32 @@ const Users = () => {
   // Handle pagination
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (loading) return <div className="flex items-center justify-center object-centerw-full mt-[25%]">
-  <div className="">
-    <span className="loading loading-infinity loading-lg text-mainColor"></span>
-  </div>
-</div>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center object-centerw-full mt-[25%]">
+        <div className="">
+          <span className="loading loading-infinity loading-lg text-mainColor"></span>
+        </div>
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   return (
     <div>
       <div className="flex my-5">
-        <h1 className="text-2xl font-bold text-titleColor">Users</h1>
+        <h1 className="text-2xl font-bold text-titleColor">
+          {" "}
+          <div className="breadcrumbs text-sm text-titleColor">
+            <ul>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <a>Users</a>
+              </li>
+            </ul>
+          </div>
+        </h1>
         <input
           type="text"
           className="w-[50%] input input-bordered focus:border-0 h-[2.5rem] m-auto"
