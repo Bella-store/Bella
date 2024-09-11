@@ -7,7 +7,7 @@ import { addProducts, updateProducts } from "../../Redux/Slices/ProductsSlice";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../config/firebase";
 import { toast } from "react-toastify";
-import { v4 as uuidv4 } from 'uuid'; // استيراد دالة uuidv4
+import { v4 as uuidv4 } from "uuid"; // استيراد دالة uuidv4
 
 const AddProductModal = ({ closeModal, productToUpdate }) => {
   const [preview, setPreview] = useState(null);
@@ -15,7 +15,7 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const [newProduct, setNewProduct] = useState({
-    id: productToUpdate ? productToUpdate.id : uuidv4(), 
+    id: productToUpdate ? productToUpdate.id : uuidv4(),
     title: "",
     category: "",
     description: "",
@@ -71,7 +71,6 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
     }
   };
 
-
   const uploadImage = async () => {
     if (!imageFile) return null;
 
@@ -112,38 +111,43 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
   const handleAddOrUpdateProduct = async (e) => {
     e.preventDefault();
     setIsDisabled(true);
-  
+
     try {
       const downloadURL = imageFile
-        ? await uploadImage() 
-        : productToUpdate?.imageUrl; 
-  
+        ? await uploadImage()
+        : productToUpdate?.imageUrl;
+
       const productData = { ...newProduct, imageUrl: downloadURL };
-  
+
       if (productToUpdate) {
-        await dispatch(updateProducts({ ...productData, id: productToUpdate.id }));
-        toast.success("Product updated successfully!"); 
+        await dispatch(
+          updateProducts({
+            productId: productToUpdate.id,
+            updatedData: productData,
+          })
+        );
+        toast.success("Product updated successfully!");
       } else {
         await dispatch(addProducts(productData));
-        toast.success("Product added successfully!"); 
+        toast.success("Product added successfully!");
       }
-  
+
       resetForm();
       closeModal();
-  
     } catch (error) {
       toast.error("Error saving product, please try again");
     } finally {
       setIsDisabled(false);
     }
   };
-  
 
   return (
     <div className="fixed w-full z-[99999] inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="modal-box bg-white p-5 rounded-lg sm:w-[50rem]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold">{productToUpdate ? "Update Product" : "Add Product"}</h2>
+          <h2 className="text-lg font-bold">
+            {productToUpdate ? "Update Product" : "Add Product"}
+          </h2>
           <button
             className="btn btn-circle btn-ghost hover:bg-mainColor hover:text-white"
             onClick={closeModal}
@@ -155,7 +159,10 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
 
         <form onSubmit={handleAddOrUpdateProduct} className="space-y-3">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-3">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-3"
+            >
               Product Name
             </label>
             <input
@@ -171,7 +178,10 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
           </div>
 
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-3">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium text-gray-700 mb-3"
+            >
               Price
             </label>
             <input
@@ -188,7 +198,10 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
           </div>
 
           <div>
-            <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-3">
+            <label
+              htmlFor="quantity"
+              className="block text-sm font-medium text-gray-700 mb-3"
+            >
               Quantity
             </label>
             <input
@@ -205,7 +218,10 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
           </div>
 
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-3">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-3"
+            >
               Category
             </label>
             <select
@@ -226,7 +242,10 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-3">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-3"
+            >
               Product Description
             </label>
             <textarea
@@ -242,7 +261,10 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <label htmlFor="imgFile" className="cursor-pointer flex items-center gap-2 mb-3">
+            <label
+              htmlFor="imgFile"
+              className="cursor-pointer flex items-center gap-2 mb-3"
+            >
               <GoFileMedia />
               Add Image
             </label>
@@ -265,7 +287,9 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
           <div className="flex justify-end mt-3">
             <button
               disabled={isDisabled}
-              className={`bg-mainColor text-white p-2 px-7 rounded ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`bg-mainColor text-white p-2 px-7 rounded ${
+                isDisabled ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               type="submit"
             >
               {isDisabled
