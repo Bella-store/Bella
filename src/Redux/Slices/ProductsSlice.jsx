@@ -21,36 +21,37 @@ export const fetchProducts = createAsyncThunk(
     return products;
   }
 );
-
 // Add a product
 export const addProducts = createAsyncThunk(
   "products/addProducts",
-  async ({ title, price, imageUrl, category, description, quantity }) => {
-    const numprice = Number(price);
-    const numquan = Number(quantity);
+  async ({ title, price, imageUrl, category, description, quantity, id }) => {
+      const numPrice=Number(price);
+      const numQuantity=Number(quantity);
 
-    try {
-      const newProduct = await addDoc(collection(db, "products"), {
-        title,
-        category,
-        description,
-        imageUrl,
-        price: numprice,
-        quantity: numquan,
-        createdAt: new Date(),
-      });
-      return {
-        id: newProduct.id,
-        title,
-        price,
-        imageUrl,
-        category,
-        description,
-        quantity,
-      };
-    } catch (error) {
-      throw new Error("Failed to add product: " + error.message);
-    }
+      try {
+          const newProduct = await addDoc(collection(db, "products"), {
+              id,
+              title,
+              category,
+              description,
+              imageUrl,
+              price:numPrice,
+              quantity:numQuantity,
+              createdAt: new Date(),
+          });
+          return {
+              Pid: newProduct.id,
+              title,
+              price,
+              imageUrl,
+              id,
+              category,
+              description,
+              quantity,
+          };
+      } catch (error) {
+          throw new Error("Failed to add product: " + error.message);
+      }
   }
 );
 

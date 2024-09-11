@@ -69,6 +69,10 @@ function App() {
             </ProtectedRoute>
           }
         >
+          {/* Redirect to "productsdash" when accessing "/dashboard" */}
+          <Route path="" element={<Navigate to="productsdash" />} />
+
+          {/* Nested routes */}
           <Route path="statistics" element={<Statistics />} />
           <Route path="users" element={<Users />} />
           <Route path="productsdash" element={<ProductsDash />} />

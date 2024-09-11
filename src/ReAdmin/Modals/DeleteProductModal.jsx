@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-const DeleteProductModal = ({ productToDelete, closeModal, handleDelete }) => {
+const DeleteProductModal = ({ productToDelete, closeModal, handleDelete, isDisabled }) => {
   return (
     <dialog
       open
@@ -12,13 +12,17 @@ const DeleteProductModal = ({ productToDelete, closeModal, handleDelete }) => {
           Are you sure you want to delete {productToDelete?.title}?
         </p>
         <div className="modal-action">
-          <button
-            className="btn bg-white text-mainColor"
+          <button 
+            className="btn bg-white text-red-800 hover:bg-white hover:border-mainColor" 
             onClick={handleDelete}
+            disabled={isDisabled} 
           >
             Delete
           </button>
-          <button className="btn bg-mainColor text-white" onClick={closeModal}>
+          <button
+            className="btn bg-mainColor text-white hover:bg-mainColor"
+            onClick={closeModal}
+          >
             Cancel
           </button>
         </div>
