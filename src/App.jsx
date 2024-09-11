@@ -29,6 +29,7 @@ import ProductsDash from "./ReAdmin/Components/ProductsDash";
 import Settings from "./User/Components/Settings";
 import ProfileFavourite from "./User/Components/ProfileFavourite";
 import Success from "./User/Components/Success";
+import UserOrders from "./User/Components/UserOrders";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -108,6 +109,7 @@ function App() {
                   <Route path="userInfo" element={<UserInfo />} />
                   <Route path="settings" element={<Settings />} />
                   <Route path="userfav" element={<ProfileFavourite />} />
+                  <Route path="orders" element={<UserOrders />} />
                 </Route>
                 <Route path="*" element={<Page404 />} />
                 <Route path="/success" element={<Success />} />

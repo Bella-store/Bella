@@ -36,7 +36,7 @@ function SidebarDash() {
         </NavLink> */}
 
         <NavLink
-          to="/profileUser/"
+          to="/dashboard/productsDash"
           className={`ml-1 text-titleColor font-montserrat transition-colors flex gap-2 items-center w-full ${
             activeLink === "productsdash"
               ? "bg-mainColor text-white"
@@ -44,7 +44,7 @@ function SidebarDash() {
           } p-2 rounded-md`}
           onClick={() => setActiveLink("productsdash")}
         >
-           <HiOutlineShoppingBag />
+          <HiOutlineShoppingBag />
           Products
         </NavLink>
         <NavLink

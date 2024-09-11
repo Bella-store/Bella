@@ -90,7 +90,7 @@ function ProfileUser() {
           </NavLink>
 
           <NavLink
-            to="/profileUser/notifications"
+            to="/profileUser/orders"
             className={({ isActive }) =>
               `ml-1 text-titleColor font-montserrat transition-colors flex gap-2 ${
                 isActive
@@ -100,7 +100,7 @@ function ProfileUser() {
             }
           >
             <IoIosNotificationsOutline size={20} />
-            Notifications
+            My Orders
           </NavLink>
         </div>
 
