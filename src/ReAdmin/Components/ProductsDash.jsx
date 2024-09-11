@@ -15,6 +15,8 @@ const DataTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productPerPage = 5;
   const [searchTerm, setSearchTerm] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [productToUpdate, setProductToUpdate] = useState(null);
 
   const { items } = useSelector((state) => state.products);
   const dispatch = useDispatch();
@@ -23,10 +25,16 @@ const DataTable = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  const openUpdateModal = (product) => {
+    setProductToUpdate(product);
+    // console.log(productToUpdate);
+    setModalOpen(true);
+  };
   // Open delete modal
   const openDeleteModal = (product) => {
     setProductToDelete(product);
     setDeleteModalOpen(true);
+    setIsDisabled(false);
   };
 
   // Close delete modal
@@ -36,6 +44,7 @@ const DataTable = () => {
 
   // Handle product deletion
   const handleDeleteProduct = async () => {
+    setIsDisabled(true); // Disable the button while deleting
     try {
       await dispatch(deleteProducts(productToDelete.id));
       toast.success("Product deleted successfully!", {
@@ -46,6 +55,8 @@ const DataTable = () => {
       toast.error("Error deleting product, please try again.", {
         position: "bottom-center",
       });
+    } finally {
+      setIsDisabled(false);
     }
   };
 
@@ -54,6 +65,7 @@ const DataTable = () => {
     setSearchTerm(event.target.value.toLowerCase());
     setCurrentPage(1); // Reset to page 1 on new search
   };
+
   // Filter products
   const filteredProducts = items.filter((item) => {
     return (
@@ -61,6 +73,7 @@ const DataTable = () => {
       item.category.toLowerCase().includes(searchTerm)
     );
   });
+
   // Pagination calculations
   const indexOfLastProduct = currentPage * productPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productPerPage;
@@ -74,7 +87,7 @@ const DataTable = () => {
   return (
     <div>
       <div className="flex justify-between my-5">
-        <h1 className="text-2xl font-bold text-mainColor">Products</h1>
+        <h1 className="text-2xl font-bold text-titleColor">Products</h1>
         <input
           type="text"
           className="w-[50%] input input-bordered focus:border-0 h-[2.5rem]"
@@ -83,12 +96,11 @@ const DataTable = () => {
         />
         <button
           onClick={() => setModalOpen(true)}
-          className="bg-mainColor text-white p-2 px-7 rounded"
+          className="bg-mainColor text-white lg:p-2 lg:px-7 rounded p-2 "
         >
-          Add Product
+          <span className="text-[0.8rem]">Add Product</span>
         </button>
       </div>
-
       <div className="container mx-auto p-4 mt-3 bg-white rounded-lg shadow-md">
         <div className="overflow-x-auto">
           <table className="table">
@@ -112,7 +124,7 @@ const DataTable = () => {
                     <img
                       src={item.imageUrl}
                       alt={item.title}
-                      className="w-20 h-20 object-cover"
+                      className="min-w-24 min-h-24 max-h-32 max-w-32 object-cover"
                     />
                   </td>
                   <td>{item.title}</td>
@@ -127,7 +139,12 @@ const DataTable = () => {
                     >
                       Delete
                     </button>
-                    <button className="btn btn-ghost btn-xs">Edit</button>
+                    <button
+                      className="btn btn-ghost btn-xs"
+                      onClick={() => openUpdateModal(item)}
+                    >
+                      Edit
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -143,9 +160,13 @@ const DataTable = () => {
         />
       </div>
 
-      {/* Add Product Modal */}
+      {/* Add & updata Product Modal */}
       {isModalOpen && (
-        <AddProductModal closeModal={() => setModalOpen(false)} />
+        <AddProductModal
+          closeModal={() => setModalOpen(false)}
+          productToUpdate={productToUpdate}
+
+        />
       )}
 
       {/* Delete Product Modal */}
@@ -154,6 +175,7 @@ const DataTable = () => {
           productToDelete={productToDelete}
           closeModal={closeDeleteModal}
           handleDelete={handleDeleteProduct}
+          isDisabled={isDisabled}
         />
       )}
     </div>

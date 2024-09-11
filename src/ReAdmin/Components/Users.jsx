@@ -9,9 +9,10 @@ const Users = () => {
   const { users, loading, error } = useSelector((state) => state.auth);
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);  // Start from page 1
+  const [currentPage, setCurrentPage] = useState(1); // Start from page 1
   const usersPerPage = 4;
   const [searchTerm, setSearchTerm] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false); // Disable state
 
   // Fetch users on component mount
   useEffect(() => {
@@ -41,13 +42,22 @@ const Users = () => {
   };
 
   // Close delete modal
-  const closeDeleteModal = () => setDeleteModal(false);
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+    setIsDisabled(false); // Reset disabled state
+  };
 
   // Handle user deletion
   const handleDelete = async () => {
     if (userToDelete) {
-      dispatch(deleteUser(userToDelete.id));
-      closeDeleteModal();
+      setIsDisabled(true); // Disable buttons during delete operation
+      try {
+        await dispatch(deleteUser(userToDelete.id)).unwrap(); // Ensure async handling
+        closeDeleteModal();
+      } catch (err) {
+        console.error("Error deleting user:", err); // Handle error
+        setIsDisabled(false); // Enable buttons if delete fails
+      }
     }
   };
 
@@ -85,7 +95,9 @@ const Users = () => {
             <tbody>
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="text-center">No users found</td>
+                  <td colSpan="5" className="text-center">
+                    No users found
+                  </td>
                 </tr>
               ) : (
                 currentUsers.map((user, index) => (
@@ -96,7 +108,7 @@ const Users = () => {
                     <td>{user.role}</td>
                     <td className="flex justify-center gap-2">
                       <button
-                        className="btn btn-ghost btn-xs text-red-800"
+                        className="btn btn-ghost btn-xs text-red-700"
                         onClick={() => openDeleteModal(user)}
                       >
                         Delete
@@ -130,16 +142,19 @@ const Users = () => {
                 <IoCloseOutline size={18} />
               </button>
             </div>
-            <p className="py-4">Are you sure you want to delete this user?</p>
+            <p className="py-4">
+              Are you sure you want to delete {userToDelete?.userName}?
+            </p>
             <div className="modal-action">
               <button
-                className="btn bg-white text-mainColor"
+                className="btn bg-white text-red-800 hover:bg-white hover:border-mainColor"
                 onClick={handleDelete}
+                disabled={isDisabled} // Disable delete button during process
               >
                 Delete
               </button>
               <button
-                className="btn bg-mainColor text-white"
+                className="btn bg-mainColor text-white hover:bg-mainColor"
                 onClick={closeDeleteModal}
               >
                 Cancel
