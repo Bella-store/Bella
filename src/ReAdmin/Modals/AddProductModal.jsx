@@ -134,7 +134,9 @@ const AddProductModal = ({ closeModal, productToUpdate }) => {
             }
 
             resetForm();
-            closeModal();
+            closeModal(
+                
+            );
         } catch (error) {
             toast.error("Error saving product, please try again");
         } finally {

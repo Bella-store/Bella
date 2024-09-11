@@ -163,9 +163,11 @@ const DataTable = () => {
       {/* Add & updata Product Modal */}
       {isModalOpen && (
         <AddProductModal
-          closeModal={() => setModalOpen(false)}
+          closeModal={() => {
+            setModalOpen(false);
+            setProductToUpdate(null);
+          }}
           productToUpdate={productToUpdate}
-
         />
       )}
 
