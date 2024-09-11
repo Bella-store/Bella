@@ -9,14 +9,35 @@ const Wishlist = () => {
   const favouritemIds = useSelector((state) => state.favourites.items);
   const allProducts = useSelector((state) => state.products.items);
   const dispatch = useDispatch();
+  const { userDetails } = useSelector((state) => state.auth);
+
+  // If userDetails is not available, return early with a message
+  if (!userDetails) {
+    return (
+      <div className="flex flex-col min-h-screen ">
+        <Navbar />
+        <div className="flex-grow mt-16 mb-3">
+          <PageBanner title="Wish List" />
+          <div className="bg-white m-auto mt-10 max-w-4xl rounded shadow-md overflow-hidden mb-5">
+            <p className="text-center py-10 text-gray-500">
+              Please log in to view your wishlist.
+            </p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   // Filter products to get only the favourites
   const favourites = allProducts.filter((product) =>
     favouritemIds.includes(product.id)
   );
+
   const handleAddtoCart = (item) => {
     dispatch(addToCart(item));
   };
+
   return (
     <div className="flex flex-col min-h-screen ">
       <Navbar />
@@ -55,7 +76,10 @@ const Wishlist = () => {
                         Stock Status: In stock
                       </div>
                       <div className="mt-2">
-                        <button className="bg-black text-white py-2 px-4 rounded shadow hover:bg-gray-800">
+                        <button
+                          onClick={() => handleAddtoCart(item)}
+                          className="bg-black text-white py-2 px-4 rounded shadow hover:bg-gray-800"
+                        >
                           Add to cart
                         </button>
                       </div>

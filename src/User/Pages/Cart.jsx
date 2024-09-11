@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Navbar from "../Components/Navbar";
 import PageBanner from "../Components/PageBanner";
@@ -20,7 +20,7 @@ const CartPage = () => {
   };
 
   const handleProceedToCheckout = () => {
-    navigate("/checkout", { state: { cart, totalPrice, totalQuantity } });
+    navigate("/checkout");
   };
 
   return (
@@ -85,10 +85,10 @@ const CartPage = () => {
                           <th className="py-4 text-gray-600 font-semibold text-center">
                             Price
                           </th>
-                          <th className="py-4 text-gray-600 font-semibold text-center">
+                          <th className="py-4 text-gray-600 font-semibold text-center w-28">
                             Quantity
                           </th>
-                          <th className="py-4 text-gray-600 font-semibold text-center">
+                          <th className="py-4 text-gray-600 font-semibold text-center w-28">
                             Subtotal
                           </th>
                         </tr>
@@ -107,7 +107,7 @@ const CartPage = () => {
                                 &#10005;
                               </button>
                             </td>
-                            <td className="py-4">
+                            <td className="py-4 h-10 w-20 object-cover">
                               <img
                                 src={item.imageUrl}
                                 alt={item.title}
@@ -122,7 +122,9 @@ const CartPage = () => {
                             <td className="text-center text-gray-600">
                               {item.price} EGP
                             </td>
-                            <td className="text-center">
+                            <td className="text-center w-28">
+                              {" "}
+                              {/* Fixed width */}
                               <div className="inline-flex items-center space-x-2">
                                 <button
                                   onClick={() =>
@@ -131,11 +133,13 @@ const CartPage = () => {
                                       item.quantity + 1
                                     )
                                   }
-                                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                                  className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
                                 >
                                   +
                                 </button>
-                                <span>{item.quantity}</span>
+                                <span className="w-8 text-center">
+                                  {item.quantity}
+                                </span>
                                 <button
                                   onClick={() =>
                                     handleAdjustQuantity(
@@ -144,7 +148,7 @@ const CartPage = () => {
                                     )
                                   }
                                   disabled={item.quantity === 1}
-                                  className={`px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 ${
+                                  className={`w-8 h-8 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300 ${
                                     item.quantity === 1
                                       ? "cursor-not-allowed opacity-50"
                                       : ""
@@ -154,7 +158,9 @@ const CartPage = () => {
                                 </button>
                               </div>
                             </td>
-                            <td className="text-center text-gray-600">
+                            <td className="text-center w-28 text-gray-600">
+                              {" "}
+                              {/* Fixed width */}
                               {item.price * item.quantity} EGP
                             </td>
                           </tr>

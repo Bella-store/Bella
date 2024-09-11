@@ -14,9 +14,7 @@ import Navbar from "../Components/Navbar";
 import PageBanner from "../Components/PageBanner";
 import Footer from "../Components/Footer";
 
-const stripePromise = loadStripe(
-  "pk_test_51PxDvCKnFPkQIH7k7MXlMhruE5k4kx6OJ6mzENb3MpOr69stp6gmJCefwwQArWQK28cLhDSlElLjelspO5r4v7Hx00w9diAawY"
-);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
   const stripe = useStripe();
@@ -42,7 +40,6 @@ const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
       setProcessing(false);
     } else {
       console.log("PaymentMethod", paymentMethod);
-      // Here you would typically send the paymentMethod.id to your server
       setProcessing(false);
       onPaymentSuccess(paymentMethod.id);
     }
@@ -98,7 +95,7 @@ const Checkout = () => {
 
     const orderData = {
       cart,
-      userId: userDetails.id || "Hamada",
+      userId: userDetails.userId,
       paymentMethod: form.paymentMethod,
       stripePaymentMethodId,
     };

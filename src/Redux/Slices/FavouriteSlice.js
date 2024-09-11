@@ -32,8 +32,8 @@ export const toggleFavourite = createAsyncThunk(
 
     // Update Firestore
     await dispatch(
-      updateFavoriteProductsByEmail({
-        userEmail: userDetails.userEmail,
+      updateFavoriteProductsByUserId({
+        userId: userDetails.userId,
         favoriteProducts: updatedItems,
       })
     );
@@ -42,18 +42,15 @@ export const toggleFavourite = createAsyncThunk(
   }
 );
 
-export const updateFavoriteProductsByEmail = createAsyncThunk(
-  "favourites/updateFavoriteProductsByEmail",
-  async ({ userEmail, favoriteProducts }, { rejectWithValue }) => {
+export const updateFavoriteProductsByUserId = createAsyncThunk(
+  "favourites/updateFavoriteProductsByUserId",
+  async ({ userId, favoriteProducts }, { rejectWithValue }) => {
     try {
       if (!Array.isArray(favoriteProducts)) {
         throw new Error("favoriteProducts must be an array");
       }
 
-      const q = query(
-        collection(db, "users"),
-        where("userEmail", "==", userEmail)
-      );
+      const q = query(collection(db, "users"), where("userId", "==", userId));
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
@@ -85,14 +82,14 @@ const favouriteSlice = createSlice({
       .addCase(toggleFavourite.fulfilled, (state, action) => {
         state.items = action.payload;
       })
-      .addCase(updateFavoriteProductsByEmail.pending, (state) => {
+      .addCase(updateFavoriteProductsByUserId.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateFavoriteProductsByEmail.fulfilled, (state, action) => {
+      .addCase(updateFavoriteProductsByUserId.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.items = action.payload;
       })
-      .addCase(updateFavoriteProductsByEmail.rejected, (state, action) => {
+      .addCase(updateFavoriteProductsByUserId.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

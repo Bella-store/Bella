@@ -53,7 +53,7 @@ function Card({ id, title, imageUrl, price, uid }) {
           className="col-span-1 cursor-pointer border-gray-500 border transition-all duration-200 hover:text-white hover:border-mainColor hover:bg-mainColor flex justify-center items-center"
           onClick={handleToggleFavourite}
         >
-          {isFavourite ? (
+          {isFavourite && userDetails ? (
             <FaHeart size={19} color="white" />
           ) : (
             <CiHeart size={24} color="black" />

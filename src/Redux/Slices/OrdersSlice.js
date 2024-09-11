@@ -30,12 +30,16 @@ export const placeOrder = createAsyncThunk(
       // Get the current timestamp
       const orderDate = Timestamp.now(); // Use Firestore Timestamp
 
+      // Define the static orderStatusId
+      const orderStatusId = "TUgeq6U27JsTojE1XukC";
+
       // Create a new order document first to get the document ID
       const docRef = await addDoc(orderRef, {
         userId,
         orderDate, // Use Firestore Timestamp
         orderDetails,
         paymentMethod, // Include paymentMethod in the order data
+        orderStatusId, // Add the static orderStatusId here
       });
 
       // Extract the document ID
@@ -46,8 +50,15 @@ export const placeOrder = createAsyncThunk(
         orderId, // Include the orderId field
       });
 
-      // Return the order data including orderId
-      return { orderId, userId, orderDate, orderDetails, paymentMethod };
+      // Return the order data including orderId and orderStatusId
+      return {
+        orderId,
+        userId,
+        orderDate,
+        orderDetails,
+        paymentMethod,
+        orderStatusId, // Return orderStatusId with the rest of the order data
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
