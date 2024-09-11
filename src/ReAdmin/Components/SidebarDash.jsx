@@ -59,6 +59,18 @@ function SidebarDash() {
           <CiUser size={20} />
           Users
         </NavLink>
+        <NavLink
+          to="/dashboard/orders"
+          className={`ml-1  text-mainColor  font-montserrat transition-colors flex gap-2 items-center w-full ${
+            activeLink === "orders"
+              ? "bg-mainColor text-white"
+              : "hover:bg-mainColor hover:text-white"
+          } p-2 rounded-md`}
+          onClick={() => setActiveLink("orders")}
+        >
+          <CiUser size={20} />
+          Orders
+        </NavLink>
       </div>
 
       <div className="mt-8 flex items-center font-montserrat text-gray-700 hover:text-red-600 cursor-pointer absolute bottom-2 w-full text-center ">

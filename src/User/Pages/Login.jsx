@@ -2,11 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../Redux/Slices/AuthSlice";
+import { useState } from "react";
 
 const Login = () => {
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const {
     register,
@@ -15,6 +17,7 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setLoading(true); // Set loading to true when starting login
     try {
       const result = await dispatch(
         loginUser({
@@ -29,12 +32,13 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      const errorMsg =
-        error.message.includes("auth/invalid-credential")
-          ? "The credentials provided are invalid. Please check your input and try again."
-          : "An unexpected error occurred. Please try again later...";
+      const errorMsg = error.message.includes("auth/invalid-credential")
+        ? "The credentials provided are invalid. Please check your input and try again."
+        : "An unexpected error occurred. Please try again later...";
       alert(errorMsg);
       console.error("Login error: ", error);
+    } finally {
+      setLoading(false); // Set loading to false after login attempt
     }
   };
 
@@ -60,7 +64,7 @@ const Login = () => {
               {...register("userEmail", {
                 required: "Email Address is required",
                 pattern: {
-                  value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,}$/,
+                  value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,}$/i,
                   message: "Invalid email address",
                 },
               })}
@@ -112,8 +116,9 @@ const Login = () => {
             <button
               type="submit"
               className="w-full py-2 px-4 bg-[#B48E61] text-white font-semibold rounded-md shadow-md hover:bg-mainColor-light transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-mainColor"
+              disabled={loading} // Disable button while loading
             >
-              Sign in
+              {loading ? "Loading..." : "Sign in"} {/* Display loading text */}
             </button>
           </div>
 

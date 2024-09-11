@@ -20,12 +20,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../src/config/firebase";
 import ProtectedRoute from "../src/ProtectedRoute/ProtectedRoute";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserData } from "../src/Redux/Slices/AuthSlice";
+import { fetchUserData, logoutUser } from "../src/Redux/Slices/AuthSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Statistics from "./ReAdmin/Components/Statistics";
 import Users from "./ReAdmin/Components/Users";
 import ProductsDash from "./ReAdmin/Components/ProductsDash";
+import Orders from "./ReAdmin/Components/Orders";
 import Settings from "./User/Components/Settings";
 import ProfileFavourite from "./User/Components/ProfileFavourite";
 import Success from "./User/Components/Success";
@@ -43,16 +44,15 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
-        await dispatch(fetchUserData(user.uid));
+        await dispatch(fetchUserData(user.uid)); // Dispatch fetch user data when a user is logged in
       } else {
         setCurrentUser(null);
-        fetchUserData(null);
       }
 
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // Cleanup on component unmount
   }, [dispatch]);
 
   if (loading) {
@@ -77,6 +77,7 @@ function App() {
           <Route path="statistics" element={<Statistics />} />
           <Route path="users" element={<Users />} />
           <Route path="productsdash" element={<ProductsDash />} />
+          <Route path="orders" element={<Orders />} />
         </Route>
         <Route
           path="*"
