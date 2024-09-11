@@ -47,7 +47,13 @@ function DetailSection() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center object-centerw-full mt-[25%]">
+        <div className="">
+          <span className="loading loading-infinity loading-lg text-mainColor"></span>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {

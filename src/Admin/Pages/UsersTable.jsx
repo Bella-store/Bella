@@ -74,7 +74,14 @@ const Users = () => {
     },
   ];
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center object-centerw-full mt-[25%]">
+        <div className="">
+          <span className="loading loading-infinity loading-lg text-mainColor"></span>
+        </div>
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   return (

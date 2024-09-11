@@ -96,7 +96,11 @@ const Shop = () => {
           </div>
 
           {loading ? (
-            <p>Loading...</p>
+            <div className="flex items-center justify-center object-centerw-full mt-[25%]">
+              <div className="">
+                <span className="loading loading-infinity loading-lg text-mainColor"></span>
+              </div>
+            </div>
           ) : (
             <div className="flex flex-wrap justify-center sm:1/2 md:4/5 md:gap-8 w-[100%] animate-fadeIn">
               {filteredPosts.map((product) => (
