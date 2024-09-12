@@ -13,9 +13,9 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   // Handle increment and decrement of quantity
-  const handleAdjustQuantity = (id, newQuantity) => {
+  const handleAdjustQuantity = (id, newQuantity,stockquantity) => {
     if (newQuantity > 0) {
-      dispatch(adjustQuantity({ id, quantity: newQuantity }));
+      dispatch(adjustQuantity({ id, quantity: newQuantity,stockquantity }));
     }
   };
 
@@ -130,7 +130,8 @@ const CartPage = () => {
                                   onClick={() =>
                                     handleAdjustQuantity(
                                       item.id,
-                                      item.quantity + 1
+                                      item.quantity + 1,
+                                      item.stockquantity
                                     )
                                   }
                                   className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
@@ -144,7 +145,8 @@ const CartPage = () => {
                                   onClick={() =>
                                     handleAdjustQuantity(
                                       item.id,
-                                      item.quantity - 1
+                                      item.quantity - 1,
+                                      item.stockquantity
                                     )
                                   }
                                   disabled={item.quantity === 1}

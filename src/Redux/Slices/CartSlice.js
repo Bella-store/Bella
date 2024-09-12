@@ -34,7 +34,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const { id, title, imageUrl, price } = action.payload;
+      const { id, title, imageUrl, price, stockquantity } = action.payload;
 
       // Check if an item with the same id AND title exists
       const existingItem = state.items.find(
@@ -42,9 +42,18 @@ const cartSlice = createSlice({
       );
 
       if (existingItem) {
+        console.log(existingItem);
+
         existingItem.quantity += 1; // Increment quantity
       } else {
-        state.items.push({ id, title, imageUrl, price, quantity: 1 });
+        state.items.push({
+          id,
+          title,
+          imageUrl,
+          price,
+          quantity: 1,
+          stockquantity,
+        });
       }
 
       // Recalculate totals after adding item
@@ -56,10 +65,9 @@ const cartSlice = createSlice({
     },
 
     adjustQuantity: (state, action) => {
-      const { id, quantity } = action.payload;
+      const { id, quantity, stockquantity } = action.payload;
       const item = state.items.find((item) => item.id === id);
-
-      if (item && quantity > 0) {
+      if (item && quantity > 0&& quantity<=stockquantity) {
         item.quantity = quantity;
 
         // Recalculate totals after adjusting quantity

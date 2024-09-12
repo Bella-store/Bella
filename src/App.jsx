@@ -77,7 +77,7 @@ function App() {
           }
         >
           {/* Redirect to "productsdash" when accessing "/dashboard" */}
-          <Route path="" element={<Navigate to="productsdash" />} />
+          <Route path="" element={<Navigate to="productsDash" />} />
 
           {/* Nested routes */}
           <Route path="statistics" element={<Statistics />} />
@@ -89,7 +89,7 @@ function App() {
           path="*"
           element={
             role === "admin" ? (
-              <Navigate to="/dashboard/statistics" />
+              <Navigate to="/dashboard/productsDash" />
             ) : (
               <Routes>
                 <Route path="/" element={<Home />} />

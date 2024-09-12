@@ -110,6 +110,7 @@ const Shop = () => {
                   title={product.title}
                   price={product.price}
                   imageUrl={product.imageUrl}
+                  stockquantity= {product.quantity}
                 />
               ))}
             </div>

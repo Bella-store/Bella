@@ -7,7 +7,7 @@ import { toggleFavourite } from "../../Redux/Slices/FavouriteSlice";
 import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-function Card({ id, title, imageUrl, price, uid }) {
+function Card({ id, title, imageUrl, price, uid,stockquantity  }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ function Card({ id, title, imageUrl, price, uid }) {
   const { userDetails } = useSelector((state) => state.auth);
 
   const handleAddToCart = () => {
-    const product = { id, title, imageUrl, price };
+    const product = { id, title, imageUrl, price,stockquantity };
     dispatch(addToCart(product));
     console.log("Product ID added to cart:", id);
   };
