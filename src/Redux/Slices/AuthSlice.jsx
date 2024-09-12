@@ -12,38 +12,35 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-// Register user
 // Register user
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async ({ userEmail, password, userName, role }, { rejectWithValue }) => {
     try {
-      // Create user with email and password
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         userEmail,
         password
       );
       const user = userCredential.user;
-      const userId = user.uid; // Get user ID from Firebase Auth
+      const userId = user.uid;
 
-      // Prepare user details object with the userId
       const userDetails = {
         userName,
         userEmail,
-        userId, // Store the userId in Firestore
-        cartProducts: [], // Initialize empty arrays if needed
+        userId,
+        cartProducts: [],
         favoriteProducts: [],
         role: role || "user",
         createdAt: new Date().toISOString(),
       };
 
-      // Save user details to Firestore under the userId
       await setDoc(doc(db, "users", userId), userDetails);
-
       return { user, userDetails };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -51,17 +48,23 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Login user
+// Login user with persistence and loading handling
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ userEmail, password }, { rejectWithValue }) => {
     try {
+      // Set persistence to ensure the user remains logged in across sessions
+      await setPersistence(auth, browserLocalPersistence);
+
       const userCredential = await signInWithEmailAndPassword(
         auth,
         userEmail,
         password
       );
       const user = userCredential.user;
+
+      // Adding a 2-second delay to ensure the data is ready, especially for admins
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
@@ -82,7 +85,6 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
   await signOut(auth);
   console.log("User signed out");
-  // Handle navigation in a component after logout if needed
 });
 
 // Fetch all users
@@ -122,22 +124,25 @@ export const fetchUserData = createAsyncThunk(
     }
   }
 );
+
 // Update user details
 export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async (userData, { rejectWithValue, getState }) => {
     try {
-      const { user } = getState().auth;
-      if (!user) throw new Error("User not authenticated");
+      const { userDetails } = getState().auth;
+      if (!userDetails) throw new Error("User not authenticated");
 
-      await setDoc(doc(db, "users", user.uid), userData, { merge: true });
-
+      await setDoc(doc(db, "users", userDetails.userId), userData, {
+        merge: true,
+      });
       return userData;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
 // Delete user
 export const deleteUser = createAsyncThunk(
   "auth/deleteUser",
@@ -152,19 +157,6 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-// Update user details
-export const updateUserDetails = createAsyncThunk(
-  "auth/updateUserDetails",
-  async ({ userId, userData }, { rejectWithValue }) => {
-    try {
-      const userDocRef = doc(db, "users", userId);
-      await setDoc(userDocRef, userData, { merge: true });
-      return { userId, userData };
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 // Update user profile image
 export const updateUserProfileImage = createAsyncThunk(
   "auth/updateUserProfileImage",
@@ -173,11 +165,9 @@ export const updateUserProfileImage = createAsyncThunk(
       const storage = getStorage();
       const storageRef = ref(storage, `profileImages/${userId}`);
 
-      // Upload the image file to Firebase Storage
       await uploadBytes(storageRef, imageFile);
       const imageUrl = await getDownloadURL(storageRef);
 
-      // Update Firestore with the new image URL
       const userDocRef = doc(db, "users", userId);
       await setDoc(userDocRef, { profileImageUrl: imageUrl }, { merge: true });
 
@@ -204,7 +194,6 @@ const authSlice = createSlice({
       // Register user
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
-        // state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -220,7 +209,6 @@ const authSlice = createSlice({
       // Login user
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
-        // state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -243,16 +231,14 @@ const authSlice = createSlice({
       // Fetch user data
       .addCase(fetchUserData.pending, (state) => {
         state.loading = true;
-        // state.error = null;
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.loading = false;
         state.userDetails = action.payload.userDetails;
         state.role = action.payload.userDetails.role;
       })
-      .addCase(fetchUserData.rejected, (state, action) => {
+      .addCase(fetchUserData.rejected, (state) => {
         state.loading = false;
-        // state.error = action.payload;
       })
 
       // Fetch all users
@@ -262,6 +248,7 @@ const authSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.error = action.payload;
       })
+
       // Update user
       .addCase(updateUser.pending, (state) => {
         state.loading = true;
@@ -275,6 +262,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      // Delete user
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.users = state.users.filter((user) => user.id !== action.payload);
       })
@@ -282,22 +271,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Update user details
-      .addCase(updateUserDetails.fulfilled, (state, action) => {
-        const index = state.users.findIndex(
-          (user) => user.id === action.payload.userId
-        );
-        if (index !== -1) {
-          state.users[index] = {
-            ...state.users[index],
-            ...action.payload.userData,
-          };
-        }
-      })
-      .addCase(updateUserDetails.rejected, (state, action) => {
-        state.error = action.payload;
-      });
-    builder
+      // Update user profile image
       .addCase(updateUserProfileImage.fulfilled, (state, action) => {
         const index = state.users.findIndex(
           (user) => user.id === action.payload.userId
