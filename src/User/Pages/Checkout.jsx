@@ -23,11 +23,14 @@ const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
   const [processing, setProcessing] = useState(false);
   const cart = useSelector((state) => state.cart.items);
   const isCartEmpty = cart.length === 0;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
 
     if (!stripe || !elements) {
+      setError("Stripe.js has not loaded yet.");
+      setProcessing(false);
       return;
     }
 
@@ -40,8 +43,6 @@ const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
       setError(error.message);
       setProcessing(false);
     } else {
-      console.log("PaymentMethod", paymentMethod);
-      setProcessing(false);
       onPaymentSuccess(paymentMethod.id);
     }
   };
@@ -54,7 +55,7 @@ const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
       {error && <div className="text-red-500 mt-2">{error}</div>}
       <button
         type="submit"
-        disabled={isCartEmpty || !stripe || processing} // Disable if cart is empty, or if stripe is not ready, or during processing
+        disabled={isCartEmpty || !stripe || processing}
         className={`mt-6 w-full py-5 rounded transition text-white ${
           isCartEmpty || !stripe || processing
             ? "bg-gray-500 cursor-not-allowed"
@@ -120,6 +121,10 @@ const Checkout = () => {
           email: "",
           paymentMethod: "pickup",
         });
+
+        // Set flag in session storage
+        sessionStorage.setItem("showTemporaryPage", "true");
+
         navigate("/success");
       })
       .catch((error) => {
@@ -130,7 +135,7 @@ const Checkout = () => {
   const handlePaymentSuccess = (paymentMethodId) => {
     handlePlaceOrder(paymentMethodId);
   };
-  console.log(userDetails);
+
   return (
     <div className="min-h-screen mt-16">
       <Navbar />
@@ -147,7 +152,6 @@ const Checkout = () => {
 
               <form className="space-y-6 border-t-2">
                 {!userDetails ? (
-                  // If no user details, show logged-in message
                   <div className="text-red-500 text-lg">
                     You need to be logged in to view or update your details.
                   </div>
@@ -307,8 +311,8 @@ const Checkout = () => {
               </Elements>
             ) : (
               <button
-                onClick={handlePlaceOrder}
-                disabled={isCartEmpty} // Disable if cart is empty
+                onClick={() => handlePlaceOrder()}
+                disabled={isCartEmpty}
                 className={`mt-6 w-full py-5 rounded transition text-white ${
                   isCartEmpty
                     ? "bg-gray-500 cursor-not-allowed"
