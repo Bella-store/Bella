@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders, selectOrder } from "../../Redux/Slices/OrdersSlice";
+import { fetchProducts } from "../../Redux/Slices/ProductsSlice";
 
 const UserOrders = () => {
   const dispatch = useDispatch();
   const { orders, selectedOrder, status, error } = useSelector(
     (state) => state.orders
   );
+  const { items: products } = useSelector((state) => state.products); // Get products from state
   const [currentOrder, setCurrentOrder] = useState(null);
 
   useEffect(() => {
     dispatch(fetchOrders());
+    dispatch(fetchProducts()); // Fetch products when the component mounts
   }, [dispatch]);
 
   const handleOrderClick = (orderId) => {
     dispatch(selectOrder(orderId));
     setCurrentOrder(orderId);
+  };
+
+  // Helper function to get product details by productId
+  const getProductDetails = (productId) => {
+    return products.find((product) => product.id === productId) || {};
   };
 
   return (
@@ -29,27 +37,30 @@ const UserOrders = () => {
                 Order #{selectedOrder.orderId}
               </h2>
               <div className="space-y-4">
-                {selectedOrder.orderDetails.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <img
-                        src={`https://via.placeholder.com/64?text=${item.productId}`}
-                        alt={`Product ${item.productId}`}
-                        className="w-16 h-16 object-cover rounded-md"
-                      />
-                      <div>
-                        <p className="text-lg font-medium">Product {item.productId}</p>
-                        <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                {selectedOrder.orderDetails.map((item, index) => {
+                  const productDetails = getProductDetails(item.productId);
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <img
+                          src={productDetails.imageUrl || "https://via.placeholder.com/64"}
+                          alt={`Product ${item.productId}`}
+                          className="w-16 h-16 object-cover rounded-md"
+                        />
+                        <div>
+                          <p className="text-lg font-medium">{productDetails.title || `Product ${item.productId}`}</p>
+                          <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                        </div>
                       </div>
+                      <p className="text-lg font-medium">
+                        USD {(item.quantity * (productDetails.price || item.price)).toFixed(2)}
+                      </p>
                     </div>
-                    <p className="text-lg font-medium">
-                      USD {(item.quantity * item.price).toFixed(2)}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ) : (
