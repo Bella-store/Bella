@@ -23,9 +23,10 @@ function Card({ id, title, imageUrl, price, uid, stockquantity }) {
   const { userDetails } = useSelector((state) => state.auth);
 
   const handleAddToCart = () => {
-    const product = { id, title, imageUrl, price, stockquantity };
-    dispatch(addToCart(product));
-    console.log("Product ID added to cart:", id);
+    if (stockquantity > 0) {
+      const product = { id, title, imageUrl, price, stockquantity };
+      dispatch(addToCart(product));
+    }
   };
 
   const handleToggleFavourite = () => {
