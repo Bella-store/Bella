@@ -4,6 +4,7 @@ import Navbar from "../Components/Navbar";
 import Pagination from "../Components/Pagination";
 import CollectionCard from "../Components/CollectionCard";
 import { fetchProducts } from "../../Redux/Slices/ProductsSlice"; // Update this path if necessary
+import Footer from "../Components/Footer";
 
 const Products = () => {
   const postsPerPage = 9;
@@ -66,6 +67,7 @@ const Products = () => {
         currentPage={currentPage}
         className="mt-16"
       />
+      <Footer />
     </div>
   );
 };

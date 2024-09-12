@@ -6,7 +6,7 @@ import Card from "../Components/Card";
 import SortDropdown from "../Components/shop/SortDropdown";
 import Banner from "../Components/shop/Banner";
 import Navbar from "../Components/Navbar";
-
+import Footer from "../Components/Footer";
 const Shop = () => {
   const dispatch = useDispatch();
   const { items: products, loading } = useSelector((state) => state.products);
@@ -81,13 +81,13 @@ const Shop = () => {
   };
 
   return (
-    <div className="bg-stone-50 min-h-screen">
+    <div className="bg-stone-50 min-h-screen mt-16">
       <Navbar />
       <Banner title={"Shop"} />
 
-      <div className="flex flex-col lg:flex-row px-4 md:px-16 lg:px-18 py-8">
+      <div className="flex flex-col lg:flex-row px-4 md:px-16 lg:px-18 py-8 ">
         {/* Main Content Area */}
-        <div className="flex flex-col flex-grow items-center w-full">
+        <div className="flex flex-col flex-grow items-center w-full ">
           <div className="flex justify-between items-center mb-4 w-[86%]">
             <p className="text-gray-600 text-sm">
               Showing {filteredPosts.length} of {products.length} results
@@ -110,7 +110,7 @@ const Shop = () => {
                   title={product.title}
                   price={product.price}
                   imageUrl={product.imageUrl}
-                  stockquantity= {product.quantity}
+                  stockquantity={product.quantity}
                 />
               ))}
             </div>
@@ -125,6 +125,7 @@ const Shop = () => {
           onCategoryChange={handleCategoryChange} // Add category filter handling
         />
       </div>
+      <Footer />
     </div>
   );
 };
