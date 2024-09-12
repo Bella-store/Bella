@@ -44,7 +44,7 @@ function SidebarDash() {
 
         <NavLink
           to="/dashboard/productsDash"
-          className={`ml-1 text-titleColor font-montserrat transition-colors flex gap-2 items-center w-full ${
+          className={`ml-1 text-mainColor font-montserrat transition-colors flex gap-2 items-center w-full ${
             activeLink === "productsdash"
               ? "bg-mainColor text-white"
               : "hover:bg-mainColor hover:text-white"

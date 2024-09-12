@@ -46,17 +46,28 @@ const UserOrders = () => {
                     >
                       <div className="flex items-center space-x-4">
                         <img
-                          src={productDetails.imageUrl || "https://via.placeholder.com/64"}
+                          src={
+                            productDetails.imageUrl ||
+                            "https://via.placeholder.com/64"
+                          }
                           alt={`Product ${item.productId}`}
                           className="w-16 h-16 object-cover rounded-md"
                         />
                         <div>
-                          <p className="text-lg font-medium">{productDetails.title || `Product ${item.productId}`}</p>
-                          <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                          <p className="text-lg font-medium">
+                            {productDetails.title ||
+                              `Product ${item.productId}`}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Quantity: {item.quantity}
+                          </p>
                         </div>
                       </div>
                       <p className="text-lg font-medium">
-                        USD {(item.quantity * (productDetails.price || item.price)).toFixed(2)}
+                        USD{" "}
+                        {(
+                          item.quantity * (productDetails.price || item.price)
+                        ).toFixed(2)}
                       </p>
                     </div>
                   );
@@ -65,7 +76,9 @@ const UserOrders = () => {
             </div>
           ) : (
             <div className="flex items-center justify-center h-full border p-4 rounded-lg shadow-sm bg-white">
-              <p className="text-xl font-semibold text-gray-500">Select an order to view details</p>
+              <p className="text-xl font-semibold text-gray-500">
+                Select an order to view details
+              </p>
             </div>
           )}
         </div>
@@ -73,7 +86,13 @@ const UserOrders = () => {
         {/* Orders Summary (Right) */}
         <div className="w-full lg:w-1/3">
           <div className="space-y-4">
-            {status === "loading" && <p>Loading orders...</p>}
+            {status === "loading" && (
+              <div className="flex items-center justify-center object-centerw-full mt-[25%]">
+                <div className="">
+                  <span className="loading loading-infinity loading-lg text-mainColor"></span>
+                </div>
+              </div>
+            )}
             {status === "failed" && <p>{error}</p>}
             {orders.map((order) => (
               <div
@@ -85,7 +104,13 @@ const UserOrders = () => {
               >
                 <p className="text-lg font-medium">Order #{order.orderId}</p>
                 <p>{new Date(order.orderDate.toDate()).toLocaleDateString()}</p>
-                <p className={`text-${order.orderStatusId === "TUgeq6U27JsTojE1XukC" ? "green" : "blue"}-500`}>
+                <p
+                  className={`text-${
+                    order.orderStatusId === "TUgeq6U27JsTojE1XukC"
+                      ? "green"
+                      : "blue"
+                  }-500`}
+                >
                   {order.orderStatusId === "TUgeq6U27JsTojE1XukC"
                     ? "Delivered"
                     : "In Progress"}
