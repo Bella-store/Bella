@@ -6,7 +6,7 @@ import { addToCart } from "../../Redux/Slices/CartSlice";
 import { toggleFavourite } from "../../Redux/Slices/FavouriteSlice";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 
 function DetailSection() {
   const { id } = useParams();
@@ -113,10 +113,10 @@ function DetailSection() {
           </div>
           <div>
             <p className="text-titleColor text-[0.8rem]">
-              {`Category:`}
-              <NavLink to="/Products" className="text-textColor">
+              {`Category : `}{product.category || "New Arrival"}
+              {/* <NavLink to="/Products" className="text-textColor">
                 {product.category || "New Arrival"}
-              </NavLink>
+              </NavLink> */}
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { CiSearch, CiHeart, CiUser } from "react-icons/ci";
+import {  CiHeart, CiUser } from "react-icons/ci";
 import { Link, useLocation, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
@@ -110,7 +110,7 @@ const Navbar = () => {
         {/* Icons */}
         <div className="hidden lg:flex space-x-4 items-center mt-4">
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <CiSearch className="size-6" />
+            {/* <CiSearch className="size-6" /> */}
           </div>
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200 relative">
             <Link to="/cart">
@@ -207,7 +207,7 @@ const Navbar = () => {
           </li>
           <div className="flex space-x-4 items-center mt-4">
             <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
-              <CiSearch className="size-10" />
+              {/* <CiSearch className="size-10" /> */}
             </div>
             <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
               <Link to="/cart">

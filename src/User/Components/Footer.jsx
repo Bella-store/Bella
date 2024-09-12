@@ -16,7 +16,7 @@ function Footer() {
           </h2>
         </div>
         <p className="text-[1.3rem] w-[55%] md-[55%] lg:w-70%  p-[1%] text-center font-thin">
-          Subscribe to get 10% off your first order
+        Find Your Dream Furniture
         </p>
       </div>
 
@@ -49,7 +49,7 @@ function Footer() {
             to="/Products"
             className="text-textColor hover:text-white text-[1.1rem]"
           >
-            Our Policies
+            Our Products
           </Link>
           <Link
             to="/contactUs"

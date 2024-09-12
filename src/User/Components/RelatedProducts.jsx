@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../Components/Card";
 import { fetchProducts } from "../../Redux/Slices/ProductsSlice"; // Update this path if necessary
@@ -33,6 +33,7 @@ const RelatedProducts = () => {
           title={product.title}
           price={product.price}
           imageUrl={product.imageUrl}
+          stockquantity={product.quantity}
           link=""
         />
       ))}
