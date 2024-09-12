@@ -19,20 +19,22 @@ function Settings() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        // Ensure user details are set properly when authenticated
         setFormData({
           userName: user.displayName || formData.userName,
           userEmail: user.email || formData.userEmail,
-          phone: userDetails ? userDetails.phone : "",
-          address: userDetails ? userDetails.address : "",
-          city: userDetails ? userDetails.city : "",
+          phone: userDetails?.phone || "",
+          address: userDetails?.address || "",
+          city: userDetails?.city || "",
         });
       } else {
         console.log("No user is authenticated");
       }
     });
-
+  
     return () => unsubscribe();
-  }, [formData.userEmail, formData.userName, userDetails]);
+  }, [formData, userDetails]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;

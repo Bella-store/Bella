@@ -15,7 +15,7 @@ const DataTable = () => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const productPerPage = 5;
+  const productPerPage = 3;
   const [searchTerm, setSearchTerm] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [productToUpdate, setProductToUpdate] = useState(null);
