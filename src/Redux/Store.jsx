@@ -15,5 +15,9 @@ const storeApp = configureStore({
     favourites: favouriteReducer,
     orders: ordersReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Disable serializable check to prevent non-serializable errors
+    }),
 });
 export default storeApp;
