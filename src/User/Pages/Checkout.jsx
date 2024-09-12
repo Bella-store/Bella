@@ -96,7 +96,7 @@ const Checkout = () => {
     setForm((prevForm) => ({ ...prevForm, paymentMethod: e.target.value }));
   };
 
-  const handlePlaceOrder = (stripePaymentMethodId = null) => {
+  const handlePlaceOrder = () => {
     if (!userDetails) {
       alert("Please log in to place an order.");
       return;
@@ -106,7 +106,6 @@ const Checkout = () => {
       cart,
       userId: userDetails.userId,
       paymentMethod: form.paymentMethod,
-      stripePaymentMethodId,
     };
 
     dispatch(placeOrder(orderData))
