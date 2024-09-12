@@ -21,12 +21,16 @@ const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
   const elements = useElements();
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
+  const cart = useSelector((state) => state.cart.items);
+  const isCartEmpty = cart.length === 0;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
 
     if (!stripe || !elements) {
+      setError("Stripe.js has not loaded yet.");
+      setProcessing(false);
       return;
     }
 
@@ -39,8 +43,6 @@ const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
       setError(error.message);
       setProcessing(false);
     } else {
-      console.log("PaymentMethod", paymentMethod);
-      setProcessing(false);
       onPaymentSuccess(paymentMethod.id);
     }
   };
@@ -53,8 +55,12 @@ const CheckoutForm = ({ totalPrice, onPaymentSuccess }) => {
       {error && <div className="text-red-500 mt-2">{error}</div>}
       <button
         type="submit"
-        disabled={!stripe || processing}
-        className="mt-6 w-full bg-gray-800 hover:bg-[#B48E61] text-white py-5 rounded transition"
+        disabled={isCartEmpty || !stripe || processing}
+        className={`mt-6 w-full py-5 rounded transition text-white ${
+          isCartEmpty || !stripe || processing
+            ? "bg-gray-500 cursor-not-allowed"
+            : "bg-gray-800 hover:bg-[#B48E61]"
+        }`}
       >
         {processing ? "Processing..." : `Pay ${totalPrice.toFixed(2)} EGP`}
       </button>
@@ -67,6 +73,8 @@ const Checkout = () => {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart.items);
+  const isCartEmpty = cart.length === 0;
+
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const { userDetails } = useSelector((state) => state.auth);
 
@@ -78,16 +86,17 @@ const Checkout = () => {
     paymentMethod: "pickup",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
-  };
+  useEffect(() => {
+    if (!userDetails) {
+      navigate("/");
+    }
+  }, [userDetails, navigate]);
 
   const handlePaymentMethodChange = (e) => {
     setForm((prevForm) => ({ ...prevForm, paymentMethod: e.target.value }));
   };
 
-  const handlePlaceOrder = (stripePaymentMethodId = null) => {
+  const handlePlaceOrder = () => {
     if (!userDetails) {
       alert("Please log in to place an order.");
       return;
@@ -97,7 +106,6 @@ const Checkout = () => {
       cart,
       userId: userDetails.userId,
       paymentMethod: form.paymentMethod,
-      stripePaymentMethodId,
     };
 
     dispatch(placeOrder(orderData))
@@ -112,6 +120,10 @@ const Checkout = () => {
           email: "",
           paymentMethod: "pickup",
         });
+
+        // Set flag in session storage
+        sessionStorage.setItem("showTemporaryPage", "true");
+
         navigate("/success");
       })
       .catch((error) => {
@@ -136,61 +148,90 @@ const Checkout = () => {
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">
                 Billing details
               </h2>
+
               <form className="space-y-6 border-t-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                      First name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={form.firstName}
-                      onChange={handleChange}
-                      className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 bg-white focus:ring-black focus:border-black"
-                      required
-                    />
+                {!userDetails ? (
+                  <div className="text-red-500 text-lg">
+                    You need to be logged in to view or update your details.
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                      Last name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={form.lastName}
-                      onChange={handleChange}
-                      className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 bg-white focus:ring-black focus:border-black"
-                      required
-                    />
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+                    {/* Username Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900">
+                        Username <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="username"
+                        value={userDetails.userName || "Update your data"}
+                        className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 focus:outline-none"
+                        readOnly
+                      />
+                    </div>
+
+                    {/* City Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900">
+                        City <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={userDetails.city || "Update your data"}
+                        className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 focus:outline-none"
+                        readOnly
+                      />
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-900">
-                    Phone <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={form.phone}
-                    onChange={handleChange}
-                    className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 bg-white focus:ring-black focus:border-black"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-900">
-                    User email address <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 bg-white focus:ring-black focus:border-black"
-                    required
-                  />
-                </div>
+                )}
+
+                {userDetails && (
+                  <>
+                    {/* Phone Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900">
+                        Phone <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={userDetails.phone || "Update your data"}
+                        className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 focus:outline-none"
+                        readOnly
+                      />
+                    </div>
+
+                    {/* User Email Address Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900">
+                        User email address{" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={userDetails.userEmail || "Update your data"}
+                        className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 focus:outline-none"
+                        readOnly
+                      />
+                    </div>
+
+                    {/* Address Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900">
+                        Address <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="address"
+                        value={userDetails.address || "Update your data"}
+                        className="mt-2 block w-full border border-gray-300 rounded-md py-3 px-3 text-gray-900 focus:outline-none"
+                        readOnly
+                      />
+                    </div>
+                  </>
+                )}
               </form>
             </div>
           </div>
@@ -270,7 +311,12 @@ const Checkout = () => {
             ) : (
               <button
                 onClick={() => handlePlaceOrder()}
-                className="mt-6 w-full bg-gray-800 hover:bg-[#B48E61] text-white py-5 rounded transition"
+                disabled={isCartEmpty}
+                className={`mt-6 w-full py-5 rounded transition text-white ${
+                  isCartEmpty
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-gray-800 hover:bg-[#B48E61]"
+                }`}
               >
                 PLACE ORDER
               </button>

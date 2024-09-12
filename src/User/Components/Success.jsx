@@ -1,8 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import successImage from "../../assets/Images/404-bg.jpg";
 
 const Success = () => {
+  const navigate = useNavigate();
+
+  const handleGoHome = () => {
+    sessionStorage.removeItem("showTemporaryPage");
+    navigate("/");
+  };
+  useEffect(() => {
+    // Check sessionStorage for the flag
+    const showTemporaryPage = sessionStorage.getItem("showTemporaryPage");
+    if (showTemporaryPage !== "true") {
+      navigate("/"); // Redirect to home if the flag is not set
+    }
+  }, [navigate]);
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
@@ -20,11 +33,12 @@ const Success = () => {
         <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-6">
           Thank you for your purchase.
         </p>
-        <Link to="/">
-          <button className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-[#B48E61] transition duration-300">
-            Go to Home
-          </button>
-        </Link>
+        <button
+          onClick={handleGoHome}
+          className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-[#B48E61] transition duration-300"
+        >
+          Go to Home
+        </button>
       </div>
     </div>
   );

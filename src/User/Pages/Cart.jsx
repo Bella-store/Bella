@@ -9,8 +9,10 @@ const CartPage = () => {
   const cart = useSelector((state) => state.cart.items);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const { userDetails } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isCartEmpty = cart.length === 0;
 
   // Handle increment and decrement of quantity
   const handleAdjustQuantity = (id, newQuantity,stockquantity) => {
@@ -20,7 +22,11 @@ const CartPage = () => {
   };
 
   const handleProceedToCheckout = () => {
-    navigate("/checkout");
+    if (!userDetails) {
+      navigate("/login"); // Redirect to login if userDetails is not available
+    } else {
+      navigate("/checkout"); // Otherwise, proceed to checkout
+    }
   };
 
   return (
@@ -82,13 +88,13 @@ const CartPage = () => {
                           <th className="py-4 text-gray-600 font-semibold text-left">
                             Product
                           </th>
-                          <th className="py-4 text-gray-600 font-semibold text-center">
+                          <th className="py-4 text-gray-600 font-semibold text-center w-28">
                             Price
                           </th>
-                          <th className="py-4 text-gray-600 font-semibold text-center w-28">
+                          <th className="py-4 text-gray-600 font-semibold text-center  w-28">
                             Quantity
                           </th>
-                          <th className="py-4 text-gray-600 font-semibold text-center w-28">
+                          <th className="py-4 text-gray-600 font-semibold text-center  w-28">
                             Subtotal
                           </th>
                         </tr>
@@ -125,7 +131,7 @@ const CartPage = () => {
                             <td className="text-center w-28">
                               {" "}
                               {/* Fixed width */}
-                              <div className="inline-flex items-center space-x-2">
+                              <div className="inline-flex items-center ">
                                 <button
                                   onClick={() =>
                                     handleAdjustQuantity(
@@ -134,7 +140,7 @@ const CartPage = () => {
                                       item.stockquantity
                                     )
                                   }
-                                  className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
+                                  className="w-6 h-8 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
                                 >
                                   +
                                 </button>
@@ -150,7 +156,7 @@ const CartPage = () => {
                                     )
                                   }
                                   disabled={item.quantity === 1}
-                                  className={`w-8 h-8 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300 ${
+                                  className={`w-6 h-8 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300 ${
                                     item.quantity === 1
                                       ? "cursor-not-allowed opacity-50"
                                       : ""
@@ -190,7 +196,12 @@ const CartPage = () => {
             </div>
             <button
               onClick={handleProceedToCheckout}
-              className="mt-4 bg-gray-800 text-white py-4 rounded hover:bg-gray-700 transition text-center block w-full"
+              disabled={isCartEmpty} // Disable if cart is empty
+              className={`mt-4 py-4 rounded text-center block w-full transition ${
+                isCartEmpty
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-gray-800 hover:bg-[#B48E61] text-white"
+              }`}
             >
               Proceed to Checkout
             </button>
