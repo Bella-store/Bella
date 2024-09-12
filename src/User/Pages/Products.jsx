@@ -5,6 +5,7 @@ import Pagination from "../Components/Pagination";
 import CollectionCard from "../Components/CollectionCard";
 import { fetchProducts } from "../../Redux/Slices/ProductsSlice"; // Update this path if necessary
 import Footer from "../Components/Footer";
+import PageBanner from "../Components/PageBanner";
 
 const Products = () => {
   const postsPerPage = 9;
@@ -28,11 +29,7 @@ const Products = () => {
       <Navbar />
 
       <div className="mt-16 bg-[#f4f3ef] px-[7%]">
-        <div className="bg-product flex justify-center items-center h-72">
-          <h2 className="text-5xl md:text-5xl text-gray-700 p-5 font-bold">
-            Collection
-          </h2>
-        </div>
+        <PageBanner title="Collection" />
       </div>
 
       {loading ? (
