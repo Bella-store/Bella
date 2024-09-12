@@ -7,13 +7,15 @@ import DeleteProductModal from "../Modals/DeleteProductModal";
 import { toast } from "react-toastify";
 import { fetchProducts } from "../../Redux/Slices/ProductsSlice";
 import Pagination from "../../User/Components/Pagination";
+import { Link } from "react-router-dom";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 const DataTable = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const productPerPage = 5;
+  const productPerPage = 3;
   const [searchTerm, setSearchTerm] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [productToUpdate, setProductToUpdate] = useState(null);
@@ -87,7 +89,18 @@ const DataTable = () => {
   return (
     <div>
       <div className="flex justify-between my-5">
-        <h1 className="text-2xl font-bold text-titleColor">Products</h1>
+        <h1 className="text-2xl font-bold text-titleColor">
+          <div className="breadcrumbs text-sm">
+            <ul>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <a>Products</a>
+              </li>
+            </ul>
+          </div>
+        </h1>
         <input
           type="text"
           className="w-[50%] input input-bordered focus:border-0 h-[2.5rem]"

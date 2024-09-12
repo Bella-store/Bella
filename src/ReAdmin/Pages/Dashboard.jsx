@@ -1,35 +1,35 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../Components/SidebarDash"; 
-import { IoMenu, IoClose } from "react-icons/io5";  
+import Sidebar from "../Components/SidebarDash";
+import { GiHamburgerMenu } from "react-icons/gi"; // Assuming you have this icon in your project
 
 function Dashboard() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false); 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);  
+    setSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <div className="h-[100vh] flex flex-col md:flex-row">
-
-      <button
-        className="md:hidden p-5 flex justify-end"
+    <div className="h-full flex md:flex-row transition-all duration-300">
+      {/* Sidebar toggle icon */}
+      <GiHamburgerMenu
         onClick={toggleSidebar}
-        aria-label="Toggle Sidebar"
-      >
-        {isSidebarOpen ? <IoClose size={30} /> : <IoMenu size={30} />}
-      </button>
+        className="cursor-pointer text-hovermain mt-10 ml-2"
+        size={28}
+      />
 
+      {/* Sidebar */}
       <div
-        className={`fixed z-20 top-0 left-0 h-full w-[50%] bg-white shadow-lg transform transition-transform duration-300 ease-in-out md:relative md:w-[35%] lg:w-[25%]  xl:w-[20%] md:transform-none ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`bg-white w-0 overflow-hidden transition-all duration-300 md:w-0 ${
+          isSidebarOpen ? "w-[250px] md:w-[250px]" : "w-0"
         }`}
       >
         <Sidebar />
       </div>
 
-      <div className="flex-1 p-5 w-full md:w-[75%] lg:w-[75%] xl:w-[80%]">
+      {/* Main content */}
+      <div className="flex-grow p-4">
         <Outlet />
       </div>
     </div>
