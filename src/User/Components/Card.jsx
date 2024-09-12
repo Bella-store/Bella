@@ -7,7 +7,7 @@ import { toggleFavourite } from "../../Redux/Slices/FavouriteSlice";
 import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-function Card({ id, title, imageUrl, price, uid,stockquantity  }) {
+function Card({ id, title, imageUrl, price, uid, stockquantity }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,11 +15,15 @@ function Card({ id, title, imageUrl, price, uid,stockquantity  }) {
   const favouriteIds = useSelector((state) => state.favourites.items);
   const isFavourite = favouriteIds.includes(id);
 
+  // Get the cart items from the state to check if the item is already in the cart
+  const cartItems = useSelector((state) => state.cart.items);
+  const isAlreadyInCart = cartItems.some((item) => item.id === id);
+
   // Get user details from state
   const { userDetails } = useSelector((state) => state.auth);
 
   const handleAddToCart = () => {
-    const product = { id, title, imageUrl, price,stockquantity };
+    const product = { id, title, imageUrl, price, stockquantity };
     dispatch(addToCart(product));
     console.log("Product ID added to cart:", id);
   };
@@ -46,9 +50,17 @@ function Card({ id, title, imageUrl, price, uid,stockquantity  }) {
       <div className="bg-titleColor text-white grid grid-cols-4 text-center w-full opacity-0 group-hover:opacity-100 transition-all duration-300">
         <div
           onClick={handleAddToCart}
-          className="col-span-3 p-3 flex justify-center items-center hover:bg-mainColor hover:text-white transition-all duration-200"
+          className={`col-span-3 p-3 flex justify-center items-center hover:bg-mainColor hover:text-white transition-all duration-200 ${
+            stockquantity === 0 ? "bg-gray-500 cursor-not-allowed" : ""
+          }`}
         >
-          <button className="text-[0.9rem]">ADD TO CART</button>
+          {stockquantity === 0 ? (
+            <span className="text-[0.9rem]">OUT OF STOCK</span>
+          ) : isAlreadyInCart ? (
+            <button className="text-[0.9rem]">Added TO CART</button>
+          ) : (
+            <button className="text-[0.9rem]">ADD TO CART</button>
+          )}
         </div>
         <div
           className="col-span-1 cursor-pointer border-gray-500 border transition-all duration-200 hover:text-white hover:border-mainColor hover:bg-mainColor flex justify-center items-center"

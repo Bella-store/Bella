@@ -72,15 +72,26 @@ const Wishlist = () => {
                       <div className="text-sm text-gray-600 mt-1">
                         Price: {item.price} EGP
                       </div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        Stock Status: In stock
+                      <div
+                        className={`text-sm mt-1 ${
+                          item.quantity === 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {item.quantity === 0 ? "Out of stock" : "In stock"}
                       </div>
                       <div className="mt-2">
                         <button
                           onClick={() => handleAddtoCart(item)}
-                          className="bg-black text-white py-2 px-4 rounded shadow hover:bg-gray-800"
+                          disabled={item.quantity === 0}
+                          className={`py-2 px-4 rounded shadow ${
+                            item.quantity === 0
+                              ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                              : "bg-black text-white hover:bg-gray-800"
+                          }`}
                         >
-                          Add to cart
+                          {item.quantity === 0 ? "Add to cart" : "Add to cart"}
                         </button>
                       </div>
                     </div>
@@ -142,13 +153,28 @@ const Wishlist = () => {
                         <td className="text-center text-gray-600">
                           {item.price} EGP
                         </td>
-                        <td className="text-center text-gray-600">In stock</td>
+                        <td
+                          className={`text-center ${
+                            item.quantity === 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {item.quantity === 0 ? "Out of stock" : "In stock"}
+                        </td>
                         <td className="text-center">
                           <button
                             onClick={() => handleAddtoCart(item)}
-                            className="bg-black text-white py-2 px-4 rounded shadow  hover:bg-[#B48E61]"
+                            disabled={item.quantity === 0}
+                            className={`py-2 px-4 rounded shadow ${
+                              item.quantity === 0
+                                ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                                : "bg-black text-white hover:bg-[#B48E61]"
+                            }`}
                           >
-                            Add to cart
+                            {item.quantity === 0
+                              ? "Add to Cart"
+                              : "Add to cart"}
                           </button>
                         </td>
                       </tr>
