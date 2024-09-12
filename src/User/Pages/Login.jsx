@@ -26,11 +26,14 @@ const Login = () => {
         })
       ).unwrap();
 
-      if (result.role === "admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/");
-      }
+      // Introduce a 2-second delay before navigating to the dashboard
+      setTimeout(() => {
+        if (result.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
+      }, 2000); // 2 seconds delay for loading before navigating
     } catch (error) {
       const errorMsg = error.message.includes("auth/invalid-credential")
         ? "The credentials provided are invalid. Please check your input and try again."
