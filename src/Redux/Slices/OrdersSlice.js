@@ -1,13 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { collection, addDoc, Timestamp, updateDoc, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  updateDoc,
+  getDocs,
+  getDoc,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
 
 // Initial state for the orders slice
 const initialState = {
-  orders: [],            // Array to hold the user's orders
-  selectedOrder: null,   // The currently selected order for viewing details
-  status: "idle",        // Status of the orders fetching process (idle, loading, succeeded, failed)
-  error: null,           // Error message, if any, during the orders fetching or placing process
+  orders: [], // Array to hold the user's orders
+  selectedOrder: null, // The currently selected order for viewing details
+  status: "idle", // Status of the orders fetching process (idle, loading, succeeded, failed)
+  error: null, // Error message, if any, during the orders fetching or placing process
 };
 
 // Async thunk for placing an order
@@ -18,33 +28,60 @@ export const placeOrder = createAsyncThunk(
       // Reference to the orders collection in Firestore
       const orderRef = collection(db, "orders");
 
-      // Map cart items to order details
-      const orderDetails = cart.map((item) => ({
-        productId: item.id,
-        quantity: item.quantity,
-        price: item.price, // Assuming that each cart item contains price
-      }));
-
-      // Get the current timestamp
-      const orderDate = Timestamp.now(); // Use Firestore Timestamp
+      // Get the current timestamp for the order date
+      const orderDate = Timestamp.now();
 
       // Static orderStatusId (this could be dynamic based on your order status logic)
       const orderStatusId = "TUgeq6U27JsTojE1XukC";
 
-      // Calculate the total amount of the order
-      const totalAmount = orderDetails.reduce(
-        (sum, item) => sum + item.quantity * item.price,
-        0
-      );
+      let orderDetails = [];
+      let totalAmount = 0;
+
+      // NEW FUNCTIONALITY: Process each item in the cart
+      for (const item of cart) {
+        // Get the current product data from Firestore
+        const productRef = doc(db, "products", item.id);
+        const productSnap = await getDoc(productRef);
+
+        if (productSnap.exists()) {
+          const productData = productSnap.data();
+          const currentQuantity = productData.quantity;
+
+          // Check if there's enough quantity available
+          if (currentQuantity >= item.quantity) {
+            // Calculate the new quantity after deducting the ordered amount
+            const newQuantity = currentQuantity - item.quantity;
+
+            // Update the product quantity in Firestore
+            await updateDoc(productRef, { quantity: newQuantity });
+
+            // Add the item to order details
+            orderDetails.push({
+              productId: item.id,
+              quantity: item.quantity,
+              price: item.price,
+            });
+
+            // Update the total amount of the order
+            totalAmount += item.quantity * item.price;
+          } else {
+            // If there's not enough quantity, throw an error
+            throw new Error(`Insufficient quantity for product ${item.id}`);
+          }
+        } else {
+          // If the product doesn't exist, throw an error
+          throw new Error(`Product ${item.id} not found`);
+        }
+      }
 
       // Create a new order document in Firestore
       const docRef = await addDoc(orderRef, {
         userId,
-        orderDate, // Use Firestore Timestamp
+        orderDate,
         orderDetails,
-        paymentMethod, // Include paymentMethod in the order data
-        orderStatusId, // Add the static orderStatusId here
-        totalAmount, // Save the total amount in the order document
+        paymentMethod,
+        orderStatusId,
+        totalAmount,
       });
 
       // Get the generated orderId (document ID)
@@ -52,21 +89,21 @@ export const placeOrder = createAsyncThunk(
 
       // Update the newly created order document with the orderId
       await updateDoc(docRef, {
-        orderId, // Include the orderId field
+        orderId,
       });
 
-      // Return the order data including orderId and orderStatusId
+      // Return the complete order data
       return {
         orderId,
         userId,
         orderDate,
         orderDetails,
         paymentMethod,
-        orderStatusId, // Return orderStatusId with the rest of the order data
-        totalAmount, // Return the total amount of the order
+        orderStatusId,
+        totalAmount,
       };
     } catch (error) {
-      // Return the error message if the operation fails
+      // If any error occurs during the process, return it as a rejected value
       return rejectWithValue(error.message);
     }
   }
@@ -77,7 +114,7 @@ export const fetchOrders = createAsyncThunk(
   "orders/fetchOrders",
   async (_, { rejectWithValue }) => {
     try {
-      // Get the current user
+      // Get the current user's ID
       const userId = auth.currentUser?.uid;
       if (!userId) {
         throw new Error("User not authenticated");
@@ -93,7 +130,7 @@ export const fetchOrders = createAsyncThunk(
       const querySnapshot = await getDocs(q);
 
       // Map the documents to an array of order objects
-      const orders = querySnapshot.docs.map(doc => ({
+      const orders = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
@@ -109,44 +146,41 @@ export const fetchOrders = createAsyncThunk(
 
 // Create the orders slice
 const ordersSlice = createSlice({
-  name: "orders",    // Name of the slice
-  initialState,      // Initial state of the slice
+  name: "orders",
+  initialState,
   reducers: {
     // Reducer to handle order selection
     selectOrder: (state, action) => {
-      // Find the selected order by orderId
       state.selectedOrder = state.orders.find(
         (order) => order.orderId === action.payload
       );
     },
   },
   extraReducers: (builder) => {
-    // Handling state changes for the placeOrder thunk
     builder
+      // Handle state changes for placeOrder thunk
       .addCase(placeOrder.pending, (state) => {
-        state.status = "loading";  // Set status to loading while the request is in progress
+        state.status = "loading";
       })
       .addCase(placeOrder.fulfilled, (state, action) => {
-        state.status = "succeeded"; // Set status to succeeded when the request is successful
-        state.orders.push(action.payload); // Add the new order to the orders array
+        state.status = "succeeded";
+        state.orders.push(action.payload);
       })
       .addCase(placeOrder.rejected, (state, action) => {
-        state.status = "failed";   // Set status to failed if the request fails
-        state.error = action.payload; // Store the error message
-      });
-
-    // Handling state changes for the fetchOrders thunk
-    builder
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // Handle state changes for fetchOrders thunk
       .addCase(fetchOrders.pending, (state) => {
-        state.status = "loading";  // Set status to loading while the request is in progress
+        state.status = "loading";
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.status = "succeeded"; // Set status to succeeded when the request is successful
-        state.orders = action.payload; // Replace the orders array with the fetched orders
+        state.status = "succeeded";
+        state.orders = action.payload;
       })
       .addCase(fetchOrders.rejected, (state, action) => {
-        state.status = "failed";   // Set status to failed if the request fails
-        state.error = action.payload; // Store the error message
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
