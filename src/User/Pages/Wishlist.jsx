@@ -35,7 +35,8 @@ const Wishlist = () => {
   );
 
   const handleAddtoCart = (item) => {
-    dispatch(addToCart(item));
+    const itemWithQuantity = { ...item, stockquantity: item.quantity };
+    dispatch(addToCart(itemWithQuantity));
   };
 
   return (
