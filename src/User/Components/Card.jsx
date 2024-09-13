@@ -52,7 +52,9 @@ function Card({ id, title, imageUrl, price, uid, stockquantity }) {
         <div
           onClick={handleAddToCart}
           className={`col-span-3 p-3 flex justify-center items-center hover:bg-mainColor hover:text-white transition-all duration-200 ${
-            stockquantity === 0 ? "bg-gray-500 cursor-not-allowed" : ""
+            stockquantity === 0
+              ? "bg-gray-500 hover:bg-gray-500 cursor-not-allowed"
+              : ""
           }`}
         >
           {stockquantity === 0 ? (
