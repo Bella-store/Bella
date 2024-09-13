@@ -33,13 +33,13 @@ const Products = () => {
       </div>
 
       {loading ? (
-        <p className="text-center mt-16">
+        <div className="text-center mt-16">
           <div className="flex items-center justify-center object-centerw-full mt-[25%]">
             <div className="">
               <span className="loading loading-infinity loading-lg text-mainColor"></span>
             </div>
           </div>
-        </p>
+        </div>
       ) : (
         <div className="mt-16 flex flex-col lg:flex-row">
           {/* Products Container */}

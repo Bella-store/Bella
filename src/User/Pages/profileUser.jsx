@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
-import { CiUser, CiHeart, CiSettings } from "react-icons/ci";
+import { CiUser, CiHeart } from "react-icons/ci";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../../Redux/Slices/AuthSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import { GrTask } from "react-icons/gr";
 
 function ProfileUser() {
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ function ProfileUser() {
             <CiHeart size={20} />
             Favourites
           </NavLink>
-
+{/* 
           <NavLink
             to="/profileUser/Settings"
             className={({ isActive }) =>
@@ -123,7 +124,7 @@ function ProfileUser() {
           >
             <CiSettings size={20} />
             Settings
-          </NavLink>
+          </NavLink> */}
 
           <NavLink
             to="/profileUser/orders"
@@ -135,7 +136,7 @@ function ProfileUser() {
               } p-2 rounded-md`
             }
           >
-            <IoIosNotificationsOutline size={20} />
+            <GrTask  size={20} />
             My Orders
           </NavLink>
         </div>
@@ -205,7 +206,7 @@ function ProfileUser() {
               Favourites
             </NavLink>
 
-            <NavLink
+            {/* <NavLink
               to="/profileUser/Settings"
               className={({ isActive }) =>
                 `ml-1 text-titleColor font-montserrat transition-colors flex gap-2 ${
@@ -217,7 +218,7 @@ function ProfileUser() {
             >
               <CiSettings size={20} />
               Settings
-            </NavLink>
+            </NavLink> */}
 
             <NavLink
               to="/profileUser/orders"
