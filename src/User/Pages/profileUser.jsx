@@ -124,9 +124,11 @@ function ProfileUser() {
 
         {/* Back Home Link */}
         <div className="flex items-center text-gray-700 hover:text-red-600 cursor-pointer">
-          <FaSignOutAlt size={24} />
-          <NavLink to="/" className={`ml-3 ${!sidebarOpen && "hidden"} text-titleColor`}>
-            Back Home
+          <NavLink to="/" className={`ml-3  text-titleColor`}>
+          <div className="flex gap-2">
+            <FaSignOutAlt size={24} />
+             <span className={`${!sidebarOpen && "hidden"}`}> Back Home </span>
+          </div>
           </NavLink>
         </div>
       </div>

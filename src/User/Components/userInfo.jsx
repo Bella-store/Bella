@@ -61,7 +61,7 @@ function UserInfo() {
               {userDetails?.userName}
             </h2>
             <p className="test-textColor text-[12px]">
-              {userDetails?.address}, {userDetails?.city}
+              {userDetails?.userEmail}
             </p>
           </div>
         </div>

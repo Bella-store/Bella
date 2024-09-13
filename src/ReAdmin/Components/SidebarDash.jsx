@@ -64,9 +64,11 @@ function SidebarDash({ isSidebarOpen }) {
 
       {/* Logout Link */}
       <div className="flex items-center text-gray-700 hover:text-red-600 cursor-pointer">
-        <FaSignOutAlt size={24} />
-        <Link onClick={logOut} className={`ml-3 ${!isSidebarOpen && "hidden"} text-titleColor`}>
-          Logout
+        <Link onClick={logOut} className={`ml-3 text-titleColor`}>
+       <div className="flex gap-2">
+          <FaSignOutAlt size={24} />
+            <span className={`${!isSidebarOpen && "hidden"}`}>Logout</span>
+       </div>
         </Link>
       </div>
     </div>
