@@ -1,56 +1,45 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../Redux/Slices/AuthSlice";
 import { auth } from "../../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { useForm } from "react-hook-form";
 
 function Settings() {
   const { userDetails } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
 
-  const [formData, setFormData] = useState({
-    userName: userDetails ? userDetails.userName : "",
-    userEmail: userDetails ? userDetails.userEmail : "",
-    phone: userDetails ? userDetails.phone : "",
-    address: userDetails ? userDetails.address : "",
-    city: userDetails ? userDetails.city : "",
-  });
-
+  // Update form fields from user details or auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setFormData({
-          userName: user.displayName || formData.userName,
-          userEmail: user.email || formData.userEmail,
-          phone: userDetails ? userDetails.phone : "",
-          address: userDetails ? userDetails.address : "",
-          city: userDetails ? userDetails.city : "",
-        });
+        setValue("userName", user.displayName || userDetails?.userName || "");
+        setValue("userEmail", user.email || userDetails?.userEmail || "");
+        setValue("phone", userDetails?.phone || "");
+        setValue("address", userDetails?.address || "");
+        setValue("city", userDetails?.city || "");
       } else {
         console.log("No user is authenticated");
       }
     });
 
     return () => unsubscribe();
-  }, [formData.userEmail, formData.userName, userDetails]);
+  }, [setValue, userDetails]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!formData.userName || !formData.userEmail) {
+  // Form submission handler
+  const onSubmit = (data) => {
+    if (!data.userName || !data.userEmail) {
       console.log("Please fill in all required fields.");
       return;
     }
 
-    dispatch(updateUser(formData))
+    dispatch(updateUser(data))
       .unwrap()
       .then(() => {
         console.log("User updated successfully");
@@ -61,79 +50,105 @@ function Settings() {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white shadow-xl rounded-xl p-4 border border-gray-200">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-        Settings
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-lg font-medium text-gray-800 mb-2">
-            Name
-          </label>
-          <input
-            type="text"
-            name="userName"
-            value={formData.userName}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
-          />
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="row-span-10 flex max-w-3xl mx-auto p-6 md:p-3"
+    >
+      <div className="flex flex-wrap justify-center items-center">
+        <div className="avatar flex justify-start items-center w-full mb-8">
+          <div className="flex-col content-center justify-center px-3">
+            <h2 className="text-titleColor text-[1.2rem] font-semibold">
+              {userDetails?.userName}
+            </h2>
+            <p className="test-textColor text-[12px]">
+              {userDetails?.address}, {userDetails?.city}
+            </p>
+          </div>
         </div>
-        <div>
-          <label className="block text-lg font-medium text-gray-800 mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            name="userEmail"
-            value={formData.userEmail}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
-          />
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col w-full">
+              <input
+                type="text"
+                placeholder="Name"
+                {...register("userName", { required: "Name is required" })}
+                className="input input-bordered w-full focus:bg-white"
+              />
+              {errors.userName && (
+                <p className="text-red-500">{errors.userName.message}</p>
+              )}
+            </div>
+
+            <input
+              type="email"
+              placeholder="Email Address"
+              {...register("userEmail", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                  message: "Email is not valid",
+                },
+              })}
+              className="input input-bordered w-full max-w-4xl focus:bg-white"
+            />
+            {errors.userEmail && (
+              <p className="text-red-500">{errors.userEmail.message}</p>
+            )}
+
+            <input
+              type="text"
+              placeholder="Phone Number"
+              {...register("phone", {
+                required: "Phone number is required",
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Phone number is not valid",
+                },
+              })}
+              className="input input-bordered w-full max-w-4xl focus:bg-white"
+            />
+            {errors.phone && (
+              <p className="text-red-500">{errors.phone.message}</p>
+            )}
+
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full mb-4">
+              <div className="flex flex-col w-full">
+                <input
+                  type="text"
+                  placeholder="Address"
+                  {...register("address", {
+                    required: "Address is required",
+                  })}
+                  className="input input-bordered w-full focus:bg-white"
+                />
+                {errors.address && (
+                  <p className="text-red-500">{errors.address.message}</p>
+                )}
+              </div>
+              <div className="flex flex-col w-full">
+                <input
+                  type="text"
+                  placeholder="City"
+                  {...register("city", { required: "City is required" })}
+                  className="input input-bordered w-full focus:bg-white"
+                />
+                {errors.city && (
+                  <p className="text-red-500">{errors.city.message}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <button
+            className="bg-hovermain text-white max-w-4xl mt-20 text-[1rem] px-9 py-3 rounded-lg border shadow-sm
+              border-hovermain hover:bg-white hover:text-hovermain"
+            type="submit"
+          >
+            Save Changes
+          </button>
         </div>
-        <div>
-          <label className="block text-lg font-medium text-gray-800 mb-2">
-            Phone Number
-          </label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
-          />
-        </div>
-        <div>
-          <label className="block text-lg font-medium text-gray-800 mb-2">
-            Address
-          </label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
-          />
-        </div>
-        <div>
-          <label className="block text-lg font-medium text-gray-800 mb-2">
-            City
-          </label>
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-btncolor focus:outline-none text-gray-700"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-btncolor hover:bg-gray-600 text-white py-3 px-4 rounded-md shadow-lg hover:bg-btncolor-dark transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-btncolor"
-        >
-          Update
-        </button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
 
