@@ -4,12 +4,18 @@ import PageBanner from "../Components/PageBanner";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { addToCart } from "../../Redux/Slices/CartSlice";
+import Pagination from "../Components/Pagination"; // Import Pagination component
+import { useState } from "react";
 
 const Wishlist = () => {
   const favouritemIds = useSelector((state) => state.favourites.items);
   const allProducts = useSelector((state) => state.products.items);
   const dispatch = useDispatch();
   const { userDetails } = useSelector((state) => state.auth);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 5; // Number of items per page
 
   // If userDetails is not available, return early with a message
   if (!userDetails) {
@@ -34,6 +40,14 @@ const Wishlist = () => {
     favouritemIds.includes(product.id)
   );
 
+  // Pagination logic
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentItems = favourites.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Handle page change
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const handleAddtoCart = (item) => {
     const itemWithQuantity = { ...item, stockquantity: item.quantity };
     dispatch(addToCart(itemWithQuantity));
@@ -54,7 +68,7 @@ const Wishlist = () => {
             <>
               {/* For small screens */}
               <div className="md:hidden flex flex-col space-y-4 p-4">
-                {favourites.map((item) => (
+                {currentItems.map((item) => (
                   <div
                     key={item.id}
                     className="flex items-center space-x-4 bg-white border-b last:border-0 hover:bg-gray-50 transition p-4 rounded"
@@ -126,7 +140,7 @@ const Wishlist = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {favourites.map((item) => (
+                    {currentItems.map((item) => (
                       <tr
                         key={item.id}
                         className="border-b last:border-0 hover:bg-gray-50 transition"
@@ -186,6 +200,14 @@ const Wishlist = () => {
             </>
           )}
         </div>
+
+        {/* Pagination */}
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={favourites.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
       </div>
       <Footer />
     </div>
