@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 import Navbar from "../Components/Navbar";
 import PageBanner from "../Components/PageBanner";
 import { removeFromCart, adjustQuantity } from "../../Redux/Slices/CartSlice";
 import Footer from "../Components/Footer";
+import Pagination from "../Components/Pagination"; // Import the Pagination component
 
 const CartPage = () => {
   const cart = useSelector((state) => state.cart.items);
@@ -14,10 +16,22 @@ const CartPage = () => {
   const navigate = useNavigate();
   const isCartEmpty = cart.length === 0;
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 5; // Number of items per page
+
+  // Get current items based on current page
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentItems = cart.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Handle page change
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   // Handle increment and decrement of quantity
-  const handleAdjustQuantity = (id, newQuantity,stockquantity) => {
+  const handleAdjustQuantity = (id, newQuantity, stockquantity) => {
     if (newQuantity > 0) {
-      dispatch(adjustQuantity({ id, quantity: newQuantity,stockquantity }));
+      dispatch(adjustQuantity({ id, quantity: newQuantity, stockquantity }));
     }
   };
 
@@ -39,13 +53,13 @@ const CartPage = () => {
           {/* Cart Items */}
           <div className="md:max-w-4xl w-full">
             <div className="bg-white rounded shadow-md overflow-hidden">
-              {cart.length === 0 ? (
+              {isCartEmpty ? (
                 <p className="text-center py-4">Your cart is empty.</p>
               ) : (
                 <>
                   {/* For small screens */}
                   <div className="md:hidden flex flex-col space-y-4 p-4">
-                    {cart.map((item) => (
+                    {currentItems.map((item) => (
                       <div
                         key={item.id}
                         className="flex items-center space-x-4 bg-white border-b last:border-0 hover:bg-gray-50 transition p-4 rounded"
@@ -91,16 +105,16 @@ const CartPage = () => {
                           <th className="py-4 text-gray-600 font-semibold text-center w-28">
                             Price
                           </th>
-                          <th className="py-4 text-gray-600 font-semibold text-center  w-28">
+                          <th className="py-4 text-gray-600 font-semibold text-center w-28">
                             Quantity
                           </th>
-                          <th className="py-4 text-gray-600 font-semibold text-center  w-28">
+                          <th className="py-4 text-gray-600 font-semibold text-center w-28">
                             Subtotal
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {cart.map((item) => (
+                        {currentItems.map((item) => (
                           <tr
                             key={item.id}
                             className="border-b last:border-0 hover:bg-gray-50 transition"
@@ -129,9 +143,7 @@ const CartPage = () => {
                               {item.price} EGP
                             </td>
                             <td className="text-center w-28">
-                              {" "}
-                              {/* Fixed width */}
-                              <div className="inline-flex items-center ">
+                              <div className="inline-flex items-center">
                                 <button
                                   onClick={() =>
                                     handleAdjustQuantity(
@@ -167,8 +179,6 @@ const CartPage = () => {
                               </div>
                             </td>
                             <td className="text-center w-28 text-gray-600">
-                              {" "}
-                              {/* Fixed width */}
                               {item.price * item.quantity} EGP
                             </td>
                           </tr>
@@ -179,6 +189,14 @@ const CartPage = () => {
                 </>
               )}
             </div>
+
+            {/* Pagination */}
+            <Pagination
+              postsPerPage={postsPerPage}
+              totalPosts={cart.length}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
           </div>
 
           {/* Cart Totals */}
