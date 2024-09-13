@@ -36,9 +36,13 @@ function DetailSection() {
 
   const handleAddToCart = () => {
     if (product && product.quantity > 0) {
-      // Ensure the product has quantity > 0
-      dispatch(addToCart(product));
-      console.log("Product ID added to cart:", id);
+      // Add stockQuantity to the product object
+      const productWithStockQuantity = {
+        ...product,
+        stockquantity: product.quantity, // Adding stockQuantity
+      };
+
+      dispatch(addToCart(productWithStockQuantity)); // Dispatch the modified product
     }
   };
 
