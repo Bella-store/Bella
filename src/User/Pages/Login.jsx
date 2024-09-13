@@ -27,19 +27,19 @@ const Login = () => {
             ).unwrap();
 
             // Introduce a 2-second delay before navigating to the dashboard
-            setTimeout(() => {
-                if (result.role === "admin") {
-                    toast.success("Welcome back, Admin!", {
-                        position: "bottom-right",
-                    });
-                    navigate("/dashboard");
-                } else {
-                    toast.success("Login successful!", {
-                        position: "bottom-right",
-                    });
-                    navigate("/");
-                }
-            }, 2000); // 2 seconds delay for loading before navigating
+            // setTimeout(() => {
+            if (result.role === "admin") {
+                toast.success("Welcome back, Admin!", {
+                    position: "bottom-right",
+                });
+                navigate("/dashboard");
+            } else {
+                toast.success("Login successful!", {
+                    position: "bottom-right",
+                });
+                navigate("/");
+            }
+            // }, 2000); // 2 seconds delay for loading before navigating
         } catch (error) {
             const errorMsg =
                 error.code === "auth/user-not-found"

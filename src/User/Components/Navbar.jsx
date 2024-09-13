@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { CiHeart, CiUser } from "react-icons/ci";
+
 import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
