@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import {  CiHeart, CiUser } from "react-icons/ci";
+import { CiHeart, CiUser } from "react-icons/ci";
 import { Link, useLocation, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
@@ -174,66 +174,79 @@ const Navbar = () => {
       </div>
 
       {/* Sidebar (Visible on Small Screens) */}
-      <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white text-black shadow-lg z-50 transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 lg:hidden`}
-      >
-        <ul className="flex flex-col space-y-8 p-8 text-black uppercase">
-          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/" onClick={toggleSidebar}>
-              Home
-            </Link>
-          </li>
-          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/AboutUs" onClick={toggleSidebar}>
-              About Us
-            </Link>
-          </li>
-          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/Products" onClick={toggleSidebar}>
-              Collection
-            </Link>
-          </li>
-          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/contact" onClick={toggleSidebar}>
-              Contact Us
-            </Link>
-          </li>
-          <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            <Link to="/shop" onClick={toggleSidebar}>
-              Store
-            </Link>
-          </li>
-          <div className="flex space-x-4 items-center mt-4">
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
-              {/* <CiSearch className="size-10" /> */}
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/cart">
-                <HiOutlineShoppingBag className="size-8" />
+      {userDetails ? (
+        <div
+          className={`fixed top-0 left-0 h-full w-64 bg-white text-black shadow-lg z-50 transform ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 lg:hidden`}
+        >
+          <ul className="flex flex-col space-y-8 p-8 text-black uppercase">
+            <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/" onClick={toggleSidebar}>
+                Home
               </Link>
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/wishlist">
-                <CiHeart className="size-8" />
+            </li>
+            <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/AboutUs" onClick={toggleSidebar}>
+                About Us
               </Link>
-            </div>
-          </div>
-          <div className="space-y-2 mt-4">
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/login" onClick={toggleSidebar}>
-                Login
+            </li>
+            <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/Products" onClick={toggleSidebar}>
+                Collection
               </Link>
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/register" onClick={toggleSidebar}>
-                Register
+            </li>
+            <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/contact" onClick={toggleSidebar}>
+                Contact Us
               </Link>
+            </li>
+            <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+              <Link to="/shop" onClick={toggleSidebar}>
+                Store
+              </Link>
+            </li>
+            <li>
+              <NavLink className=" text-titleColor" to="/profileUser/userInfo">
+                {userDetails.userName}
+              </NavLink>
+            </li>
+            <div className="flex space-x-4 items-center mt-4">
+              <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
+                {/* <CiSearch className="size-10" /> */}
+              </div>
+              <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+                <Link to="/cart">
+                  <HiOutlineShoppingBag className="size-8" />
+                </Link>
+              </div>
+              <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+                <Link to="/wishlist">
+                  <CiHeart className="size-8" />
+                </Link>
+              </div>
             </div>
-          </div>
-        </ul>
-      </div>
+            <div className="space-y-2 mt-4">
+              <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+                <Link to="/login" onClick={toggleSidebar}>
+                  Login
+                </Link>
+              </div>
+              <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
+                <Link to="/register" onClick={toggleSidebar}>
+                  Register
+                </Link>
+              </div>
+            </div>
+          </ul>
+        </div>
+      ) : (
+        <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
+          <Link to="/login" className="mr-5">
+            LOGIN
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };

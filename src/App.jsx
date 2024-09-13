@@ -95,11 +95,25 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route
                   path="/login"
-                  element={!currentUser ? <Login /> : <Navigate to="/" />}
+                  element={
+                    <ProtectedRoute
+                      isAllowed={!role}
+                      redirectPath={role === "admin" ? "/dashboard" : "/"}
+                    >
+                      <Login />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path="/Register"
-                  element={!currentUser ? <Register /> : <Navigate to="/" />}
+                  element={
+                    <ProtectedRoute
+                      isAllowed={!role}
+                      redirectPath={role === "admin" ? "/dashboard" : "/"}
+                    >
+                      <Register />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route path="/AboutUs" element={<AboutUs />} />
                 <Route path="/Products" element={<Products />} />
