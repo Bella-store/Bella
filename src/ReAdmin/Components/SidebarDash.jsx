@@ -1,15 +1,13 @@
-/* eslint-disable no-unused-vars */
-// Sidebar.js
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { CiUser, CiSettings } from "react-icons/ci";
+import { CiUser } from "react-icons/ci";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useState } from "react";
 import { logoutUser } from "../../Redux/Slices/AuthSlice";
 import { useDispatch } from "react-redux";
-import { CgSmartHomeHeat } from "react-icons/cg";
+import { GrTask } from "react-icons/gr";
 
-function SidebarDash() {
+function SidebarDash({ isSidebarOpen }) {
   const [activeLink, setActiveLink] = useState("productsdash");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,57 +18,55 @@ function SidebarDash() {
   };
 
   return (
-    <div className="w-[100%]  p-5 relative h-[100vh]">
-      <div className="flex justify-center gap-2 mb-8">
-        {/* <CgSmartHomeHeat className="text-mainColor mt-1" size={28} /> */}
-        <h2 className="text-3xl text-mainColor justify-center flex font-semibold">
-          BELLA
-        </h2>
+    <div className={`h-full p-5 relative flex flex-col justify-between ${isSidebarOpen ? "w-[250px]" : "w-[80px]"} transition-all duration-300 bg-white shadow-lg`}>
+      <div>
+        {/* Logo or Sidebar Header */}
+        <div className="flex items-center justify-center mb-16">
+          <h2 className={`text-3xl text-mainColor font-semibold ${!isSidebarOpen && "hidden"}`}>
+            BELLA
+          </h2>
+        </div>
+
+        {/* Navigation Links */}
+        <div className="flex flex-col gap-4 mt-6">
+          <NavLink
+            to="/dashboard/productsDash"
+            className={`text-mainColor font-montserrat transition-colors flex items-center w-full ${
+              activeLink === "productsdash" ? "bg-mainColor text-white" : "hover:bg-mainColor hover:text-white"
+            } p-2 rounded-md`}
+            onClick={() => setActiveLink("productsdash")}
+          >
+            <HiOutlineShoppingBag size={24} />
+            <span className={`ml-2 ${!isSidebarOpen && "hidden"}`}>Products</span>
+          </NavLink>
+          <NavLink
+            to="/dashboard/users"
+            className={`text-mainColor font-montserrat transition-colors flex items-center w-full ${
+              activeLink === "users" ? "bg-mainColor text-white" : "hover:bg-mainColor hover:text-white"
+            } p-2 rounded-md`}
+            onClick={() => setActiveLink("users")}
+          >
+            <CiUser size={24} />
+            <span className={`ml-2 ${!isSidebarOpen && "hidden"}`}>Users</span>
+          </NavLink>
+          <NavLink
+            to="/dashboard/orders"
+            className={`text-mainColor font-montserrat transition-colors flex items-center w-full ${
+              activeLink === "orders" ? "bg-mainColor text-white" : "hover:bg-mainColor hover:text-white"
+            } p-2 rounded-md`}
+            onClick={() => setActiveLink("orders")}
+          >
+            <GrTask size={24} />
+            <span className={`ml-2 ${!isSidebarOpen && "hidden"}`}>Orders</span>
+          </NavLink>
+        </div>
       </div>
 
-      <div className="flex flex-col gap-4 mt-6">
-        <NavLink
-          to="/dashboard/productsDash"
-          className={`ml-1 text-mainColor font-montserrat transition-colors flex gap-2 items-center w-full ${
-            activeLink === "productsdash"
-              ? "bg-mainColor text-white"
-              : "hover:bg-mainColor hover:text-white"
-          } p-2 rounded-md`}
-          onClick={() => setActiveLink("productsdash")}
-        >
-          <HiOutlineShoppingBag />
-          Products
-        </NavLink>
-        <NavLink
-          to="/dashboard/users"
-          className={`ml-1  text-mainColor  font-montserrat transition-colors flex gap-2 items-center w-full ${
-            activeLink === "users"
-              ? "bg-mainColor text-white"
-              : "hover:bg-mainColor hover:text-white"
-          } p-2 rounded-md`}
-          onClick={() => setActiveLink("users")}
-        >
-          <CiUser size={20} />
-          Users
-        </NavLink>
-        <NavLink
-          to="/dashboard/orders"
-          className={`ml-1  text-mainColor  font-montserrat transition-colors flex gap-2 items-center w-full ${
-            activeLink === "orders"
-              ? "bg-mainColor text-white"
-              : "hover:bg-mainColor hover:text-white"
-          } p-2 rounded-md`}
-          onClick={() => setActiveLink("orders")}
-        >
-          <CiUser size={20} />
-          Orders
-        </NavLink>
-      </div>
-
-      <div className="mt-8 flex items-center font-montserrat text-gray-700 hover:text-red-600 cursor-pointer absolute bottom-2 w-full text-center ">
-        <FaSignOutAlt />
-        <Link onClick={logOut} className=" m-3 text-titleColor">
-          LogOut
+      {/* Logout Link */}
+      <div className="flex items-center text-gray-700 hover:text-red-600 cursor-pointer">
+        <FaSignOutAlt size={24} />
+        <Link onClick={logOut} className={`ml-3 ${!isSidebarOpen && "hidden"} text-titleColor`}>
+          Logout
         </Link>
       </div>
     </div>

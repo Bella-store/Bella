@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../Components/SidebarDash";
-import { GiHamburgerMenu } from "react-icons/gi"; // Assuming you have this icon in your project
+import SidebarDash from "../components/SidebarDash";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 function Dashboard() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -11,25 +11,28 @@ function Dashboard() {
   };
 
   return (
-    <div className="h-full flex md:flex-row transition-all duration-300">
-      {/* Sidebar toggle icon */}
-      <GiHamburgerMenu
+    <div className="h-full flex">
+      {/* Sidebar toggle icon for all screens */}
+      <button
         onClick={toggleSidebar}
-        className="cursor-pointer text-hovermain mt-10 ml-2"
-        size={28}
-      />
+        className="fixed z-50 top-4 left-4 p-2 text-mainColor hover:text-hovermain focus:outline-none transition-all"
+      >
+        <GiHamburgerMenu size={28} />
+      </button>
 
-      {/* Sidebar */}
+      {/* Sidebar - slide in/out on all screens */}
       <div
-        className={`bg-white w-0 overflow-hidden transition-all duration-300 md:w-0 ${
-          isSidebarOpen ? "w-[250px] md:w-[250px]" : "w-0"
+        className={`fixed top-0 left-0 h-full z-40 transition-all duration-300 ${
+          isSidebarOpen ? "translate-x-0 w-[250px]" : "translate-x-0 w-[80px]"
         }`}
       >
-        <Sidebar />
+        <SidebarDash isSidebarOpen={isSidebarOpen} />
       </div>
 
       {/* Main content */}
-      <div className="flex-grow p-4">
+      <div
+        className={`flex-grow p-4 transition-all duration-300 ${isSidebarOpen ? "ml-[250px]" : "ml-[80px]"}`}
+      >
         <Outlet />
       </div>
     </div>
