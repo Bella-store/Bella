@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders, selectOrder } from "../../Redux/Slices/OrdersSlice";
 import { fetchProducts } from "../../Redux/Slices/ProductsSlice";
+import DetilesModal from "../../ReAdmin/Modals/DetilesModal";
+
 
 const UserOrders = () => {
     const dispatch = useDispatch();
@@ -10,6 +12,8 @@ const UserOrders = () => {
     );
     const { items: products } = useSelector((state) => state.products); // Get products from state
     const [currentOrder, setCurrentOrder] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [orderDetailsUser, setOrderDetailsUser] = useState([]);
 
     useEffect(() => {
         dispatch(fetchOrders());
@@ -19,6 +23,20 @@ const UserOrders = () => {
     const handleOrderClick = (orderId) => {
         dispatch(selectOrder(orderId));
         setCurrentOrder(orderId);
+        const selectedOrder = orders.find((order) => order.orderId === orderId);
+        if (selectedOrder) {
+            const details = selectedOrder.orderDetails.map((item) => {
+                const productDetails = getProductDetails(item.productId);
+                return {
+                    ...item,
+                    title: productDetails.title || `Product ${item.productId}`,
+                    imageUrl: productDetails.imageUrl || "https://via.placeholder.com/64",
+                    price: productDetails.price || item.price,
+                };
+            });
+            setOrderDetailsUser(details);
+            setIsModalOpen(true);
+        }
     };
 
     // Helper function to get product details by productId
@@ -26,123 +44,68 @@ const UserOrders = () => {
         return products.find((product) => product.id === productId) || {};
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
-        <div className="p-4">
-            <div className="flex flex-col lg:flex-row lg:space-x-4">
-                {/* Order Details (Left) */}
-                <div className="flex-1">
-                    {selectedOrder ? (
-                        <div className="border p-4 rounded-lg shadow-sm bg-white mb-4">
-                            <h2 className="text-xl font-semibold mb-4">
-                                Order #{selectedOrder.orderId}
-                            </h2>
-                            <div className="space-y-4">
-                                {selectedOrder.orderDetails.map(
-                                    (item, index) => {
-                                        const productDetails =
-                                            getProductDetails(item.productId);
-                                        return (
-                                            <div
-                                                key={index}
-                                                className="flex items-center justify-between"
+        <div>
+            <div className="flex justify-between my-5">
+                <h1 className="text-2xl font-bold text-titleColor">Orders</h1>
+            </div>
+
+            {status === "loading" && <p>Loading...</p>}
+            {status === "failed" && <p>Error: {error}</p>}
+
+            <div className="container mx-auto p-4 mt-3 bg-white rounded-lg shadow-md">
+                <div className="overflow-x-auto">
+                    <table className="table">
+                        <thead>
+                            <tr className="text-center">
+                                <th>Index</th>
+                                <th>Order Date</th>
+                                <th>Payment Method</th>
+                                <th>Order Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.length > 0 ? (
+                                orders.map((order, index) => (
+                                    <tr key={order.orderId} className="text-center">
+                                        <td>{index + 1}</td>
+                                        <td>
+                                            {new Date(order.orderDate.toDate()).toLocaleDateString()}
+                                        </td>
+                                        <td>{order.paymentMethod}</td>
+                                        <td>
+                                            <button
+                                                className="btn btn-ghost btn-xs text-red-600"
+                                                onClick={() => handleOrderClick(order.orderId)}
                                             >
-                                                <div className="flex items-center space-x-4">
-                                                    <img
-                                                        src={
-                                                            productDetails.imageUrl ||
-                                                            "https://via.placeholder.com/64"
-                                                        }
-                                                        alt={`Product ${item.productId}`}
-                                                        className="w-16 h-16 object-cover rounded-md"
-                                                    />
-                                                    <div>
-                                                        <p className="text-lg font-medium">
-                                                            {productDetails.title ||
-                                                                `Product ${item.productId}`}
-                                                        </p>
-                                                        <p className="text-sm text-gray-500">
-                                                            Quantity:{" "}
-                                                            {item.quantity}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-lg font-medium">
-                                                    USD{" "}
-                                                    {(
-                                                        item.quantity *
-                                                        (productDetails.price ||
-                                                            item.price)
-                                                    ).toFixed(2)}
-                                                </p>
-                                            </div>
-                                        );
-                                    }
-                                )}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="flex items-center justify-center h-full border p-4 rounded-lg shadow-sm bg-white">
-                            <p className="text-xl font-semibold text-gray-500">
-                                Select an order to view details
-                            </p>
-                        </div>
-                    )}
+                                                Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" className="text-center">
+                                        No orders found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
 
-                {/* Orders Summary (Right) */}
-                <div className="w-full lg:w-1/3">
-                    <div className="space-y-4">
-                        {status === "loading" && (
-                            <div className="flex items-center justify-center object-centerw-full mt-[25%]">
-                                <div className="">
-                                    <span className="loading loading-infinity loading-lg text-mainColor"></span>
-                                </div>
-                            </div>
-                        )}
-                        {status === "failed" && <p>{error}</p>}
-                        {orders.map((order) => (
-                            <div
-                                key={order.orderId}
-                                className={`border p-4 rounded-lg shadow-sm bg-white cursor-pointer ${
-                                    currentOrder === order.orderId
-                                        ? "bg-gray-100"
-                                        : ""
-                                }`}
-                                onClick={() => handleOrderClick(order.orderId)}
-                            >
-                                <p className="text-lg font-medium">
-                                    Order #{order.orderId}
-                                </p>
-                                <p>
-                                    {new Date(
-                                        order.orderDate.toDate()
-                                    ).toLocaleDateString()}
-                                </p>
-                                <p
-                                    className={`text-${
-                                        order.orderStatusId ===
-                                        "TUgeq6U27JsTojE1XukC"
-                                            ? "blue"
-                                            : order.orderStatusId ===
-                                              "w3oNSy1Y2MrIX1coDIP0"
-                                            ? "green"
-                                            : "red"
-                                    }-500`}
-                                >
-                                    {order.orderStatusId ===
-                                    "TUgeq6U27JsTojE1XukC"
-                                        ? "Processing"
-                                        : order.orderStatusId ===
-                                          "w3oNSy1Y2MrIX1coDIP0"
-                                        ? "Completed"
-                                        : "Canceled"}
-                                </p>
-                                <p>USD {order.totalAmount}</p>
-                                <p>{order.orderDetails.length} Items</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* Show modal only when isModalOpen is true */}
+                {isModalOpen && (
+                    <DetilesModal
+                        closeModal={closeModal}
+                        orderDetailsUser={orderDetailsUser}
+                        quantity={orderDetailsUser.reduce((total, item) => total + item.quantity, 0)}
+                    />
+                )}
             </div>
         </div>
     );

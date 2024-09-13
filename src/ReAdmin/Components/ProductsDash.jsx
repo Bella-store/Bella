@@ -146,17 +146,18 @@ const DataTable = () => {
                   <td>${item.price}</td>
                   <td>{item.description}</td>
                   <td>
-                    <button
-                      className="btn btn-ghost btn-xs text-red-600"
-                      onClick={() => openDeleteModal(item)}
-                    >
-                      Delete
-                    </button>
+                   
                     <button
                       className="btn btn-ghost btn-xs"
                       onClick={() => openUpdateModal(item)}
                     >
                       Edit
+                    </button>
+                    <button
+                      className="btn btn-ghost btn-xs text-red-600"
+                      onClick={() => openDeleteModal(item)}
+                    >
+                      Delete
                     </button>
                   </td>
                 </tr>
