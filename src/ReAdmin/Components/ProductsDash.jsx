@@ -50,12 +50,12 @@ const DataTable = () => {
     try {
       await dispatch(deleteProducts(productToDelete.id));
       toast.success("Product deleted successfully!", {
-        position: "top-center",
+        position: "bottom-right",
       });
       closeDeleteModal();
     } catch (error) {
       toast.error("Error deleting product, please try again.", {
-        position: "bottom-center",
+        position: "bottom-right",
       });
     } finally {
       setIsDisabled(false);

@@ -29,19 +29,6 @@ function SidebarDash() {
       </div>
 
       <div className="flex flex-col gap-4 mt-6">
-        {/* <NavLink
-            to="/profileUser/"
-            className={`ml-1 text-titleColor font-montserrat transition-colors flex gap-2 items-center w-full ${
-              activeLink === "userInfo"
-                ? "bg-mainColor text-white"
-                : "hover:bg-mainColor hover:text-white"
-            } p-2 rounded-md`}
-            onClick={() => setActiveLink("userInfo")}
-          >
-            <CiSettings size={20} />
-            Dashboard
-          </NavLink> */}
-
         <NavLink
           to="/dashboard/productsDash"
           className={`ml-1 text-mainColor font-montserrat transition-colors flex gap-2 items-center w-full ${
