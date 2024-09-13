@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { CiHeart, CiUser } from "react-icons/ci";
-import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { PiLineVerticalLight } from "react-icons/pi";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoIosLogOut } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
+import { PiLineVerticalLight } from "react-icons/pi";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { fetchUserData, logoutUser } from "../../Redux/Slices/AuthSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
@@ -16,7 +17,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, userDetails } = useSelector((state) => state.auth);
-
   const changeNavBg = () => {
     if (window.scrollY > 0) {
       setNavBg(true);
@@ -24,16 +24,23 @@ const Navbar = () => {
       setNavBg(false);
     }
   };
-
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
-  const logOut = () => {
-    dispatch(logoutUser());
-    navigate("/login");
+  const logOut = async () => {
+    try {
+      await dispatch(logoutUser
+        ()).unwrap(); // Assuming logoutUser is an async thunk
+      toast.success("Logged out successfully!", {
+        position: "bottom-right",
+      });
+      navigate("/login");
+    } catch (error) {
+      toast.error("An error occurred while logging out. Please try again.", {
+        position: "bottom-right",
+      });
+    }
   };
-
   useEffect(() => {
     if (user) {
       dispatch(fetchUserData());
@@ -161,7 +168,7 @@ const Navbar = () => {
               <Link to="/login" className="mr-5">
                 LOGIN
               </Link>
-              <Link to="/register">REGISTER</Link>
+              {/* <Link to="/register">REGISTER</Link> */}
             </div>
           )}
         </div>
