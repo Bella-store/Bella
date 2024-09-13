@@ -70,6 +70,7 @@ const ShopSidebar = ({
                 <h3 className="font-bold text-lg mb-4 text-gray-700">PRICE</h3>
                 <input
                     type="range"
+                    defaultValue={priceRange.max}
                     min={priceRange.min}
                     max={priceRange.max}
                     onChange={(e) => onPriceChange(e.target.value)}
