@@ -183,7 +183,6 @@ const Navbar = () => {
                             <Link to="/login" className="mr-5">
                                 LOGIN
                             </Link>
-                            <Link to="/register">REGISTER</Link>
                         </div>
                     )}
                 </div>
