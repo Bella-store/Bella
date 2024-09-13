@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginUser } from "../../Redux/Slices/AuthSlice";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); // Add loading state
 
@@ -27,18 +27,29 @@ const Login = () => {
       ).unwrap();
 
       if (result.role === "admin") {
+        toast.success("Welcome back, Admin!", {
+          position: "bottom-right",
+        });
         navigate("/dashboard");
       } else {
+        toast.success("Login successful!", {
+          position: "bottom-right",
+        });
         navigate("/");
       }
     } catch (error) {
-      const errorMsg = error.message.includes("auth/invalid-credential")
-        ? "The credentials provided are invalid. Please check your input and try again."
-        : "An unexpected error occurred. Please try again later...";
-      alert(errorMsg);
-      console.error("Login error: ", error);
+      const errorMsg =
+        error.code === "auth/user-not-found"
+          ? "User not found. Please check your email."
+          : error.code === "auth/wrong-password"
+          ? "Incorrect password. Please try again."
+          : "An unexpected error occurred. Please try again later.";
+
+      toast.error(errorMsg, {
+        position: "bottom-right",
+      });
     } finally {
-      setLoading(false); // Set loading to false after login attempt
+      setLoading(false);
     }
   };
 
@@ -121,8 +132,6 @@ const Login = () => {
               {loading ? "Loading..." : "Sign in"} {/* Display loading text */}
             </button>
           </div>
-
-          {error && <p className="text-red-500 text-center mt-3">{error}</p>}
         </form>
 
         <div className="text-center mt-6">

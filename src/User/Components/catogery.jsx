@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -8,10 +9,9 @@ function Category() {
     try {
       const res = await fetch("data.json");
       const data = await res.json();
-      console.log(data);
       setCategory(data);
     } catch (error) {
-      console.log("Failed to fetch data: " + error);
+      // console.log("Failed to fetch data: " + error);
     }
   };
 

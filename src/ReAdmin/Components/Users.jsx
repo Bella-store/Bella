@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, deleteUser } from "../../Redux/Slices/AuthSlice";
@@ -5,6 +6,7 @@ import Pagination from "../../User/Components/Pagination";
 import { IoCloseOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { toast } from "react-toastify";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -55,9 +57,14 @@ const Users = () => {
       setIsDisabled(true); // Disable buttons during delete operation
       try {
         await dispatch(deleteUser(userToDelete.id)).unwrap(); // Ensure async handling
+        toast.success("User deleted successfully!", {
+          position: "bottom-right",
+        });
         closeDeleteModal();
       } catch (err) {
-        console.error("Error deleting user:", err); // Handle error
+        toast.error("Error deleting user, please try again.", {
+          position: "bottom-right",
+        });
         setIsDisabled(false); // Enable buttons if delete fails
       }
     }
