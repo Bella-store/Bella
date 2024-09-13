@@ -2,11 +2,10 @@
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { CiHeart, CiUser } from "react-icons/ci";
-import { Link, useLocation, NavLink } from "react-router-dom";
+
+import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
-import { useNavigate } from "react-router-dom";
-
 import { IoIosLogOut } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData, logoutUser } from "../../Redux/Slices/AuthSlice";
@@ -14,13 +13,11 @@ import { toast } from "react-toastify";
 
 const Navbar = () => {
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-
   const [navBg, setNavBg] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { user, userDetails } = useSelector((state) => state.auth);
 
   const changeNavBg = () => {
@@ -118,9 +115,6 @@ const Navbar = () => {
 
         {/* Icons */}
         <div className="hidden lg:flex space-x-4 items-center mt-4">
-          <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-            {/* <CiSearch className="size-6" /> */}
-          </div>
           <div className="hover:text-mainColor cursor-pointer transition-all duration-200 relative">
             <Link to="/cart">
               {totalQuantity > 0 && (
@@ -177,6 +171,7 @@ const Navbar = () => {
               <Link to="/login" className="mr-5">
                 LOGIN
               </Link>
+              <Link to="/register">REGISTER</Link>
             </div>
           )}
         </div>
@@ -187,7 +182,14 @@ const Navbar = () => {
         className={`fixed top-0 left-0 h-full w-64 bg-white text-black shadow-lg z-50 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 lg:hidden`}
+        onClick={() => setSidebarOpen(false)}
       >
+        <div
+          className="absolute top-4 right-4 text-3xl cursor-pointer"
+          onClick={() => setSidebarOpen(false)}
+        >
+          {/* <FaTimes /> */}
+        </div>
         <ul className="flex flex-col space-y-8 p-8 text-black uppercase">
           <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
             <Link to="/" onClick={toggleSidebar}>
@@ -214,33 +216,30 @@ const Navbar = () => {
               Store
             </Link>
           </li>
-          <div className="flex space-x-4 items-center mt-4">
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-black">
-              {/* <CiSearch className="size-10" /> */}
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/cart">
-                <HiOutlineShoppingBag className="size-8" />
-              </Link>
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/wishlist">
-                <CiHeart className="size-8" />
-              </Link>
-            </div>
-          </div>
-          <div className="space-y-2 mt-4">
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/login" onClick={toggleSidebar}>
-                Login
-              </Link>
-            </div>
-            <div className="hover:text-mainColor cursor-pointer transition-all duration-200">
-              <Link to="/register" onClick={toggleSidebar}>
-                Register
-              </Link>
-            </div>
-          </div>
+          {userDetails ? (
+            <li>
+              <NavLink
+                className=" text-titleColor hover:text-hovermain"
+                to="/profileUser/userInfo"
+                onClick={toggleSidebar}
+              >
+                {userDetails.userName}
+              </NavLink>
+            </li>
+          ) : (
+            <>
+              <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+                <Link to="/login" onClick={toggleSidebar}>
+                  Login
+                </Link>
+              </li>
+              <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
+                <Link to="/register" onClick={toggleSidebar}>
+                  Register
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

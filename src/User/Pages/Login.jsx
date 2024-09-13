@@ -37,6 +37,7 @@ const Login = () => {
         });
         navigate("/");
       }
+
     } catch (error) {
       const errorMsg =
         error.code === "auth/user-not-found"
