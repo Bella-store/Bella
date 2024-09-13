@@ -81,8 +81,6 @@ export const loginUser = createAsyncThunk(
 // Logout user
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
   await signOut(auth);
-  console.log("User signed out");
-  // Handle navigation in a component after logout if needed
 });
 
 // Fetch all users

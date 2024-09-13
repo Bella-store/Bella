@@ -2,10 +2,11 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../Redux/Slices/AuthSlice";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const { error, loading } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const {
     register,
@@ -26,15 +27,19 @@ const Register = () => {
     )
       .unwrap()
       .then(() => {
+        toast.success("Registration successful!", {
+          position: "bottom-right",
+        });
         navigate("/");
       })
       .catch((error) => {
         const errorMsg =
           error.code === "auth/invalid-credential"
-            ? "The credentials provided are invalid. Please check your input and try again."
-            : "An unexpected error occurred. Please try again later.";
-        alert(errorMsg);
-        console.error("Registration error: ", error);
+            ? "The credentials provided are invalid,Please check your input and try again."
+            : "An unexpected error occurred , Please try again later.";
+        toast.error(errorMsg, {
+          position: "bottom-right",
+        });
       });
   };
 
@@ -165,8 +170,6 @@ const Register = () => {
               {loading ? "Registering..." : "Sign up"}
             </button>
           </div>
-
-          {error && <p className="text-red-500 text-center mt-3">{error}</p>}
         </form>
 
         <div className="text-center mt-6">

@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import {  CiHeart, CiUser } from "react-icons/ci";
+import { CiHeart, CiUser } from "react-icons/ci";
 import { Link, useLocation, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { PiLineVerticalLight } from "react-icons/pi";
@@ -9,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { IoIosLogOut } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData, logoutUser } from "../../Redux/Slices/AuthSlice";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
@@ -32,12 +34,19 @@ const Navbar = () => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
-  const logOut = () => {
-    dispatch(logoutUser());
-    navigate("/login");
+  const logOut = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap(); // Assuming logoutUser is an async thunk
+      toast.success("Logged out successfully!", {
+        position: "bottom-right",
+      });
+      navigate("/login");
+    } catch (error) {
+      toast.error("An error occurred while logging out. Please try again.", {
+        position: "bottom-right",
+      });
+    }
   };
-
   useEffect(() => {
     if (user) {
       dispatch(fetchUserData());
