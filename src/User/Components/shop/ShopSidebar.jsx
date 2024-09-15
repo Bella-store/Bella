@@ -1,16 +1,21 @@
-import { useDispatch } from "react-redux";
-import { setSelectedCategories } from "../../../Redux/Slices/ProductsSlice";
-
 const ShopSidebar = ({
     priceRange,
     onPriceChange,
     onSearch,
     onCategoryChange,
 }) => {
-    const dispatch = useDispatch();
+    const handleMinPriceChange = (e) => {
+        const newMin = Number(e.target.value);
+        onPriceChange(newMin, priceRange.max);
+    };
+
+    const handleMaxPriceChange = (e) => {
+        const newMax = Number(e.target.value);
+        onPriceChange(priceRange.min, newMax);
+    };
 
     const handleCategoryChange = (category) => {
-        onCategoryChange(category); // Inform the parent component about category change
+        onCategoryChange(category);
     };
 
     return (
@@ -68,18 +73,27 @@ const ShopSidebar = ({
             {/* Price Filter */}
             <div className="mb-8">
                 <h3 className="font-bold text-lg mb-4 text-gray-700">PRICE</h3>
-                <input
-                    type="range"
-                    defaultValue={priceRange.max}
-                    min={priceRange.min}
-                    max={priceRange.max}
-                    onChange={(e) => onPriceChange(e.target.value)}
-                    className="w-full accent-gray-600"
-                />
-                <div className="flex justify-between text-sm text-gray-600 mb-4">
+                <div className="flex gap-4">
+                    <input
+                        type="number"
+                        value={priceRange.min}
+                        min={0}
+                        max={priceRange.max}
+                        onChange={handleMinPriceChange}
+                        className="w-1/2 p-2 border-b-2 border-gray-400 focus:outline-none focus:border-gray-600"
+                    />
+                    <input
+                        type="number"
+                        value={priceRange.max}
+                        min={priceRange.min}
+                        max={10000}
+                        onChange={handleMaxPriceChange}
+                        className="w-1/2 p-2 border-b-2 border-gray-400 focus:outline-none focus:border-gray-600"
+                    />
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 mt-2">
                     <span>{priceRange.min} EGP</span>
-                    <span>{priceRange.max} EGP</span>{" "}
-                    {/* Update to reflect current max */}
+                    <span>{priceRange.max} EGP</span>
                 </div>
             </div>
         </div>
