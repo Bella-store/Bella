@@ -16,6 +16,7 @@ import {
     browserLocalPersistence,
 } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { clearCart, initializeCart } from "./CartSlice";
 
 // Register user
 export const registerUser = createAsyncThunk(
@@ -51,7 +52,7 @@ export const registerUser = createAsyncThunk(
 // Login user with persistence and loading handling
 export const loginUser = createAsyncThunk(
     "auth/loginUser",
-    async ({ userEmail, password }, { rejectWithValue }) => {
+    async ({ userEmail, password }, { dispatch, rejectWithValue }) => {
         try {
             // Set persistence to ensure the user remains logged in across sessions
             await setPersistence(auth, browserLocalPersistence);
@@ -71,6 +72,7 @@ export const loginUser = createAsyncThunk(
 
             if (docSnap.exists()) {
                 const userDetails = docSnap.data();
+                dispatch(initializeCart());
                 return { user, userDetails };
             } else {
                 return rejectWithValue("User document does not exist");
@@ -82,9 +84,13 @@ export const loginUser = createAsyncThunk(
 );
 
 // Logout user
-export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
-    await signOut(auth);
-});
+export const logoutUser = createAsyncThunk(
+    "auth/logoutUser",
+    async (_, { dispatch }) => {
+        await signOut(auth);
+        dispatch(clearCart());
+    }
+);
 
 // Fetch all users
 export const fetchUsers = createAsyncThunk(

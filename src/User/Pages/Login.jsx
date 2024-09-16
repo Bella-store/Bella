@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../Redux/Slices/AuthSlice";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { initializeCart } from "../../Redux/Slices/CartSlice";
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const Login = () => {
                 });
                 navigate("/dashboard");
             } else {
+                await dispatch(initializeCart());
                 toast.success("Login successful!", {
                     position: "bottom-right",
                 });

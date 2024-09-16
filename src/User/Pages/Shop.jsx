@@ -20,7 +20,7 @@ const Shop = () => {
 
     // Filters and sorting
     const [searchTerm, setSearchTerm] = useState("");
-    const [priceRange, setPriceRange] = useState({ min: null, max: null });
+    const [priceRange, setPriceRange] = useState({ min: "", max: "" });
     const [sortOption, setSortOption] = useState("Sort by Default");
     const [selectedCategories, setSelectedCategories] = useState([]);
 
@@ -55,12 +55,12 @@ const Shop = () => {
         }
 
         // Apply price range filters
-        if (priceRange.min != null) {
+        if (priceRange.min != "") {
             filtered = filtered.filter(
                 (product) => product.price >= priceRange.min
             );
         }
-        if (priceRange.max != null) {
+        if (priceRange.max != "") {
             filtered = filtered.filter(
                 (product) => product.price <= priceRange.max
             );
@@ -162,7 +162,7 @@ const Shop = () => {
 
                     {/* Pagination Controls */}
                     {currentProducts.length === 0
-                        ? null
+                        ? ""
                         : renderPagination(
                               currentPage,
                               totalPages,
