@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const ShopSidebar = ({
     priceRange,
     onPriceChange,
@@ -85,8 +86,7 @@ const ShopSidebar = ({
                     <input
                         type="number"
                         value={priceRange.max}
-                        min={priceRange.min}
-                        max={10000}
+                        min={0}
                         onChange={handleMaxPriceChange}
                         className="w-1/2 p-2 border-b-2 border-gray-400 focus:outline-none focus:border-gray-600"
                     />
