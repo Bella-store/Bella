@@ -8,6 +8,7 @@ import AddProductModal from "../Modals/AddProductModal";
 import DeleteProductModal from "../Modals/DeleteProductModal";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { renderPagination } from "../../User/Pages/RenderPagination";
 
 const DataTable = () => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -88,115 +89,6 @@ const DataTable = () => {
     const handlePageChange = (page) => {
         if (page === currentPage || page < 1 || page > totalPages) return;
         setCurrentPage(page);
-    };
-
-    const renderPagination = () => {
-        const pages = [];
-        const startPage = Math.max(2, currentPage - 1);
-        const endPage = Math.min(totalPages - 1, currentPage + 1);
-
-        // Previous Button
-        pages.push(
-            <button
-                key="prev"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`px-3 py-1 ${
-                    currentPage === 1
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-gray-200"
-                }`}
-            >
-                Prev
-            </button>
-        );
-
-        // First page
-        pages.push(
-            <button
-                key={1}
-                className={`px-3 py-1 ${
-                    currentPage === 1 ? "bg-blue-500 text-white" : "bg-gray-200"
-                }`}
-                onClick={() => handlePageChange(1)}
-            >
-                1
-            </button>
-        );
-
-        // Dots before current page group
-        if (currentPage > 3) {
-            pages.push(
-                <span key="start-ellipsis" className="px-2">
-                    ...
-                </span>
-            );
-        }
-
-        // Pages around current page
-        for (let i = startPage; i <= endPage; i++) {
-            if (i !== 1 && i !== totalPages) {
-                pages.push(
-                    <button
-                        key={i}
-                        className={`px-3 py-1 ${
-                            currentPage === i
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-200"
-                        }`}
-                        onClick={() => handlePageChange(i)}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-
-        // Dots after current page group
-        if (currentPage < totalPages - 2) {
-            pages.push(
-                <span key="end-ellipsis" className="px-2">
-                    ...
-                </span>
-            );
-        }
-
-        // Last page
-        if (totalPages > 1) {
-            pages.push(
-                <button
-                    key={totalPages}
-                    className={`px-3 py-1 ${
-                        currentPage === totalPages
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-200"
-                    }`}
-                    onClick={() => handlePageChange(totalPages)}
-                >
-                    {totalPages}
-                </button>
-            );
-        }
-
-        // Next Button
-        pages.push(
-            <button
-                key="next"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`px-3 py-1 ${
-                    currentPage === totalPages
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-gray-200"
-                }`}
-            >
-                Next
-            </button>
-        );
-
-        return (
-            <div className="flex space-x-2 justify-center mt-4">{pages}</div>
-        );
     };
 
     return (
@@ -287,7 +179,7 @@ const DataTable = () => {
                 </div>
 
                 {/* Pagination Controls */}
-                {renderPagination()}
+                {renderPagination(currentPage, totalPages, handlePageChange)}
             </div>
 
             {/* Add & Update Product Modal */}
