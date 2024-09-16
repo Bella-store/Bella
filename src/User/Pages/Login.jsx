@@ -9,7 +9,7 @@ import { initializeCart } from "../../Redux/Slices/CartSlice";
 const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false); // Add loading state
+    const [loading, setLoading] = useState(false);
 
     const {
         register,
@@ -18,7 +18,7 @@ const Login = () => {
     } = useForm();
 
     const onSubmit = async (data) => {
-        setLoading(true); // Set loading to true when starting login
+        setLoading(true);
         try {
             const result = await dispatch(
                 loginUser({
@@ -27,8 +27,6 @@ const Login = () => {
                 })
             ).unwrap();
 
-            // Introduce a 2-second delay before navigating to the dashboard
-            // setTimeout(() => {
             if (result.role === "admin") {
                 toast.success("Welcome back, Admin!", {
                     position: "bottom-right",
@@ -41,7 +39,6 @@ const Login = () => {
                 });
                 navigate("/");
             }
-            // }, 2000); // 2 seconds delay for loading before navigating
         } catch (error) {
             const errorMsg =
                 error.code === "auth/user-not-found"
@@ -59,18 +56,25 @@ const Login = () => {
     };
 
     return (
-        <div className="h-screen overflow-hidden bg-gray-50">
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 animate-fadeIn">
-                <div className="w-full max-w-md px-8 py-10 bg-white rounded-lg shadow-lg">
-                    <div className="flex justify-center items-center gap-3 mb-6">
-                        <h1 className="text-3xl font-semibold text-gray-700">
-                            Sign in
-                        </h1>
-                    </div>
+        <div className="flex h-screen">
+            {/* Left Side - Image Section */}
+            <div className="w-1/2 hidden lg:flex items-center justify-center bg-cover bg-center">
+                <img
+                    src="logbg.webp"
+                    alt="Login Image"
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
+            {/* Right Side - Full Height Login Form */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-50">
+                <div className="w-full px-8 flex flex-col items-center text-center">
+                    <h1 className="text-3xl font-semibold text-gray-700 mb-6">
+                        Sign in
+                    </h1>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="space-y-6"
+                        className="space-y-6 w-full max-w-sm"
                     >
                         <div>
                             <label
@@ -135,16 +139,13 @@ const Login = () => {
                             )}
                         </div>
 
-                        <div>
-                            <button
-                                type="submit"
-                                className="w-full py-2 px-4 bg-[#B48E61] text-white font-semibold rounded-md shadow-md hover:bg-mainColor-light transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-mainColor"
-                                disabled={loading} // Disable button while loading
-                            >
-                                {loading ? "Loading..." : "Sign in"}{" "}
-                                {/* Display loading text */}
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            className="w-full py-2 px-4 bg-[#B48E61] text-white font-semibold rounded-md shadow-md hover:bg-mainColor-light transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-mainColor"
+                            disabled={loading}
+                        >
+                            {loading ? "Loading..." : "Sign in"}
+                        </button>
                     </form>
 
                     <div className="text-center mt-6">
