@@ -106,16 +106,36 @@ const Navbar = () => {
 
                 {/* Full Menu Links (Hidden on Small Screens) */}
                 <ul className="hidden lg:flex space-x-8 uppercase tracking-wide mt-3">
-                    <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
+                    <li
+                        className={`${
+                            (!navBg && "hover:text-black") ||
+                            "hover:text-mainColor"
+                        } cursor-pointer transition-all duration-200 text-[1rem]`}
+                    >
                         <Link to="/">Home</Link>
                     </li>
-                    <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
+                    <li
+                        className={`${
+                            (!navBg && "hover:text-black") ||
+                            "hover:text-mainColor"
+                        } cursor-pointer transition-all duration-200 text-[1rem]`}
+                    >
                         <Link to="/aboutus">About Us</Link>
                     </li>
-                    <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
+                    <li
+                        className={`${
+                            (!navBg && "hover:text-black") ||
+                            "hover:text-mainColor"
+                        } cursor-pointer transition-all duration-200 text-[1rem]`}
+                    >
                         <Link to="/Products">Collection</Link>
                     </li>
-                    <li className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
+                    <li
+                        className={`${
+                            (!navBg && "hover:text-black") ||
+                            "hover:text-mainColor"
+                        } cursor-pointer transition-all duration-200 text-[1rem]`}
+                    >
                         <Link to="/contactUs">Contact Us</Link>
                     </li>
                     <li className="hover:text-mainColor cursor-pointer transition-all duration-200">
@@ -179,7 +199,12 @@ const Navbar = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="hover:text-mainColor cursor-pointer transition-all duration-200 text-[1rem]">
+                        <div
+                            className={`${
+                                (!navBg && "hover:text-black") ||
+                                "hover:text-mainColor"
+                            } cursor-pointer transition-all duration-200 text-[1rem]`}
+                        >
                             <Link to="/login" className="mr-5">
                                 LOGIN
                             </Link>
