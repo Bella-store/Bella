@@ -41,15 +41,15 @@ const Products = () => {
   };
 
   return (
-    <div className="bg-stone-50 min-h-screen">
+    <div className="bg-stone-50 min-h-screen ">
       <Navbar />
 
-      <div className="mt-16 bg-[#f4f3ef] px-[7%]">
+      <div className="mt-16 bg-[#f4f3ef] px-[7%] animate-fadeIn">
         <PageBanner title="Collection" />
       </div>
 
       {loading ? (
-        <div className="text-center mt-16">
+        <div className="text-center mt-16 ">
           <div className="flex items-center justify-center w-full mt-[25%]">
             <div className="">
               <span className="loading loading-infinity loading-lg text-mainColor"></span>
@@ -57,7 +57,7 @@ const Products = () => {
           </div>
         </div>
       ) : (
-        <div className="mt-16 flex flex-col items-center mb-16">
+        <div className="mt-16 flex flex-col items-center mb-16 animate-fadeIn">
           {/* Products Container */}
           <div className="flex flex-wrap justify-center gap-16 sm:w-1/2 md:w-4/5 md:gap-8 lg:w-11/12 w-full">
             {currentProducts.map((product) => (

@@ -61,7 +61,7 @@ const ContactUs = () => {
         {/* Google Map Section */}
         <div className="flex-1 mt-8 lg:mt-0 sm:ml-0 lg:ml-8">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d27647.54374231558!2d31.342647!3d29.981069!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583969aca0ab79%3A0x2530d23f0e41abdd!2sBaron%20Mall!5e0!3m2!1sen!2sus!4v1725058041031!5m2!1sen!2sus"
+            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3455.424120810197!2d31.429572075342982!3d29.99597597494805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjnCsDU5JzQ1LjUiTiAzMcKwMjUnNTUuNyJF!5e0!3m2!1sen!2seg!4v1726742788334!5m2!1sen!2seg"
             width="100%"
             height="450"
             style={{ border: 0 }}
