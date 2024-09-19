@@ -58,9 +58,9 @@ function App() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center object-center w-full mt-[15%] ">
+      <div className="flex items-center justify-center object-center w-full mt-[20%] ">
         <div className="">
-          <span className="loading loading-infinity loading-lg text-mainColor size-48"></span>
+          <span className="loading loading-infinity loading-lg text-mainColor size-16"></span>
         </div>
       </div>
     );

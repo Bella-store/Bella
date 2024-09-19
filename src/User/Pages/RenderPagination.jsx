@@ -1,7 +1,9 @@
+
 export const renderPagination = (currentPage, totalPages, handlePageChange) => {
   const pages = [];
   const startPage = Math.max(2, currentPage - 1);
   const endPage = Math.min(totalPages - 1, currentPage + 1);
+
 
   // First page
   pages.push(

@@ -142,7 +142,7 @@ const Shop = () => {
               No Products Found
             </div>
           ) : (
-            <div className="flex flex-wrap justify-evenly sm:w-1/2 md:w-4/5 md:gap-8 w-full lg:w-full animate-fadeIn">
+            <div className="flex flex-wrap justify-center sm:w-1/2 md:w-4/5 md:gap-8 w-full lg:w-full animate-fadeIn">
               {currentProducts.map((product) => (
                 <Card
                   key={product.id}
