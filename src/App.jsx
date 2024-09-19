@@ -31,6 +31,7 @@ import Settings from "./User/Components/Settings";
 import ProfileFavourite from "./User/Components/ProfileFavourite";
 import Success from "./User/Components/Success";
 import UserOrders from "./User/Components/UserOrders";
+import ScrollToTop from "./hooks/ScrollTop";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -67,6 +68,8 @@ function App() {
 
   return (
     <>
+      <ScrollToTop />
+
       <Routes>
         <Route
           path="/dashboard/*"
