@@ -155,11 +155,6 @@ const Shop = () => {
               ))}
             </div>
           )}
-
-          {/* Pagination Controls */}
-          {currentProducts.length === 0
-            ? ""
-            : renderPagination(currentPage, totalPages, handlePageChange)}
         </div>
 
         <ShopSidebar
@@ -169,7 +164,12 @@ const Shop = () => {
           onCategoryChange={handleCategoryChange}
         />
       </div>
-
+      <div className="mt-16 mb-16">
+        {/* Pagination Controls */}
+        {currentProducts.length === 0
+          ? ""
+          : renderPagination(currentPage, totalPages, handlePageChange)}
+      </div>
       <Footer />
     </div>
   );
